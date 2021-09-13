@@ -2,10 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sida_drivers_app/colors.dart';
-import 'package:sida_drivers_app/payment_screen.dart';
+import 'package:sida_drivers_app/shared/colors/colors.dart';
+import 'package:sida_drivers_app/screens/payment_screen.dart';
 
-import 'my_components.dart';
+import '../shared/componenents/my_components.dart';
 
 class BalanceScreen extends StatefulWidget {
   @override

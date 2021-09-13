@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sida_drivers_app/home_screen.dart';
+import 'package:sida_drivers_app/screens/home_screen.dart';
 
 void main() {
   runApp(MyApp());

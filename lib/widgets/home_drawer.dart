@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../colors.dart';
+import '../shared/colors/colors.dart';
 
 
 class HomeDrawer extends StatefulWidget {

@@ -5,8 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 
-import 'colors.dart';
-import 'my_components.dart';
+import '../shared/colors/colors.dart';
+import '../shared/componenents/my_components.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

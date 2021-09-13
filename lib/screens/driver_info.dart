@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'my_components.dart';
+import '../shared/componenents/my_components.dart';
 
 class DriverInfo extends StatefulWidget {
 

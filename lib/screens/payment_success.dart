@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'colors.dart';
-import 'my_components.dart';
+import '../shared/colors/colors.dart';
+import '../shared/componenents/my_components.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
   @override
@@ -411,8 +411,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     title: "Done",
                     onTap: (){
 
-                    }
-                  ),
+                    }),
                   SizedBox(height: 15,),
                 ],
               ),

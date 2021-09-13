@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'my_components.dart';
+import '../shared/componenents/my_components.dart';
 
 class DriverRegistration extends StatefulWidget {
 
