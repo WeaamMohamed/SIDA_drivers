@@ -9,12 +9,13 @@ class DriverInfo extends StatefulWidget {
 }
 
 class _DriverInfoState extends State<DriverInfo> {
+  var nameController = TextEditingController();
+  var genderController = TextEditingController();
+  var ageController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    var nameController = TextEditingController();
-    var genderController = TextEditingController();
-    var ageController = TextEditingController();
-    var formKey = GlobalKey<FormState>();
+
 
     return Scaffold(
       appBar:  AppBar(
@@ -154,7 +155,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
                 Spacer(),
 
-                customBlackButton(title: "Next",
+                customBlackButton(
                     onTap: (){
 
                       if(formKey.currentState.validate())
@@ -162,7 +163,6 @@ class _DriverInfoState extends State<DriverInfo> {
                         print("updated.");
 
                       }
-
 
                     }),
 

@@ -72,7 +72,7 @@ Widget customHomeButton({
     );
 
 Widget customBlackButton({
-  String title = "Update",
+  String title = "Next",
   Function onTap,
 }) =>
     Container(
@@ -108,7 +108,9 @@ Widget customTextFormField({
 //labelText:"label",
 
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 20.0,),
+
+      //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
+
 
         errorStyle: TextStyle(
           fontSize: 13,
@@ -127,4 +129,146 @@ Widget customTextFormField({
       ),
       validator: validator,
     );
+
+Widget customEditImage({@required context,
+  String imagePath = "assets/images/certificate.svg",
+  Function onTap,
+}) => GestureDetector(
+  onTap: onTap,
+  child:   Container(
+
+    height: MediaQuery.of(context).size.height * 0.2 ,
+
+    width: MediaQuery.of(context).size.width * 0.7,
+
+    //  color: Colors.white,
+
+    decoration: BoxDecoration(
+
+      borderRadius: BorderRadius.circular(15),
+
+    ),
+
+    child: Stack(
+
+      children: [
+
+        Positioned(
+
+          top: 0,
+
+          left: 0,
+
+          child: Container(
+
+
+
+            decoration: BoxDecoration(
+
+             color: Colors.grey.shade300,
+
+              borderRadius: BorderRadius.circular(15),
+
+            ),
+
+
+
+            height: MediaQuery.of(context).size.height * 0.2  - 15,
+
+            width: MediaQuery.of(context).size.width * 0.7 - 20,
+
+            //child: SvgPicture.asset(imagePath,),
+
+
+
+          ),
+
+        ),
+
+        Positioned(
+
+          bottom: 5,
+
+          right: 0,
+
+          child: Container(
+
+
+
+            decoration: BoxDecoration(
+
+
+
+                color: Colors.white,
+
+                shape: BoxShape.circle,
+
+                boxShadow: [BoxShadow(
+
+                  color: Colors.grey.shade400,
+
+                  spreadRadius: 1,
+
+                  blurRadius: 8,
+
+                  offset: Offset(2,7),
+
+                )]
+
+            ),
+
+
+
+            padding: EdgeInsets.all(8),
+
+            child: Icon(Icons.edit, color: Colors.black,
+
+              size: 30,),
+
+          ),
+
+        ),
+
+
+
+      ],
+
+    ),
+
+    // child: SvgPicture.asset("assets/images/identity.svg",
+
+
+
+    // fit: BoxFit.cover,
+
+    // ),
+
+
+
+  ),
+);
+
+Widget customAppBar({String title, @required context})=>   AppBar(
+  //  backgroundColor: Colors.red,
+
+
+  centerTitle: true,
+
+
+  title: Text(title,
+    style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.black
+    ),),
+  elevation: 0,
+  backgroundColor: Colors.white.withOpacity(0),
+  leading: InkWell(
+    onTap: () {
+      Navigator.pop(context);
+    },
+    child: Icon(Icons.arrow_back, color: Colors.black,
+    ),
+  ),
+);
 BorderRadius customBorderRadius = BorderRadius.circular(8);
