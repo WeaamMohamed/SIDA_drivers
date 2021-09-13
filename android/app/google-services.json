@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "644827566218",
+    "firebase_url": "https://sida-51cb9-default-rtdb.firebaseio.com",
+    "project_id": "sida-51cb9",
+    "storage_bucket": "sida-51cb9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644827566218:android:5d3e3cb827dd751e285d73",
+        "android_client_info": {
+          "package_name": "com.example.sida_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644827566218-1gedn2tcb0lg50n12m7n7l4upeamoe5k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sida_app",
+            "certificate_hash": "a3bace1d60597da1cf2f1ca2d96cf8f6f003341e"
+          }
+        },
+        {
+          "client_id": "644827566218-7d6fpnmsd877sst28nnfg281l7gtjoqc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sida_app",
+            "certificate_hash": "ea04d536406bb29599d138d1250fa2fa73c4cf74"
+          }
+        },
+        {
+          "client_id": "644827566218-kkqoh7hg64069atpq82rsd4jvhq2i43i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sida_app",
+            "certificate_hash": "b8c7d406698eb842b1da3463e87f2c681fe014d5"
+          }
+        },
+        {
+          "client_id": "644827566218-3ni4profpcrg4ijal5jdr102ijk5mv92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8duRzIq6lUb6BuMVDIpV0vEMmdfHf0WQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644827566218-3ni4profpcrg4ijal5jdr102ijk5mv92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644827566218:android:dc8d2b265defc12b285d73",
+        "android_client_info": {
+          "package_name": "com.example.sida_drivers_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644827566218-3ni4profpcrg4ijal5jdr102ijk5mv92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8duRzIq6lUb6BuMVDIpV0vEMmdfHf0WQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644827566218-3ni4profpcrg4ijal5jdr102ijk5mv92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
