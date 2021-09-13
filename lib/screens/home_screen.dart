@@ -1,10 +1,15 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
-
+import 'dart:async';
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 
@@ -18,10 +23,40 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-
+  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+  GoogleMapController newGoogleMapController;
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _enabled = false;
   Color mColor = Colors.white;
+  Position currentPosition;
+  var geoLocator=Geolocator();
+
+
+  final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(30.033333, 31.233334),
+    zoom: 14.4746,
+  );
+
+  void locatePosition() async
+  {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    currentPosition = position;
+
+    LatLng userLatLangPosition = LatLng(
+      position.latitude,
+      position.longitude,
+    );
+
+    CameraPosition cameraPosition =
+    new CameraPosition(target: userLatLangPosition, zoom: 17);
+
+   // mapProvider.newGoogleMapController
+     //   .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    //to get user's current address
+    //String currentUserAddress =
+    //await RequestAssistant.getSearchCoordinateAddress(position: position, context: context);
+   // print("this is your address: " + currentUserAddress);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +142,18 @@ class _HomeScreenState extends State<HomeScreen> {
             onChanged: (value) {
               setState(() {
                 _enabled = value;
-                value?  mColor = Colors.black:  mColor = Colors.white;
+                if ( value)
+                  {
+                    /// online
+                    mColor = Colors.black;
+                    print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                    print(widget.userID);
+                    makeDriverOnlineNow();
+                    getLocationLiveUpdates();
+                 }
+                else
+                  mColor = Colors.white;
+
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                 //   statusBarIconBrightness: value? Brightness.light: Brightness.dark ,
                 // ));
@@ -122,8 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _enabled? Container(
         height: double.infinity,
         width: double.infinity,
-
-
         child: Stack(
           children: [
             Positioned(
@@ -158,6 +202,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 ), ),
+            GoogleMap(
+              padding: EdgeInsets.only(
+                bottom: mqSize.height / 4,
+                top: 25.0,
+              ),
+              mapType: MapType.normal,
+              myLocationButtonEnabled: true,
+              initialCameraPosition: _kGooglePlex,
+              myLocationEnabled: true,
+              zoomGesturesEnabled: true,
+              tiltGesturesEnabled: true,
+              zoomControlsEnabled: false,
+              compassEnabled: false,
+           //   polylines: mapProvider.polylineSet,
+              // markers: markersSet,
+              // circles: circlesSet,
+              onMapCreated: (GoogleMapController controller) {
+                _controllerGoogleMap.complete(controller);
+                locatePosition();
+            //    mapProvider.newGoogleMapController = controller;
+          //      locatePosition();
+
+                //  locatePosition();
+              },
+            ),
+
             Positioned(
               bottom: 20,
               left: 15,
@@ -215,6 +285,29 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  void makeDriverOnlineNow() async
+  {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    currentPosition = position;
+    Geofire.initialize("availableDrivers");
+    print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    print(widget.userID);
+    print(currentPosition.latitude);
+    print(currentPosition.longitude);
+    Geofire.setLocation( widget.userID, currentPosition.latitude, currentPosition.longitude);
+   rideRequest_ref.onValue.listen((event) {
+   });
+  }
+   void getLocationLiveUpdates()
+   {
+     homeTabPageStreamSubscription=Geolocator.getPositionStream().listen((Position position) {
+       currentPosition = position;
+       Geofire.setLocation( widget.userID, position.latitude, position.longitude);
+       LatLng latLng= LatLng(position.latitude, position.longitude);
+       newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
+       
+     });
+   }
 
   @override
   void initState() {

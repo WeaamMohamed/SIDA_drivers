@@ -42,17 +42,15 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
   String dropdownvalue = '+2';
   String code_country;
   bool is_disabled = true;
-  bool is_exists = false;
+  bool is_exists = false; 
   var formKey = GlobalKey<FormState>();
   final  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
-
 
   void signInWithPhoneAuthCredential(PhoneAuthCredential phoneAuthCredential) async {
 
     setState(() {
       showLoading = true;
     });
-
     try {
       final authCredential =
       await _auth.signInWithCredential(phoneAuthCredential);
@@ -60,7 +58,6 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       setState(() {
         showLoading = false;
       });
-
       if(authCredential?.user != null)
       {
         try {
@@ -248,7 +245,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                     });
 
                     setState(() {
-                      if (value.length == 1)
+                      if (value.length >= 1)
                         is_disabled= false;
                     });
                     },
