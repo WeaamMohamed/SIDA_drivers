@@ -25,12 +25,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Spoqa Han Sans Neo',
       ),
-      //home: PhoneNumberPage(),
-      initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
-      routes: {
-        PhoneNumberPage.id: (context) => PhoneNumberPage(),
-        HomeScreen.id: (context) => HomeScreen(FirebaseAuth.instance.currentUser.uid),
-      },
+      home: PhoneNumberPage(),
+      //initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
+     // routes: {
+       // PhoneNumberPage.id: (context) => PhoneNumberPage(),
+        //HomeScreen.id: (context) => HomeScreen(FirebaseAuth.instance.currentUser.uid),
+      //},
     );
   }
 }

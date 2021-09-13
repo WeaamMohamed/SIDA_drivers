@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Completer<GoogleMapController> _controllerGoogleMap = Completer();
   GoogleMapController newGoogleMapController;
+
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _enabled = false;
   Color mColor = Colors.white;
@@ -147,14 +148,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   {
                     /// online
                     mColor = Colors.black;
-                    print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                    print(widget.userID);
                     makeDriverOnlineNow();
                     getLocationLiveUpdates();
+                    //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    //content: Text("You're Online now!"),
+                    //  ));
                  }
                 else
-                  mColor = Colors.white;
-
+                  {
+                    ///offline
+                    mColor = Colors.white;
+                    makeDriverOfflineNow();
+                    //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      //content: Text("You're Offline now!"),
+                  //  ));
+                  }
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                 //   statusBarIconBrightness: value? Brightness.light: Brightness.dark ,
                 // ));
@@ -299,16 +307,28 @@ class _HomeScreenState extends State<HomeScreen> {
    rideRequest_ref.onValue.listen((event) {
    });
   }
-   void getLocationLiveUpdates()
+   void getLocationLiveUpdates ()
    {
      homeTabPageStreamSubscription=Geolocator.getPositionStream().listen((Position position) {
        currentPosition = position;
-       Geofire.setLocation( widget.userID, position.latitude, position.longitude);
+        if (_enabled)
+         {
+           Geofire.setLocation( widget.userID, position.latitude, position.longitude);
+         }
        LatLng latLng= LatLng(position.latitude, position.longitude);
+        ///TODO:CHECK THIS LINE BELOW
+      // final GoogleMapController mapController = await _controllerGoogleMap.future;
        newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
        
      });
    }
+    void makeDriverOfflineNow ()
+  {
+    Geofire.removeLocation(widget.userID);
+    rideRequest_ref.onDisconnect();
+    rideRequest_ref.remove();
+    rideRequest_ref=null;
+  }
 
   @override
   void initState() {
