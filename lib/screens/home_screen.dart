@@ -9,6 +9,8 @@ import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String userID;
+  HomeScreen(  this.userID,{Key key}):super(key: key);
   @override
   _HomeScreenState createState() =>
       _HomeScreenState();

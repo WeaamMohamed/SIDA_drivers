@@ -1,11 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sida_drivers_app/screens/criminal_records_and_taxi_application_file.dart';
-import 'package:sida_drivers_app/screens/driver_license.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
-import 'package:sida_drivers_app/screens/vehicle_registration_certificate.dart';
-import 'package:sida_drivers_app/shared/colors/colors.dart';
+import 'package:sida_drivers_app/sign_up_in/phone_numer_page.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
 
-        primaryColor: amberSwitchButton,
+        primarySwatch: Colors.blue,
       ),
-      home: CriminalRecordsAndTaxiApplicationFile(),
+      home: PhoneNumberPage(),
     );
   }
 }
