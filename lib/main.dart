@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sida_drivers_app/screens/criminal_records_and_taxi_application_file.dart';
+import 'package:sida_drivers_app/screens/driver_license.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
+import 'package:sida_drivers_app/screens/vehicle_registration_certificate.dart';
+import 'package:sida_drivers_app/shared/colors/colors.dart';
 
 void main() {
   runApp(MyApp());
@@ -14,9 +18,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
 
-        primarySwatch: Colors.blue,
+        primaryColor: amberSwitchButton,
       ),
-      home: HomeScreen(),
+      home: CriminalRecordsAndTaxiApplicationFile(),
     );
   }
 }

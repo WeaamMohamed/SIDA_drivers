@@ -16,25 +16,29 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
     Size size = MediaQuery.of(context).size;
     return Scaffold(
 
-      appBar:  AppBar(
-        //  backgroundColor: Colors.red,
-        centerTitle: true,
-        title: Text("Driver Registration",
-          style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black
-          ),),
-        elevation: 0,
-        backgroundColor: Colors.white.withOpacity(0),
-        // leading: InkWell(
-        //   onTap: () {
-        //     Navigator.pop(context);
-        //   },
-        //   child: Icon(Icons.arrow_back, color: Colors.black,),),
+      // appBar:  AppBar(
+      //   //  backgroundColor: Colors.red,
+      //   centerTitle: true,
+      //   title: Text("Driver Registration",
+      //     style: TextStyle(
+      //         fontSize: 16,
+      //         fontWeight: FontWeight.bold,
+      //         color: Colors.black
+      //     ),),
+      //   elevation: 0,
+      //   backgroundColor: Colors.white.withOpacity(0),
+      //   // leading: InkWell(
+      //   //   onTap: () {
+      //   //     Navigator.pop(context);
+      //   //   },
+      //   //   child: Icon(Icons.arrow_back, color: Colors.black,),),
+      //
+      //
+      // ),
+      backgroundColor: Colors.white,
+      appBar: customAppBar(context: context,
+        title:"Driver Registration",),
 
-
-      ),
       body: Padding(
         padding: EdgeInsets.only(top: 30,
             left: 15,

@@ -107,7 +107,7 @@ class _IdentityConfirmationState extends State<IdentityConfirmation> {
             Spacer(),
             customBlackButton(
               onTap: (){}
-              ,title: "Next",
+              ,
             )
           ],
         ),
