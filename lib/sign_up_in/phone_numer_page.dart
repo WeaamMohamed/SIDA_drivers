@@ -22,6 +22,7 @@ enum MobileVerificationState {
 String myphoneNumber='';
 String my_verificationcode='';
 class PhoneNumberPage extends StatefulWidget {
+  static const String id = 'phonenumberpage';
 
   PhoneNumberPage({this.app});
   final FirebaseApp app;
@@ -68,7 +69,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             }
             else
             {
-              drivers_ref.child(FirebaseAuth.instance.currentUser.uid).set({'Phonenumber': myphoneNumber , 'FirstName' :'','LastName' :''});
+              drivers_ref.child(FirebaseAuth.instance.currentUser.uid).set({'Phone': myphoneNumber , 'FirstName' :'','LastName' :''});
               Navigator.push(context, MaterialPageRoute(builder: (context)=> NamePage(FirebaseAuth.instance.currentUser.uid)));
             }
           });
