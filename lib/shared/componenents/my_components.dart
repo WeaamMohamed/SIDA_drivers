@@ -71,28 +71,30 @@ Widget customHomeButton({
       ),
     );
 
+
 Widget customBlackButton({
   String title = "Next",
   Function onTap,
 }) =>
-    Container(
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: Colors.black,
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-            onTap: () {},
-            child: Center(
-              child: Text(title,
-                  style: TextStyle(
-                   // fontSize: 13,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  )),
-            )),
+    InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.black,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: Center(
+            child: Text(title,
+                style: TextStyle(
+                  // fontSize: 13,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
+        ),
       ),
     );
 
@@ -101,17 +103,19 @@ Widget customTextFormField({
   Function validator,
   TextEditingController textController,
   TextInputType textInputType,
+  String hint,
 }) =>
     TextFormField(
+
       controller: textController,
       keyboardType: textInputType,
 //labelText:"label",
 
       decoration: InputDecoration(
 
-      //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
+        //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
 
-
+        hintText: hint,
         errorStyle: TextStyle(
           fontSize: 13,
           color: Colors.red[700],
@@ -129,6 +133,67 @@ Widget customTextFormField({
       ),
       validator: validator,
     );
+// Widget customBlackButton({
+//   String title = "Next",
+//   Function onTap,
+// }) =>
+//     InkWell(
+//       onTap: onTap,
+//       child: Container(
+//         height: 60,
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(14),
+//           color: Colors.black,
+//         ),
+//         child: Material(
+//           color: Colors.transparent,
+//           child: InkWell(
+//               onTap: () {},
+//               child: Center(
+//                 child: Text(title,
+//                     style: TextStyle(
+//                      // fontSize: 13,
+//                       color: Colors.white,
+//                       fontWeight: FontWeight.bold,
+//                     )),
+//               )),
+//         ),
+//       ),
+//     );
+//
+// Widget customTextFormField({
+//   String label,
+//   Function validator,
+//   TextEditingController textController,
+//   TextInputType textInputType,
+// }) =>
+//     TextFormField(
+//       controller: textController,
+//       keyboardType: textInputType,
+// //labelText:"label",
+//
+//       decoration: InputDecoration(
+//
+//       //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
+//
+//
+//         errorStyle: TextStyle(
+//           fontSize: 13,
+//           color: Colors.red[700],
+//         ),
+//         labelText: label,
+//         labelStyle: TextStyle(
+//           fontSize: 13,
+//           color: Color(0xffA9ACB6),
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//       cursorColor: Colors.black,
+//       style: TextStyle(
+//         fontSize: 15,
+//       ),
+//       validator: validator,
+//     );
 
 Widget customEditImage({@required context,
   String imagePath = "assets/images/certificate.svg",
