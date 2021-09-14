@@ -1,5 +1,4 @@
-
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,11 +14,12 @@ import '../shared/componenents/my_components.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
-  final String userID;
-  HomeScreen(  this.userID,{Key key}):super(key: key);
+
+  HomeScreen(String uid);
+  //final String userID;
+  //HomeScreen(  this.userID,{Key key}):super(key: key);
   @override
-  _HomeScreenState createState() =>
-      _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -30,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   bool _enabled = false;
   Color mColor = Colors.white;
-  Position currentPosition;
-  var geoLocator=Geolocator();
+  var geoLocator = Geolocator();
 
 
   final CameraPosition _kGooglePlex = CameraPosition(
@@ -39,18 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
     zoom: 14.4746,
   );
 
-  void locatePosition() async
+  void getCurrentPosition() async
   {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
-
-    LatLng userLatLangPosition = LatLng(
-      position.latitude,
-      position.longitude,
-    );
-
-    CameraPosition cameraPosition =
-    new CameraPosition(target: userLatLangPosition, zoom: 17);
+    LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
+    //CameraPosition cameraPosition = new CameraPosition(target: userLatLangPosition, zoom: 17);
+    newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
 
    // mapProvider.newGoogleMapController
      //   .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
@@ -229,7 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
               // circles: circlesSet,
               onMapCreated: (GoogleMapController controller) {
                 _controllerGoogleMap.complete(controller);
-                locatePosition();
+                getCurrentPosition();
+                //locatePosition();
             //    mapProvider.newGoogleMapController = controller;
           //      locatePosition();
 
@@ -300,12 +295,16 @@ class _HomeScreenState extends State<HomeScreen> {
     currentPosition = position;
     Geofire.initialize("availableDrivers");
     print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    print(widget.userID);
+    //print(widget.userID);
     print(currentPosition.latitude);
     print(currentPosition.longitude);
-    Geofire.setLocation( widget.userID, currentPosition.latitude, currentPosition.longitude);
-   rideRequest_ref.onValue.listen((event) {
-   });
+    //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
+    Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
+    rideRequest_ref = FirebaseDatabase.instance.reference().child('Drivers').child(currentUser.uid).child('newRide');
+    rideRequest_ref.set('waiting');
+    rideRequest_ref.onValue.listen((event) {
+
+    });
   }
    void getLocationLiveUpdates ()
    {
@@ -313,18 +312,21 @@ class _HomeScreenState extends State<HomeScreen> {
        currentPosition = position;
         if (_enabled)
          {
-           Geofire.setLocation( widget.userID, position.latitude, position.longitude);
+           Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
+           //Geofire.setLocation( widget.userID, position.latitude, position.longitude);
          }
-       LatLng latLng= LatLng(position.latitude, position.longitude);
+       LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
         ///TODO:CHECK THIS LINE BELOW
       // final GoogleMapController mapController = await _controllerGoogleMap.future;
-       newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
+      newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
+       //newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
        
      });
    }
     void makeDriverOfflineNow ()
   {
-    Geofire.removeLocation(widget.userID);
+    //Geofire.removeLocation(widget.userID);
+    Geofire.removeLocation(currentUser.uid);
     rideRequest_ref.onDisconnect();
     rideRequest_ref.remove();
     rideRequest_ref=null;

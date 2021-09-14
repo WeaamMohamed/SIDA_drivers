@@ -8,8 +8,8 @@ import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
 class NamePage extends StatefulWidget {
 
-  final String userID;
-  NamePage(  this.userID,{Key key}):super(key: key);
+  //final String userID;
+  //NamePage(  this.userID,{Key key}):super(key: key);
   @override
   _NamePageState createState() => _NamePageState();
 }
@@ -64,7 +64,7 @@ class _NamePageState extends State<NamePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton( onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>HomeScreen(widget.userID)));
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>HomeScreen(currentUser.uid)));
                   },
                     icon:Icon(Icons.arrow_back) ,color: Colors.white,),
                 ),
@@ -173,10 +173,10 @@ class _NamePageState extends State<NamePage> {
             final form2= formKey2.currentState;
             if(form1.validate() && form2.validate())
             {
-              drivers_ref.child(widget.userID).update({'FirstName': firstNamecontroller.text });
-              drivers_ref.child(widget.userID).update({'LastName': lastNamecontroller.text });
+              drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
+              drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
               Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen(widget.userID)));
+                  builder: (BuildContext context) => HomeScreen(currentUser.uid)));
             }
           },
           child:   Text(' Next',

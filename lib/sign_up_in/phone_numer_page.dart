@@ -70,7 +70,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             else
             {
               drivers_ref.child(FirebaseAuth.instance.currentUser.uid).set({'Phone': myphoneNumber , 'FirstName' :'','LastName' :''});
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> NamePage(FirebaseAuth.instance.currentUser.uid)));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> NamePage()));
             }
           });
         }
