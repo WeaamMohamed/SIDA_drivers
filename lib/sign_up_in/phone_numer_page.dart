@@ -98,6 +98,8 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
     {
       is_disabled=true;
       final form= formKey.currentState;
+      print("**********___________________________***********************");
+      print(form.validate());
       if(form.validate())
       {
         setState(() {
@@ -181,6 +183,9 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                           });
                         },
                         validator: (val) {
+                          print("##############333");
+                          print(val.length);
+                          print(val);
                           if(val.isEmpty){return "Please fill in your Phone Number";}
                           final number = num.tryParse(val);
                           if (number == null) {

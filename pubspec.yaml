@@ -39,6 +39,7 @@ dependencies:
   rolling_switch: ^0.0.2
   flutter_geofire: ^1.0.3
   connectivity: ^2.0.2
+  firebase_messaging: ^7.0.3
 
 
 dependency_overrides:
