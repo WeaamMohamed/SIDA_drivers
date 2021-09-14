@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _enabled = true;
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
+  var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
 
   @override
   void initState()
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getCurrentPosition() async
   {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
     LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
     //CameraPosition cameraPosition = new CameraPosition(target: userLatLangPosition, zoom: 17);
@@ -159,20 +160,20 @@ class _HomeScreenState extends State<HomeScreen> {
             trackColor: Colors.white70,
             onChanged: (value) {
               setState(() {
-                _enabled = value;
-                if ( value)
-                  {
-                    /// online
+              _enabled = value;
+              if(value)
+              {
+                /// online
                     mColor = Colors.black;
                     GoOnline();
                     getLocationLiveUpdates();
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     //content: Text("You're Online now!"),
                     //  ));
-                 }
-                else
-                  {
-                    ///offline
+              }
+              else
+              {
+                ///offline
                     mColor = Colors.white;
                     GoOffline();
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -182,10 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                 //   statusBarIconBrightness: value? Brightness.light: Brightness.dark ,
                 // ));
-
-              });
-              print("current value : " + _enabled.toString());
-            },
+                });
+                //print("current value : " + _enabled.toString());
+              },
           ),
           SizedBox(width: 15,),
         ],
@@ -247,9 +247,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 _controllerGoogleMap.complete(controller);
                 getCurrentPosition();
             //    mapProvider.newGoogleMapController = controller;
-          //      locatePosition();
-
-                //  locatePosition();
               },
             ),
 
@@ -304,7 +301,6 @@ class _HomeScreenState extends State<HomeScreen> {
               withIcon: false,
               onTap: (){},
             ),
-
           ],
         ),
       ),
@@ -312,8 +308,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void GoOnline() async
   {
-    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    currentPosition = position;
+    //Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    //currentPosition = position;
     Geofire.initialize("availableDrivers");
     Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
     //print(widget.userID);
@@ -326,24 +322,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
     });
   }
-   void getLocationLiveUpdates ()
+   void getLocationLiveUpdates () async
    {
-     homeTabPageStreamSubscription = Geolocator.getPositionStream().listen((Position position) {
-       currentPosition = position;
-        if (_enabled)
-         {
-           Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
-           //Geofire.setLocation( widget.userID, position.latitude, position.longitude);
-         }
-       LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
-        ///TODO:CHECK THIS LINE BELOW
-      // final GoogleMapController mapController = await _controllerGoogleMap.future;
+     homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
+      currentPosition = position;
+
+      if(_enabled)
+      {
+        Geofire.setLocation(currentUser.uid, position.latitude, position.longitude);
+      }
+
+      LatLng userLatLangPosition = LatLng(position.latitude, position.longitude);
       newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
-       //newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
-       
-     });
+
+    });
+    
+    //  homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
+    //    currentPosition = position;
+    //     if (_enabled)
+    //      {
+    //        Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
+    //        //Geofire.setLocation( widget.userID, position.latitude, position.longitude);
+    //      }
+    //    LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
+    //     ///TODO:CHECK THIS LINE BELOW
+    //   // final GoogleMapController mapController = await _controllerGoogleMap.future;
+    //   newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
+    //    //newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
+     //});
    }
-    void GoOffline()
+    void GoOffline() async
   {
     //Geofire.removeLocation(widget.userID);
     Geofire.removeLocation(currentUser.uid);
