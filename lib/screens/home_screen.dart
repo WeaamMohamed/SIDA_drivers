@@ -7,11 +7,8 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-<<<<<<< HEAD
 import 'package:google_maps_webservice/directions.dart';
-=======
 import 'package:sida_drivers_app/Notifications/pushNotification.dart';
->>>>>>> 385b01f2b705d4ea4006645f5f6149c5ccc9f8f2
 import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
@@ -34,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _enabled = true;
+  bool _enabled = false;
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
