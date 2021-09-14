@@ -64,7 +64,7 @@ class _NamePageState extends State<NamePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton( onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>HomeScreen(currentUser.uid)));
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>HomeScreen()));
                   },
                     icon:Icon(Icons.arrow_back) ,color: Colors.white,),
                 ),
@@ -176,7 +176,7 @@ class _NamePageState extends State<NamePage> {
               drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
               drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
               Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen(currentUser.uid)));
+                  builder: (BuildContext context) => HomeScreen()));
             }
           },
           child:   Text(' Next',

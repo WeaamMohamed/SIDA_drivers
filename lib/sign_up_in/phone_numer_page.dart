@@ -65,7 +65,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
           await drivers_ref.child(FirebaseAuth.instance.currentUser.uid).once().then((DataSnapshot snapshot) async {
             if ( snapshot.value != null)
             {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen(FirebaseAuth.instance.currentUser.uid )));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
             }
             else
             {

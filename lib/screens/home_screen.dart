@@ -6,6 +6,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/directions.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
@@ -15,7 +16,7 @@ import '../shared/componenents/my_components.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
 
-  HomeScreen(String uid);
+  HomeScreen();
   //final String userID;
   //HomeScreen(  this.userID,{Key key}):super(key: key);
   @override
@@ -137,14 +138,16 @@ class _HomeScreenState extends State<HomeScreen> {
             activeColor: amberSwitchButton,
             trackColor: Colors.white70,
             onChanged: (value) {
-              setState(() {
-              _enabled = value;
+                _enabled = value;
               if(value)
               {
                 /// online
-                    mColor = Colors.black;
-                    GoOnline();
-                    getLocationLiveUpdates();
+                    setState(() {
+                      mColor = Colors.black;
+                      GoOnline();
+                      getLocationLiveUpdates();
+                      _enabled = true;
+                    });
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     //content: Text("You're Online now!"),
                     //  ));
@@ -152,16 +155,19 @@ class _HomeScreenState extends State<HomeScreen> {
               else
               {
                 ///offline
-                    mColor = Colors.white;
-                    GoOffline();
+                    setState(() {
+                      mColor = Colors.white;
+                      GoOffline();
+                      _enabled = false;
+                    });
+                    //_enabled = false;
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       //content: Text("You're Offline now!"),
                   //  ));
-                  }
+              }
                 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                 //   statusBarIconBrightness: value? Brightness.light: Brightness.dark ,
                 // ));
-                });
                 //print("current value : " + _enabled.toString());
               },
           ),
@@ -300,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     });
   }
-   void getLocationLiveUpdates () async
+   void getLocationLiveUpdates()
    {
      homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
       currentPosition = position;
@@ -329,13 +335,13 @@ class _HomeScreenState extends State<HomeScreen> {
     //    //newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
      //});
    }
-    void GoOffline() async
+  void GoOffline() async
   {
     //Geofire.removeLocation(widget.userID);
     Geofire.removeLocation(currentUser.uid);
     rideRequest_ref.onDisconnect();
     rideRequest_ref.remove();
-    rideRequest_ref=null;
+    rideRequest_ref = null;
   }
 
   @override

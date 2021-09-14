@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
      routes: {
        PhoneNumberPage.id: (context) => PhoneNumberPage(),
-        HomeScreen.id: (context) => HomeScreen(currentUser.uid),
+        HomeScreen.id: (context) => HomeScreen(),
       },
     );
   }
