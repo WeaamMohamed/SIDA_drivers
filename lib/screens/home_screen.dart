@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   {
                     /// online
                     mColor = Colors.black;
-                    makeDriverOnlineNow();
+                    GoOnline();
                     getLocationLiveUpdates();
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     //content: Text("You're Online now!"),
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   {
                     ///offline
                     mColor = Colors.white;
-                    makeDriverOfflineNow();
+                    GoOffline();
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       //content: Text("You're Offline now!"),
                   //  ));
@@ -289,18 +289,17 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  void makeDriverOnlineNow() async
+  void GoOnline() async
   {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     currentPosition = position;
     Geofire.initialize("availableDrivers");
-    print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-    //print(widget.userID);
-    print(currentPosition.latitude);
-    print(currentPosition.longitude);
-    //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
     Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
-    rideRequest_ref = FirebaseDatabase.instance.reference().child('Drivers').child(currentUser.uid).child('newRide');
+    //print(widget.userID);
+    //print(currentPosition.latitude);
+    //print(currentPosition.longitude);
+    //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
+    rideRequest_ref = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/newRide');
     rideRequest_ref.set('waiting');
     rideRequest_ref.onValue.listen((event) {
 
@@ -308,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
    void getLocationLiveUpdates ()
    {
-     homeTabPageStreamSubscription=Geolocator.getPositionStream().listen((Position position) {
+     homeTabPageStreamSubscription = Geolocator.getPositionStream().listen((Position position) {
        currentPosition = position;
         if (_enabled)
          {
@@ -323,7 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
        
      });
    }
-    void makeDriverOfflineNow ()
+    void GoOffline()
   {
     //Geofire.removeLocation(widget.userID);
     Geofire.removeLocation(currentUser.uid);
