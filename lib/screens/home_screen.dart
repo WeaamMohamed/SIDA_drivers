@@ -328,7 +328,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     });
   }
-   void getLocationLiveUpdates()
+   void getLocationLiveUpdates() async
    {
      homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
       currentPosition = position;
