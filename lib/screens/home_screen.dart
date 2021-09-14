@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sida_drivers_app/Notifications/pushNotification.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
@@ -28,11 +30,24 @@ class _HomeScreenState extends State<HomeScreen> {
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _enabled = false;
+  bool _enabled = true;
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
 
+  @override
+  void initState()
+  {
+    // TODO: implement initState
+    //to hide app bar and status bar
+    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
+          statusBarIconBrightness: Brightness.light,
+        ));
+    super.initState();
+    getCurrentDriverInfo();
+  }
 
   final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(30.033333, 31.233334),
@@ -54,7 +69,14 @@ class _HomeScreenState extends State<HomeScreen> {
     //await RequestAssistant.getSearchCoordinateAddress(position: position, context: context);
    // print("this is your address: " + currentUserAddress);
   }
+  void getCurrentDriverInfo() async
+  {
+    User currentFirebaseUser = await FirebaseAuth.instance.currentUser;
+    PushNotificationService pushNotificationService =PushNotificationService();
+    pushNotificationService.initialize();
+    pushNotificationService.getToken();
 
+  }
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -337,21 +359,6 @@ class _HomeScreenState extends State<HomeScreen> {
     rideRequest_ref.remove();
     rideRequest_ref=null;
   }
-
-  @override
-  void initState() {
-
-    // TODO: implement initState
-    //to hide app bar and status bar
-    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
-          statusBarIconBrightness: Brightness.light,
-        ));
-    super.initState();
-  }
-
-
 
   @override
   void dispose() {
