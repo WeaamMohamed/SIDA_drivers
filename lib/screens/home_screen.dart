@@ -8,13 +8,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
+import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/Notifications/pushNotification.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
-
+import 'package:sida_drivers_app/shared/providers/map_provider.dart';
+import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
 
@@ -26,8 +28,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+   var mapProvider;
 
-  Completer<GoogleMapController> _controllerGoogleMap = Completer();
+//TODO:
+  ///Completer<GoogleMapController> _controllerGoogleMap = Completer();
+  Completer<GoogleMapController> _controllerGoogleMap;
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -39,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState()
   {
+   /// getCurrentPosition();
     // TODO: implement initState
     //to hide app bar and status bar
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
@@ -50,26 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
     getCurrentDriverInfo();
   }
 
-  final CameraPosition _kGooglePlex = CameraPosition(
+   CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(30.033333, 31.233334),
     zoom: 14.4746,
   );
 
-  void getCurrentPosition() async
-  {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    currentPosition = position;
-    LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
-    //CameraPosition cameraPosition = new CameraPosition(target: userLatLangPosition, zoom: 17);
-    newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
 
-   // mapProvider.newGoogleMapController
-     //   .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-    //to get user's current address
-    //String currentUserAddress =
-    //await RequestAssistant.getSearchCoordinateAddress(position: position, context: context);
-   // print("this is your address: " + currentUserAddress);
-  }
+  CameraPosition cameraPosition;
+
   void getCurrentDriverInfo() async
   {
     User currentFirebaseUser = await FirebaseAuth.instance.currentUser;
@@ -78,8 +72,65 @@ class _HomeScreenState extends State<HomeScreen> {
     pushNotificationService.getToken();
 
   }
+  Future<void> getCurrentPosition() async
+  {
+    ///
+
+    Position position1 = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position1;
+    print("weaam :CurrentPosition data: " + currentPosition.latitude.toString() +
+        currentPosition.longitude.toString());
+
+    print("weaam position1 : " + position1.latitude.toString() +
+        position1.longitude.toString());
+
+
+    LatLng latLatPosition = LatLng(position1.latitude, position1.longitude);
+    //
+    // CameraPosition cameraPosition =
+    // new CameraPosition(target: userLatLangPosition, zoom: 17);
+    //
+    // mapProvider.newGoogleMapController
+    //     .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+
+   CameraPosition currentCameraPosition = new CameraPosition(target: latLatPosition, zoom: 14);
+   cameraPosition = currentCameraPosition;
+    // mapProvider.newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(
+    //     currentCameraPosition));
+
+    //TODO:
+    // setState(() {
+    //   _kGooglePlex = cameraPosition;
+    // });
+
+
+    newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(currentCameraPosition));
+
+    ///
+
+    // Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
+    // currentPosition = position;
+    // LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
+    // //CameraPosition cameraPosition = new CameraPosition(target: userLatLangPosition, zoom: 17);
+    // newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
+
+    ///
+    // mapProvider.newGoogleMapController
+    //   .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    //to get user's current address
+    //String currentUserAddress =
+    //await RequestAssistant.getSearchCoordinateAddress(position: position, context: context);
+    // print("this is your address: " + currentUserAddress);
+  }
   @override
   Widget build(BuildContext context) {
+    _controllerGoogleMap = Completer();
+
+     mapProvider = Provider.of<MapProvider>(context);
+    final dataProvider = Provider.of<DataProvider>(context);
+
+
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     //   statusBarIconBrightness: _enabled? Brightness.dark: Brightness.light,
     //   statusBarColor: Colors.white.withOpacity(0.0),
@@ -160,14 +211,24 @@ class _HomeScreenState extends State<HomeScreen> {
             activeColor: amberSwitchButton,
             trackColor: Colors.white70,
             onChanged: (value) {
+              setState(() {
                 _enabled = value;
+              });
+
               if(value)
               {
+
                 /// online
+                ///
+                //     getCurrentPosition().then((value){
+                //
+                //       GoOnline();
+                //       getLocationLiveUpdates();
+                //     });
                     setState(() {
                       mColor = Colors.black;
-                      GoOnline();
-                      getLocationLiveUpdates();
+                       // GoOnline();
+                       //  getLocationLiveUpdates();
                       _enabled = true;
                     });
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -179,9 +240,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ///offline
                     setState(() {
                       mColor = Colors.white;
-                      GoOffline();
+
                       _enabled = false;
                     });
+                    GoOffline();
                     //_enabled = false;
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       //content: Text("You're Offline now!"),
@@ -238,8 +300,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: mqSize.height / 4,
                 top: 25.0,
               ),
+
+
+              ///
               mapType: MapType.normal,
               myLocationButtonEnabled: true,
+             /// initialCameraPosition: (cameraPosition == null)? _kGooglePlex: cameraPosition,
               initialCameraPosition: _kGooglePlex,
               myLocationEnabled: true,
               zoomGesturesEnabled: true,
@@ -250,8 +316,20 @@ class _HomeScreenState extends State<HomeScreen> {
               // markers: markersSet,
               // circles: circlesSet,
               onMapCreated: (GoogleMapController controller) {
+
+                print("weaam : onMapCreated");
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
+
                 _controllerGoogleMap.complete(controller);
-                getCurrentPosition();
+                newGoogleMapController = controller;
+              //  mapProvider.newGoogleMapController = controller;
+                getCurrentPosition().then((value){
+
+                  GoOnline();
+                  getLocationLiveUpdates();
+                });
+
+
             //    mapProvider.newGoogleMapController = controller;
               },
             ),
@@ -314,9 +392,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   void GoOnline() async
   {
+
+    print("weaam : GoOnline()");
+  /// await getCurrentPosition();
     //Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
     //currentPosition = position;
     Geofire.initialize("availableDrivers");
+    print("weaam: longitude form Go Online: " + currentPosition.longitude.toString());
     Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
     //print(widget.userID);
     //print(currentPosition.latitude);
@@ -338,8 +420,27 @@ class _HomeScreenState extends State<HomeScreen> {
         Geofire.setLocation(currentUser.uid, position.latitude, position.longitude);
       }
 
+
       LatLng userLatLangPosition = LatLng(position.latitude, position.longitude);
-      newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
+      CameraPosition _newCameraPosition = CameraPosition(
+        target: userLatLangPosition,
+      //  zoom: 14.4746,
+        zoom: 40.4746,
+      );
+      // setState(() {
+      //
+      // });
+      // setState(() {
+      //
+      //   _kGooglePlex = _newCameraPosition;
+      //
+      //
+      // });
+     /// newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
+     Timer(Duration(milliseconds: 500), () async {
+            await newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+      });
+     ////// newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
 
     });
     
