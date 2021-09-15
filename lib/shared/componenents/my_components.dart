@@ -133,67 +133,6 @@ Widget customTextFormField({
       ),
       validator: validator,
     );
-// Widget customBlackButton({
-//   String title = "Next",
-//   Function onTap,
-// }) =>
-//     InkWell(
-//       onTap: onTap,
-//       child: Container(
-//         height: 60,
-//         decoration: BoxDecoration(
-//           borderRadius: BorderRadius.circular(14),
-//           color: Colors.black,
-//         ),
-//         child: Material(
-//           color: Colors.transparent,
-//           child: InkWell(
-//               onTap: () {},
-//               child: Center(
-//                 child: Text(title,
-//                     style: TextStyle(
-//                      // fontSize: 13,
-//                       color: Colors.white,
-//                       fontWeight: FontWeight.bold,
-//                     )),
-//               )),
-//         ),
-//       ),
-//     );
-//
-// Widget customTextFormField({
-//   String label,
-//   Function validator,
-//   TextEditingController textController,
-//   TextInputType textInputType,
-// }) =>
-//     TextFormField(
-//       controller: textController,
-//       keyboardType: textInputType,
-// //labelText:"label",
-//
-//       decoration: InputDecoration(
-//
-//       //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
-//
-//
-//         errorStyle: TextStyle(
-//           fontSize: 13,
-//           color: Colors.red[700],
-//         ),
-//         labelText: label,
-//         labelStyle: TextStyle(
-//           fontSize: 13,
-//           color: Color(0xffA9ACB6),
-//           fontWeight: FontWeight.bold,
-//         ),
-//       ),
-//       cursorColor: Colors.black,
-//       style: TextStyle(
-//         fontSize: 15,
-//       ),
-//       validator: validator,
-//     );
 
 Widget customEditImage({@required context,
   String imagePath = "assets/images/certificate.svg",
@@ -313,13 +252,21 @@ Widget customEditImage({@required context,
   ),
 );
 
+Widget customAmberAppCar({@required context}) => AppBar(
+  elevation: 0,
+  backgroundColor: customAmberColor1,
+  leading: InkWell(
+    onTap: () {
+      Navigator.pop(context);
+    },
+    child: Icon(Icons.arrow_back, color: Colors.black,
+    ),
+  ),
+);
 Widget customAppBar({String title, @required context})=>   AppBar(
   //  backgroundColor: Colors.red,
 
-
   centerTitle: true,
-
-
   title: Text(title,
     style: TextStyle(
         fontSize: 16,
@@ -333,6 +280,43 @@ Widget customAppBar({String title, @required context})=>   AppBar(
       Navigator.pop(context);
     },
     child: Icon(Icons.arrow_back, color: Colors.black,
+    ),
+  ),
+);
+
+Widget customContainerWithGradient({double height, String title,})=>
+    Container(
+ // height:  height,
+  decoration: BoxDecoration(
+    color: customAmberColor2,
+    gradient: LinearGradient(
+      colors: [customAmberColor1, customAmberColor2],
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+
+    ),
+
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black26.withOpacity(0.2),
+        spreadRadius: 4,
+        blurRadius: 10,
+        //offset: Offset(0, 3), // changes position of shadow
+      ),
+    ],
+  ),
+  child: Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 20,
+    vertical: 25,),
+    child: Center(
+      child: Text(title, style: TextStyle(
+        height: 1.5,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+
+      ),
+
+      ),
     ),
   ),
 );
