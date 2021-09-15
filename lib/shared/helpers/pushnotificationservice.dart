@@ -1,10 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
-
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import 'dart:io' show Platform;
+import 'dart:async';
 import '../../firebase_db.dart';
 
 class PushNotificationService{
@@ -21,12 +18,14 @@ class PushNotificationService{
     firebaseMessaging.configure(
       /// the driver opened the app
       onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
       },
       /// after click to the notification
       onLaunch: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
@@ -34,6 +33,7 @@ class PushNotificationService{
       },
       /// get notifications if the app minimized
       onResume: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
@@ -52,6 +52,9 @@ class PushNotificationService{
     DatabaseReference tokenRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/token');
     tokenRef.set(token);
 
+    //firebaseMessaging.unsubscribeFromTopic('allDrivers');
+    //firebaseMessaging.unsubscribeFromTopic('allUsers');
+
     firebaseMessaging.subscribeToTopic('alldrivers');
     firebaseMessaging.subscribeToTopic('allusers');
 
@@ -63,9 +66,10 @@ class PushNotificationService{
 
     if(Platform.isAndroid){
       rideRequestID = message['data']['ride_request_id'];
+      //print('ride_request_id: $rideRequestID');
     }
     else{
-     rideRequestID = message['ride_request_id'];
+      rideRequestID = message['ride_request_id'];
       print('ride_request_id: $rideRequestID');
     }
 
