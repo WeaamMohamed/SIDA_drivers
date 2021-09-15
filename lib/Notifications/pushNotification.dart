@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -13,16 +13,16 @@ class PushNotificationService
     firebaseMessaging.configure(
       /// the driver opened the app
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
+        getRideRequestId(message);
 
       },
       /// after click to the notification
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
+        getRideRequestId(message);
       },
       /// get notifications if the app minimized
       onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
+        getRideRequestId(message);
       },
     );
   }
@@ -32,8 +32,22 @@ class PushNotificationService
      print("+>>>>>>>>>>>>>>>>>>>>>>>>>>.this is token");
      print(token);
      drivers_ref.child(FirebaseAuth.instance.currentUser.uid).child('token').set(token);
-     firebaseMessaging.subscribeToTopic('allDrivers');
-     firebaseMessaging.subscribeToTopic('allUsers');
+     firebaseMessaging.subscribeToTopic('alldrivers');
+     firebaseMessaging.subscribeToTopic('allusers');
    }
+  String getRideRequestId(Map<String, dynamic> message)
+  {
+    String rideRequestId = "";
+    if(Platform.isAndroid)
+    {
+      rideRequestId = message['data']['ride_request_id'];
+    }
+    ///TODO:UN COMMENT FOR ios
+  //  else
+    //{
+      //rideRequestId = message['ride_request_id'];
+    //}
 
+    return rideRequestId;
+  }
 }
