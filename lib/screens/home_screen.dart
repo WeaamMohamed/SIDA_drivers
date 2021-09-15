@@ -17,6 +17,7 @@ import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/shared/providers/map_provider.dart';
 import 'package:sida_drivers_app/shared/providers/data_provider.dart';
+import 'package:sida_drivers_app/widgets/cancel_trip_container.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
 
@@ -258,6 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 15,),
         ],
       ),
+
       body: _enabled? Container(
         height: double.infinity,
         width: double.infinity,
@@ -351,6 +353,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
+            //TODO: Cancel Trip
+           if(false) Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: CancelTripContainer(),
+            )
+
           ],
         ),
       ) : Container(
@@ -425,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
       CameraPosition _newCameraPosition = CameraPosition(
         target: userLatLangPosition,
       //  zoom: 14.4746,
-        zoom: 40.4746,
+        zoom: 18,
       );
       // setState(() {
       //
