@@ -9,8 +9,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
 import 'package:provider/provider.dart';
-import 'package:sida_drivers_app/Notifications/pushNotification.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
+import 'package:sida_drivers_app/shared/helpers/pushnotificationservice.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
 import '../shared/colors/colors.dart';
@@ -42,21 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
 
-  @override
-  void initState()
-  {
-   /// getCurrentPosition();
-    // TODO: implement initState
-    //to hide app bar and status bar
-    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
-          statusBarIconBrightness: Brightness.light,
-        ));
-    super.initState();
-    getCurrentDriverInfo();
-  }
-
    CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(30.033333, 31.233334),
     zoom: 14.4746,
@@ -65,14 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   CameraPosition cameraPosition;
 
-  void getCurrentDriverInfo() async
-  {
-    User currentFirebaseUser = await FirebaseAuth.instance.currentUser;
-    PushNotificationService pushNotificationService =PushNotificationService();
-    pushNotificationService.initialize();
-    pushNotificationService.getToken();
-
-  }
   Future<void> getCurrentPosition() async
   {
     ///
@@ -124,6 +101,29 @@ class _HomeScreenState extends State<HomeScreen> {
     //await RequestAssistant.getSearchCoordinateAddress(position: position, context: context);
     // print("this is your address: " + currentUserAddress);
   }
+
+  void getCurrentDriverInfo() async
+  {
+    currentUser = await FirebaseAuth.instance.currentUser;
+    PushNotificationService pushNotificationService = PushNotificationService();
+    pushNotificationService.initialize(context);
+    pushNotificationService.getToken();
+  }
+
+  @override
+  void initState()
+  {
+   /// getCurrentPosition();
+    //to hide app bar and status bar
+    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
+          statusBarIconBrightness: Brightness.light,
+        ));
+    super.initState();
+    getCurrentDriverInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     _controllerGoogleMap = Completer();
