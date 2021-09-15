@@ -18,14 +18,12 @@ class PushNotificationService{
     firebaseMessaging.configure(
       /// the driver opened the app
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
       },
       /// after click to the notification
       onLaunch: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
@@ -33,7 +31,6 @@ class PushNotificationService{
       },
       /// get notifications if the app minimized
       onResume: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
 
         //fetchRideInfo(getRideRequestID(message), context);
         getRideRequestID(message);
@@ -66,13 +63,12 @@ class PushNotificationService{
 
     if(Platform.isAndroid){
       rideRequestID = message['data']['ride_request_id'];
-      //print('ride_request_id: $rideRequestID');
+      print('ride_request_id: $rideRequestID');
     }
     else{
       rideRequestID = message['ride_request_id'];
       print('ride_request_id: $rideRequestID');
     }
-
     return rideRequestID;
   }
 }
