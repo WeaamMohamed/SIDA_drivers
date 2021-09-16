@@ -40,6 +40,7 @@ dependencies:
   flutter_geofire: ^1.0.3
   connectivity: ^2.0.2
   firebase_messaging: ^7.0.3
+  assets_audio_player: ^2.0.13+1
 
 
 dependency_overrides:
@@ -57,6 +58,7 @@ flutter:
     - assets/images/
     - assets/lang/en.json
     - assets/lang/ar.json
+    - sounds/alert.mp3
 
   fonts:
     - family: Spoqa Han Sans Neo
