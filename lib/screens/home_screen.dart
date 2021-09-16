@@ -414,8 +414,8 @@ class _HomeScreenState extends State<HomeScreen> {
     //print(currentPosition.latitude);
     //print(currentPosition.longitude);
     //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
-    rideRequest_ref = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/newRide');
-    rideRequest_ref.set('waiting');
+    newRequest_ref.set('Searching');
+
     rideRequest_ref.onValue.listen((event) {
 
     });
