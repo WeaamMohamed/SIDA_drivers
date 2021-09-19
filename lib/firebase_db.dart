@@ -8,11 +8,25 @@ User currentUser;
 Position currentPosition;
 final database = FirebaseDatabase.instance;
 final drivers_ref = database.reference().child('Drivers');
+
 DatabaseReference rideRequest_ref=database.reference().child('Drivers');
 
 /// newRide = searching => driver is available otherwise he os busy
 /// e7na 3aks el ragl
+
 DatabaseReference newRequest_ref= database.reference().child('Ride_Requests').child(FirebaseAuth.instance.currentUser.uid).child('newRide');
+//DatabaseReference newRequest_ref= database.reference().child('Ride_Requests');
+
+
+//rideRequestRef
+
+// DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("users");
+// DatabaseReference driversRef = FirebaseDatabase.instance.reference().child("drivers");
+// DatabaseReference newRequestsRef = FirebaseDatabase.instance.reference().child("Ride Requests");
+// DatabaseReference rideRequestRef = FirebaseDatabase.instance.reference().child("drivers").child(currentfirebaseUser.uid).child("newRide");
+
+
+
 
 const String MAP_API_KEY = "AIzaSyC8duRzIq6lUb6BuMVDIpV0vEMmdfHf0WQ";
 StreamSubscription<Position> homeTabPositionStream;

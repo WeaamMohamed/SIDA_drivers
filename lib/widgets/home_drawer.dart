@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:intl_phone_field/phone_number.dart';
+import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
+import 'package:sida_drivers_app/shared/componenents/constants.dart';
+import 'package:sida_drivers_app/sign_up_in/phone_numer_page.dart';
 import '../shared/colors/colors.dart';
 
 
@@ -171,7 +175,27 @@ class _HomeDrawerState extends State<HomeDrawer> {
             _buildDrawerItem(
                 title: "Sign Out",
                 imagePath: "assets/images/log_out_icon.svg",
-                onTap: (){}),
+                onTap:  () async{
+                  //TODO: sign out
+
+                  await FirebaseAuth.instance.signOut().then((value) {
+                    print("singed out successfully");
+                    CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: false);
+                  }).onError((error, stackTrace){
+                    print(error.toString());
+                  }).catchError((error)=> print(error.toString()));
+
+                  //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+
+                  Navigator.pushAndRemoveUntil<dynamic>(
+                    context,
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) => PhoneNumberPage(),
+                    ),
+                        (route) => false,//if you want to disable back feature set to false
+                  );
+
+                },),
 
 
 

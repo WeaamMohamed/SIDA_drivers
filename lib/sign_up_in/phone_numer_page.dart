@@ -24,8 +24,9 @@ String my_verificationcode='';
 class PhoneNumberPage extends StatefulWidget {
   static const String id = 'phonenumberpage';
 
-  PhoneNumberPage({this.app});
-  final FirebaseApp app;
+  //todo:
+  // PhoneNumberPage({this.app});
+  // final FirebaseApp app;
   @override
   _PhoneNumberPageState createState() => _PhoneNumberPageState();
 }
