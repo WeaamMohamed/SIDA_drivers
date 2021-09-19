@@ -10,6 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/helpers/pushnotificationservice.dart';
+import 'package:sida_drivers_app/models/drivers.dart';
+import 'package:sida_drivers_app/screens/vehicle_info.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
 import '../shared/colors/colors.dart';
@@ -99,6 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
   {
     print("heeeeeeeeeeeeeeeey");
     currentUser = FirebaseAuth.instance.currentUser;
+
+    drivers_ref.child(currentUser.uid).once().then((DataSnapshot dataSnapshot)
+    {
+            if (dataSnapshot != null)
+              {
+                driversInfo= Drivers.fromSnapshot(dataSnapshot);
+              }
+    });
+
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
@@ -320,7 +331,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 newGoogleMapController = controller;
               //  mapProvider.newGoogleMapController = controller;
                 getCurrentPosition().then((value){
-
                   GoOnline();
                   getLocationLiveUpdates();
                 });
@@ -387,7 +397,11 @@ class _HomeScreenState extends State<HomeScreen> {
               context: context,
               title: "Update Driver Information",
               withIcon: false,
-              onTap: (){},
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> VehicleInfoScreen()));
+
+
+              },
             ),
           ],
         ),

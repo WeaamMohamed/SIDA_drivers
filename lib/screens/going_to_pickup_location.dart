@@ -42,9 +42,13 @@ class _NewRideScreenState extends State<NewRideScreen> {
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
 
+  void initState()
+  {
+    super.initState();
+    acceptRideRequest();
+  }
 
-
-  CameraPosition _kGooglePlex = CameraPosition(
+CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(30.033333, 31.233334),
     zoom: 14.4746,
   );
@@ -210,7 +214,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
               // markers: markersSet,
               // circles: circlesSet,
               onMapCreated: (GoogleMapController controller) async{
-                print("weaam : onMapCreated");
+                print("weaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam : onMapCreated");
                 print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
                 _controllerGoogleMap.complete(controller);
                 newGoogleMapController = controller;
@@ -475,4 +479,21 @@ class _NewRideScreenState extends State<NewRideScreen> {
       circlesSet.add(dropOffLocCircle);
     });
   }
+ void acceptRideRequest()
+ {
+   String rideReqId= widget.tripDetails.rideID;
+   newRequest_ref.child(rideReqId).child('status').set('accepted');
+   newRequest_ref.child(rideReqId).child('driverPhone').set(driversInfo.Phone);
+   newRequest_ref.child(rideReqId).child('driverName').set(driversInfo.FirstName+' '+driversInfo.LastName);
+   newRequest_ref.child(rideReqId).child('driverID').set(driversInfo.Key);
+   newRequest_ref.child(rideReqId).child('carDetails').set('${driversInfo.carBrand} - ${driversInfo.carModel} - ${driversInfo.carColor}');
+
+   Map locMap= {
+     'latitude': currentPosition.latitude.toString(),
+     'longitude' : currentPosition.longitude.toString()
+   };
+   newRequest_ref.child(rideReqId).child("driverLocation").set(locMap);
+
+ }
+
 }

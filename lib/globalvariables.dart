@@ -5,9 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sida_drivers_app/models/drivers.dart';
 
 User currentUser;
-
+Drivers driversInfo;
 final CameraPosition googlePlex = CameraPosition(
   target: LatLng(30.033333, 31.233334),
   zoom: 14.4746,
@@ -26,10 +27,7 @@ DatabaseReference rideRef;
 final database = FirebaseDatabase.instance;
 final drivers_ref = database.reference().child('Drivers');
 
-/// newRide = searching => driver is available otherwise he os busy
-/// e7na 3aks el ragl
-/// 
-/// //DatabaseReference newRequest_ref= database.reference().child('Ride_Requests');
+DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
 
 //rideRequestRef

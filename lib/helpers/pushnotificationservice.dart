@@ -12,12 +12,8 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 class PushNotificationService{
 
   final FirebaseMessaging fcm = FirebaseMessaging();
-
-
   Future initialize(context) async {
-
     print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> initialize");
-
     // if(Platform.isIOS){
     //   fcm.requestNotificationPermissions(IosNotificationSettings());
     // }
@@ -74,42 +70,40 @@ class PushNotificationService{
     String rideID = '';
 
     if(Platform.isAndroid){
-      rideID = message['data']['ride_id'];
+      rideID = message['data']['ride_request_id'];
       //print('ride_id: $rideID');
     }
     else{
-      rideID = message['ride_id'];
+      rideID = message['ride_request_id'];
       print('ride_id: $rideID');
     }
+    print(rideID);
     return rideID;
   }
 
   void fetchRideInfo(String rideID, context)
   {
     print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> yaraaaaaab");
-    DatabaseReference rideRef = FirebaseDatabase.instance.reference().child('rideRequest/$rideID');
+    DatabaseReference rideRef = FirebaseDatabase.instance.reference().child('rideRequests/$rideID');
     rideRef.once().then((DataSnapshot dataSnapShot)
     {
       print(dataSnapShot.value);
           if(dataSnapShot.value != null)
           {
-              print("whyyyyyyyyyyy?");
-
               assetsAudioPlayer.open(Audio('assets/sounds/alert.mp3'));
               assetsAudioPlayer.play();
-
-              double pickupLat = double.parse(dataSnapShot.value['pickup']['latitude'].toString());
-              double pickupLng = double.parse(dataSnapShot.value['pickup']['longitude'].toString());
+              double pickupLat = double.parse(dataSnapShot.value['pickup_location']['latitude'].toString());
+              double pickupLng = double.parse(dataSnapShot.value['pickup_location']['longitude'].toString());
               String pickupAddress = dataSnapShot.value['pickup_address'].toString();
 
-              double dropoffLat = double.parse(dataSnapShot.value['dropoff']['latitude'].toString());
-              double dropoffLng = double.parse(dataSnapShot.value['dropoff']['longitude'].toString());
+              double dropoffLat = double.parse(dataSnapShot.value['dropoff_location']['latitude'].toString());
+              double dropoffLng = double.parse(dataSnapShot.value['dropoff_location']['longitude'].toString());
               String dropoffAddress = dataSnapShot.value['dropoff_address'];
 
               String paymentMethod = dataSnapShot.value['payment_method'];
 
               //String riderName = dataSnapShot.value["rider_name"];
-              String riderPhone = dataSnapShot.value['rider_phone'];
+            //  String riderPhone = dataSnapShot.value['rider_phone'];
 
               TripDetails tripDetails = TripDetails();
               
@@ -120,13 +114,13 @@ class PushNotificationService{
               tripDetails.dropoffLocation = LatLng(dropoffLat, dropoffLng);
               tripDetails.paymentMethod = paymentMethod;
               //tripDetails.riderName = riderName;
-              tripDetails.riderPhone = riderPhone;
+            //  tripDetails.riderPhone = riderPhone;
 
               print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Information :: ");
               print(tripDetails.pickupAddress);
               print(tripDetails.dropoffAddress);
-              print(tripDetails.riderName);
-
+              //print(tripDetails.riderName);
+              print("whyyyyyyyyyyy?>>>>>>>>>>>>>>>>>>>>>>>>>>>");
               Navigator.push(context, MaterialPageRoute(builder: (context)=> ReceiveRide(tripDetails: tripDetails,)));
 
 

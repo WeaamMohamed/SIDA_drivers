@@ -29,7 +29,7 @@ class ReceiveRide extends StatelessWidget {
           children: [
             Positioned(
 
-                top: screenHeight*0.35,
+                top: screenHeight*0.2,
                 child:
                 Column(
                   children: [
@@ -121,7 +121,7 @@ class ReceiveRide extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(width: 0.02 * screenWidth),
-                              SvgPicture.asset('assets/images/PickupFlag.svg',width:30,height:30),
+                              SvgPicture.asset('assets/images/pickupflag.svg',width:30,height:30),
                               SizedBox(width: 0.03 * screenWidth),
                               Flexible(
                                   child: Text( tripDetails.pickupAddress,
@@ -203,7 +203,7 @@ class ReceiveRide extends StatelessWidget {
                               assetsAudioPlayer.stop();
                               ///TODO:UNCOMMENT
                             //  checkAvailabilityOfRide(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails:tripDetails ,)));
                             },
                           ),
                         ],
