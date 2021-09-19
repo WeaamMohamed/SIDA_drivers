@@ -7,7 +7,6 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/directions.dart';
 import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
 import 'package:sida_drivers_app/shared/helpers/pushnotificationservice.dart';
