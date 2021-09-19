@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sida_drivers_app/screens/going_to_pickup_location.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
@@ -200,7 +201,9 @@ class ReceiveRide extends StatelessWidget {
                             onTap: (){
                               ///TODO:SOUND DOESN'T STOP!
                               assetsAudioPlayer.stop();
-                              checkAvailabilityOfRide(context);
+                              ///TODO:UNCOMMENT
+                            //  checkAvailabilityOfRide(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen()));
                             },
                           ),
                         ],
@@ -237,7 +240,7 @@ class ReceiveRide extends StatelessWidget {
       if(theRideId == tripDetails.rideID)
       {
         rideRef.set("accepted");
-       // AssistantMethods.disableHomeTabLiveLocationUpdates();
+       // HelperMethods.disableHomeTabLiveLocationUpdates();
        // Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails: tripDetails)));
       }
       else if(theRideId == "cancelled")
