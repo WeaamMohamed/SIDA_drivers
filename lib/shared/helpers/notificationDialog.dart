@@ -180,7 +180,7 @@ class ReceiveRide extends StatelessWidget {
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
                                     SizedBox(height: 0.04* screenHeight),
-                                    Text(rideDetails.rider_name,
+                                    Text("Mohamed",
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
                                     SizedBox(height: 0.04* screenHeight),
@@ -200,15 +200,14 @@ class ReceiveRide extends StatelessWidget {
                             title: "Accept",
                             withIcon: false,
                             onTap: (){
+                              ///TODO:SOUND DOESN'T STOP!
                               assetsAudioPlayer.stop();
-                              checkAvailabilityOfRide(context);
+
+                             checkAvailabilityOfRide(context);
                             },
                           ),
-
-
                         ],
                       ),
-
 )
                   ],
                 )
@@ -224,24 +223,25 @@ class ReceiveRide extends StatelessWidget {
   void checkAvailabilityOfRide(context)
   {
 
-    newRequest_ref.once().then((DataSnapshot dataSnapShot){
+    rideRequestRef.once().then((DataSnapshot dataSnapShot){
       Navigator.pop(context);
       String theRideId = "";
       if(dataSnapShot.value != null)
       {
         theRideId = dataSnapShot.value.toString();
+        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+        print(theRideId);
       }
       else
       {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Ride doesn't exist."),
+          content: Text("Ride doesn't exist1."),
         ));
+        print("ride doesn't exist1");
       }
-
-
       if(theRideId == rideDetails.ride_request_id)
       {
-        newRequest_ref.set("accepted");
+        rideRequestRef.set("accepted");
        // AssistantMethods.disableHomeTabLiveLocationUpdates();
        // Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(rideDetails: rideDetails)));
       }
@@ -250,6 +250,7 @@ class ReceiveRide extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Ride has been Cancelled."),
         ));
+        print("ride doesn't exist222");
 
       }
       else if(theRideId == "timeout")
@@ -257,14 +258,14 @@ class ReceiveRide extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Ride has time out."),
         ));
-
+        print("ride doesn't exist333");
       }
       else
       {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("Ride doesn't exist."),
         ));
-
+        print("ride doesn't exist4");
       }
     });
   }
