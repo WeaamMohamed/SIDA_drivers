@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sida_drivers_app/firebase_db.dart';
+import 'package:sida_drivers_app/screens/going_to_pickup_location.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/shared/helpers/ride_details.dart';
@@ -202,8 +203,9 @@ class ReceiveRide extends StatelessWidget {
                             onTap: (){
                               ///TODO:SOUND DOESN'T STOP!
                               assetsAudioPlayer.stop();
-
-                             checkAvailabilityOfRide(context);
+                              ///TODO:UNCOMMENT
+                            //  checkAvailabilityOfRide(context);
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen()));
                             },
                           ),
                         ],

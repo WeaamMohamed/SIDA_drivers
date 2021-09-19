@@ -84,8 +84,8 @@ class PushNotificationService{
   void RetrieveRideRequestInfo(String rideRequestID,BuildContext  context)
   {
     print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> yaraaaaaab");
-    DatabaseReference rideRequests=database.reference().child('rideRequests');
-    rideRequests.child(rideRequestID).once().then((DataSnapshot dataSnapShot)
+   // DatabaseReference rideRequests=database.reference().child('rideRequests');
+    newRequestsRef.child(rideRequestID).once().then((DataSnapshot dataSnapShot)
 
         {
 print(dataSnapShot.value);

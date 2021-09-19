@@ -59,7 +59,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
       setState(() {
         showLoading = false;
       });
-      if(authCredential?.user != null)
+    //  if(authCredential?.user != null)
       {
         try {
           await drivers_ref.child(FirebaseAuth.instance.currentUser.uid).once().then((DataSnapshot snapshot) async {
@@ -69,7 +69,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             }
             else
             {
-              drivers_ref.child(FirebaseAuth.instance.currentUser.uid).set({'Phone': myphoneNumber , 'FirstName' :'','LastName' :''});
+
               Navigator.push(context, MaterialPageRoute(builder: (context)=> NamePage()));
             }
           });

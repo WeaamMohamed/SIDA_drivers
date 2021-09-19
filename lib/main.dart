@@ -35,12 +35,12 @@ class MyApp extends StatelessWidget {
           primaryColor: customAmberColor2,
           fontFamily: 'Spoqa Han Sans Neo',
         ),
-       // home: HomeScreen(),
-        initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
-       routes: {
-         PhoneNumberPage.id: (context) => PhoneNumberPage(),
-          HomeScreen.id: (context) => HomeScreen(),
-        },
+        home: PhoneNumberPage(),
+       // initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
+       //routes: {
+        // PhoneNumberPage.id: (context) => PhoneNumberPage(),
+          //HomeScreen.id: (context) => HomeScreen(),
+       // },
       ),
     );
   }
