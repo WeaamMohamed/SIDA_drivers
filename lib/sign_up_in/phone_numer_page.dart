@@ -12,7 +12,8 @@ import 'package:sida_drivers_app/screens/home_screen.dart';
 
 import '../firebase_db.dart';
 import 'Name_page.dart';
-
+import 'package:sida_drivers_app/shared/componenents/constants.dart';
+import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 
 enum MobileVerificationState {
   SHOW_MOBILE_FORM_STATE,
@@ -66,6 +67,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
           await drivers_ref.child(FirebaseAuth.instance.currentUser.uid).once().then((DataSnapshot snapshot) async {
             if ( snapshot.value != null)
             {
+              CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
               Navigator.push(context, MaterialPageRoute(builder: (context)=> HomeScreen()));
             }
             else
