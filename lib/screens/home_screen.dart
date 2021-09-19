@@ -7,10 +7,9 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/directions.dart';
 import 'package:provider/provider.dart';
-import 'package:sida_drivers_app/firebase_db.dart';
-import 'package:sida_drivers_app/shared/helpers/pushnotificationservice.dart';
+import 'package:sida_drivers_app/globalvariables.dart';
+import 'package:sida_drivers_app/helpers/pushnotificationservice.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
 import '../shared/colors/colors.dart';
@@ -41,12 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
-
-   CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(30.033333, 31.233334),
-    zoom: 14.4746,
-  );
-
 
   CameraPosition cameraPosition;
 
@@ -79,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     //TODO:
     // setState(() {
-    //   _kGooglePlex = cameraPosition;
+    //   googlePlex = cameraPosition;
     // });
 
 
@@ -104,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getCurrentDriverInfo() async
   {
-    currentUser = await FirebaseAuth.instance.currentUser;
+    print("heeeeeeeeeeeeeeeey");
+    currentUser = FirebaseAuth.instance.currentUser;
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
@@ -307,8 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ///
               mapType: MapType.normal,
               myLocationButtonEnabled: true,
-             /// initialCameraPosition: (cameraPosition == null)? _kGooglePlex: cameraPosition,
-              initialCameraPosition: _kGooglePlex,
+             /// initialCameraPosition: (cameraPosition == null)? googlePlex: cameraPosition,
+              initialCameraPosition: googlePlex,
               myLocationEnabled: true,
               zoomGesturesEnabled: true,
               tiltGesturesEnabled: true,
@@ -414,9 +408,10 @@ class _HomeScreenState extends State<HomeScreen> {
     //print(currentPosition.latitude);
     //print(currentPosition.longitude);
     //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
-    newRequest_ref.set('Searching');
+    rideRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/newRide');
+    rideRef.set('Searching');
 
-    rideRequest_ref.onValue.listen((event) {
+    rideRef.onValue.listen((event) {
 
     });
   }
@@ -442,7 +437,7 @@ class _HomeScreenState extends State<HomeScreen> {
       // });
       // setState(() {
       //
-      //   _kGooglePlex = _newCameraPosition;
+      //   googlePlex = _newCameraPosition;
       //
       //
       // });
@@ -471,10 +466,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void GoOffline() async
   {
     //Geofire.removeLocation(widget.userID);
+    print("))))))))))))))))))))))))))))))))))))))))");
+    print(currentUser.uid);
     Geofire.removeLocation(currentUser.uid);
-    rideRequest_ref.onDisconnect();
-    rideRequest_ref.remove();
-    rideRequest_ref = null;
+    rideRef.onDisconnect();
+    rideRef.remove();
+    rideRef = null;
   }
 
   @override

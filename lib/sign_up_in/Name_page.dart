@@ -4,8 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sida_drivers_app/firebase_db.dart';
+import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
+import 'package:sida_drivers_app/shared/componenents/constants.dart';
+import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
+
 class NamePage extends StatefulWidget {
 
   //final String userID;
@@ -64,6 +67,7 @@ class _NamePageState extends State<NamePage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: IconButton( onPressed: (){
+                    CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
                     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context)=>HomeScreen()));
                   },
                     icon:Icon(Icons.arrow_back) ,color: Colors.white,),
@@ -173,6 +177,7 @@ class _NamePageState extends State<NamePage> {
             final form2= formKey2.currentState;
             if(form1.validate() && form2.validate())
             {
+              CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
               drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
               drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
               Navigator.push(context, MaterialPageRoute(
