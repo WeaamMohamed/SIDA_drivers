@@ -104,6 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void getCurrentDriverInfo() async
   {
+    print("heeeeeeeeeeeeeeeey");
     currentUser = await FirebaseAuth.instance.currentUser;
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
@@ -414,9 +415,8 @@ class _HomeScreenState extends State<HomeScreen> {
     //print(currentPosition.latitude);
     //print(currentPosition.longitude);
     //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
-    newRequest_ref.set('Searching');
-
-    rideRequest_ref.onValue.listen((event) {
+    rideRequestRef.set('Searching');
+    rideRequestRef.onValue.listen((event) {
 
     });
   }
@@ -471,10 +471,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void GoOffline() async
   {
     //Geofire.removeLocation(widget.userID);
+    print("))))))))))))))))))))))))))))))))))))))))");
+    print(currentUser.uid);
     Geofire.removeLocation(currentUser.uid);
-    rideRequest_ref.onDisconnect();
-    rideRequest_ref.remove();
-    rideRequest_ref = null;
+    rideRequestRef.onDisconnect();
+    rideRequestRef.remove();
+    rideRequestRef = null;
   }
 
   @override
