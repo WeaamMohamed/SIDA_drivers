@@ -318,7 +318,7 @@ CameraPosition _kGooglePlex = CameraPosition(
 
     });
   }
-  //
+  ///
   void getLocationLiveUpdates() async
   {
     homeTabPositionStream = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1).listen((Position position) {
