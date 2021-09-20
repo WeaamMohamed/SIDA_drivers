@@ -37,6 +37,16 @@ class HelperMethods
 
     return directionDetails;
   }
+  static void disableHomeLiveLocationUpdates()
+  {
+    homeTabPositionStream.pause();
+    Geofire.removeLocation(currentUser.uid);
+  }
+  static void enableHomeLiveLocationUpdates()
+  {
+    homeTabPositionStream.resume();
+    Geofire.setLocation(currentUser.uid, currentPosition.latitude,currentPosition.longitude);
+  }
 }
 ///-------------------------------------------------------------------------------------
 class DirectionDetails

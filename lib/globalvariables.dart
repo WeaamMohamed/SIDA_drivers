@@ -17,6 +17,7 @@ final CameraPosition googlePlex = CameraPosition(
 const String MAP_API_KEY = "AIzaSyC8duRzIq6lUb6BuMVDIpV0vEMmdfHf0WQ";
 
 StreamSubscription<Position> homeTabPositionStream;
+StreamSubscription<Position> rideStreamSubscription;
 
 final assetsAudioPlayer = AssetsAudioPlayer();
 
