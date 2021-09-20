@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dialogs/flutter_dialogs.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
@@ -49,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
   {
     ///
 
-    Position position1 = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+   //todo; weaam Position position1 = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position1 = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     currentPosition = position1;
     print("weaam :CurrentPosition data: " + currentPosition.latitude.toString() +
         currentPosition.longitude.toString());
@@ -121,6 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
    /// getCurrentPosition();
     //to hide app bar and status bar
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+   _checkPermission();
+
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
           statusBarIconBrightness: Brightness.light,
@@ -128,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getCurrentDriverInfo();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -408,6 +413,83 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  Future<bool> _checkPermission() async {
+    LocationPermission permission;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ) {
+      permission = await Geolocator.requestPermission();
+      if(permission == LocationPermission.denied )
+      {
+        print("check permission called");
+        return _checkPermission();
+      }
+
+      // return Future.error('Location permissions are denied');
+      print('Location permissions are denied');
+      ///  _checkPermission();
+      // if (permission == LocationPermission.denied) {
+      //   permission = await Geolocator.requestPermission();
+      //   return Future.error('Location permissions are denied');
+      // }
+    }
+    if(permission == LocationPermission.always || permission == LocationPermission.whileInUse)
+    {
+      print("permission accepted");
+      return true;
+    }
+
+    if( permission == LocationPermission.deniedForever)
+    {
+      //TODO: show dialog that permission denied forever and ask user again
+      // _showCustomDialog();
+      _showCustomPlatformDialog();
+      // Geolocator.openAppSettings();
+      //openAppSettings();
+      // return _checkPermission();
+    }
+
+    return true;
+
+  }
+
+  _showCustomPlatformDialog()=> showPlatformDialog(
+    context: context,
+    builder: (_) => BasicDialogAlert(
+      title: Text("Permission"),
+      content:
+      Text("Permission was denied forever. Do you want to open settings to change it?"),
+      actions: <Widget>[
+        BasicDialogAction(
+          title: Text("OK"),
+          onPressed: () {
+            Navigator.pop(context);
+
+            Geolocator.openAppSettings().then((value) => _checkPermission());
+          },
+        ),
+      ],
+    ),
+  );
+  Future<void> checkGPS() async {
+    bool serviceEnabled;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      _showDialog();
+      return Future.error('Location services are disabled.');
+    }
+
+
+  }
+  _showDialog() => showDialog(context: context, builder: (_) => AlertDialog(
+    title: Text("GPS disabled"),
+    content: Text("Please open your GPS."),
+
+  ),);
+
   void GoOnline() async
   {
 
@@ -431,7 +513,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
    void getLocationLiveUpdates() async
    {
-     homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
+     //todo; weaam
+     //accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1
+     homeTabPositionStream = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation,
+   distanceFilter: 1).listen((Position position) {
       currentPosition = position;
 
       if(_enabled)

@@ -24,10 +24,11 @@ dependencies:
   pin_code_fields: ^7.3.0
   adobe_xd: ^2.0.0+1
   flutter_polyline_points: ^0.2.4
-  google_maps_place_picker: ^0.9.5
-  google_maps_flutter: ^0.5.28
-  geolocator: ^5.3.1
-  permission_handler: ^5.0.1+1
+  google_maps_place_picker: ^1.0.1
+  google_maps_flutter:  ^1.0.6
+
+#  geolocator: ^5.3.1
+ # permission_handler: ^5.0.1+1
   provider: ^4.0.1
   google_maps_webservice: ^0.0.16
   tuple: ^1.0.3
@@ -41,6 +42,9 @@ dependencies:
   connectivity: ^2.0.2
   firebase_messaging: ^7.0.3
   assets_audio_player: ^2.0.13+1
+  geolocator: ^6.0.0+4
+  permission_handler: ^5.0.1+1
+  flutter_dialogs: ^2.1.0
 
 
 dependency_overrides:

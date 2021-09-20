@@ -57,7 +57,7 @@ CameraPosition _kGooglePlex = CameraPosition(
 
   Future<void> getCurrentPosition() async
   {
-    Position position1 = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position1 = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     currentPosition = position1;
 
     LatLng latLatPosition = LatLng(position1.latitude, position1.longitude);
@@ -320,7 +320,7 @@ CameraPosition _kGooglePlex = CameraPosition(
   }
   void getLocationLiveUpdates() async
   {
-    homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
+    homeTabPositionStream = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1).listen((Position position) {
       currentPosition = position;
 
       if(_enabled)
