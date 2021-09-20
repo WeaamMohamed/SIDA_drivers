@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sida_drivers_app/models/tripdetails.dart';
 import 'dart:io' show Platform;
 import 'dart:async';
-import '../../globalvariables.dart';
+import '../globalvariables.dart';
 import 'notificationDialog.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
