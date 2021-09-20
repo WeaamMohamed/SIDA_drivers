@@ -9,6 +9,8 @@ import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/models/tripdetails.dart';
 
+import 'helpermethods.dart';
+
 class ReceiveRide extends StatelessWidget {
 
   final TripDetails tripDetails;
@@ -96,7 +98,7 @@ class ReceiveRide extends StatelessWidget {
                                   ),
 
                                 SizedBox(width: 0.03 * screenWidth),
-                                SvgPicture.asset("assets/images/distance.svg",width: 45,height: 45),
+                                SvgPicture.asset("assets/images/travel_between_two_points.svg",width: 45,height: 45),
                               ],
                             ),
                           ),
@@ -121,7 +123,7 @@ class ReceiveRide extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(width: 0.02 * screenWidth),
-                              SvgPicture.asset('assets/images/pickupflag.svg',width:30,height:30),
+                              SvgPicture.asset('assets/images/pickup_flag.svg',width:30,height:30),
                               SizedBox(width: 0.03 * screenWidth),
                               Flexible(
                                   child: Text( tripDetails.pickupAddress,
@@ -201,9 +203,8 @@ class ReceiveRide extends StatelessWidget {
                             onTap: (){
                               ///TODO:SOUND DOESN'T STOP!
                               assetsAudioPlayer.stop();
-                              ///TODO:UNCOMMENT
-                            //  checkAvailabilityOfRide(context);
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails:tripDetails ,)));
+                           checkAvailabilityOfRide(context);
+
                             },
                           ),
                         ],
@@ -240,8 +241,8 @@ class ReceiveRide extends StatelessWidget {
       if(theRideId == tripDetails.rideID)
       {
         rideRef.set("accepted");
-       // HelperMethods.disableHomeTabLiveLocationUpdates();
-       // Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails: tripDetails)));
+        HelperMethods.disableHomeLiveLocationUpdates();
+       Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails: tripDetails)));
       }
       else if(theRideId == "cancelled")
       {

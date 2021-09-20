@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 
 class ProgressDialog extends StatelessWidget 
@@ -10,7 +11,7 @@ class ProgressDialog extends StatelessWidget
   Widget build(BuildContext context) 
   {
     return Dialog(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.amber,
       child: Container(
         margin: EdgeInsets.all(15.0),
         width: double.infinity,
@@ -24,10 +25,10 @@ class ProgressDialog extends StatelessWidget
             children: [
               SizedBox(width: 6.0,),
               CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.black),),
-              SizedBox(width: 26.0,),
+              SizedBox(width: 50.0,),
               Text(
                 message,
-                style: TextStyle(color: Colors.black, fontSize: 10.0),
+                style: TextStyle(color: Colors.black, fontSize: 15.0),
               ),
             ],
           ),

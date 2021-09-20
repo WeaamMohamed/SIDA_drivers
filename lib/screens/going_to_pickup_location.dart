@@ -41,13 +41,51 @@ class _NewRideScreenState extends State<NewRideScreen> {
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
-
+  BitmapDescriptor animatingMarkerIcon;
+  Position myPosition;
   void initState()
   {
     super.initState();
+    print("&77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777");
     acceptRideRequest();
   }
+  void createIconMarker()
+  {
+    if(animatingMarkerIcon == null)
+    {
+      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: Size(2, 2));
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "assets/images/Driver_Car.png")
+          .then((value)
+      {
+        animatingMarkerIcon = value;
+      });
+    }
+  }
 
+  void getRideLiveLocationUpdates()
+  {
+
+       rideStreamSubscription = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation,
+          distanceFilter: 1).listen((Position position) {
+        currentPosition = position;
+        myPosition=position;
+        LatLng mPosition=LatLng(position.latitude, position.longitude);
+        Marker animatingMarker =Marker(
+          markerId: MarkerId('animating'),
+          position: mPosition,
+          icon: animatingMarkerIcon,
+          infoWindow: InfoWindow(title: 'Current Location'),
+        );
+        setState(() {
+          CameraPosition cameraPosition = new CameraPosition(target: mPosition,zoom: 17);
+          newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+          markersSet.removeWhere((marker)=> marker.markerId.value == "animating");
+          markersSet.add(animatingMarker);
+        });
+
+       });
+  }
+        //--------------
 CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(30.033333, 31.233334),
     zoom: 14.4746,
@@ -60,6 +98,7 @@ CameraPosition _kGooglePlex = CameraPosition(
     Position position1 = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     currentPosition = position1;
 
+
     LatLng latLatPosition = LatLng(position1.latitude, position1.longitude);
     CameraPosition currentCameraPosition = new CameraPosition(target: latLatPosition, zoom: 14);
     cameraPosition = currentCameraPosition;
@@ -69,6 +108,8 @@ CameraPosition _kGooglePlex = CameraPosition(
   ///-----------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
+
+    createIconMarker();
     Size mqSize = MediaQuery.of(context).size;
     double mapPaddingFromBottom= mqSize.height / 4;
     return Scaffold(
@@ -216,8 +257,8 @@ CameraPosition _kGooglePlex = CameraPosition(
               onMapCreated: (GoogleMapController controller) async{
                 print("weaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam : onMapCreated");
                 print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
-                _controllerGoogleMap.complete(controller);
-                newGoogleMapController = controller;
+               // _controllerGoogleMap.complete(controller);
+             //   newGoogleMapController = controller;
                 setState(() {
                   mapPaddingFromBottom= 265.0;
                 });
@@ -230,6 +271,7 @@ CameraPosition _kGooglePlex = CameraPosition(
                 var pickupLatLng = widget.tripDetails.pickupLocation;
                 print("############################################################################################################################");
                 await getPlaceDirection(currentLatLng, pickupLatLng);
+                getRideLiveLocationUpdates();
                 //    mapProvider.newGoogleMapController = controller;
               },
             ),
@@ -367,8 +409,6 @@ CameraPosition _kGooglePlex = CameraPosition(
   }
   void GoOffline() async
   {
-
-    print("))))))))))))))))))))))))))))))))))))))))");
     print(currentUser.uid);
     Geofire.removeLocation(currentUser.uid);
     rideRef.onDisconnect();
@@ -378,7 +418,7 @@ CameraPosition _kGooglePlex = CameraPosition(
 
   Future<void> getPlaceDirection(LatLng pickUpLatLng, LatLng dropOffLatLng) async
   {
-    print("4444444444444444444444444444444444444444444444444444444");
+
     showDialog(
         context: context,
         builder: (BuildContext context) => ProgressDialog(message: "Please wait...",)
@@ -482,6 +522,7 @@ CameraPosition _kGooglePlex = CameraPosition(
   }
  void acceptRideRequest()
  {
+   print("88888888888888888888888888888888888888888888888888888888888888888888888888");
    String rideReqId= widget.tripDetails.rideID;
    newRequest_ref.child(rideReqId).child('status').set('accepted');
    newRequest_ref.child(rideReqId).child('driverPhone').set(driversInfo.Phone);
