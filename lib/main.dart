@@ -5,12 +5,13 @@ import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/screens/cancel_driver_screen.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
-import 'package:sida_drivers_app/sign_up_in/phone_numer_page.dart';
-import 'firebase_db.dart';
+import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
+import 'globalvariables.dart';
 import 'shared/providers/map_provider.dart';
 import 'shared/providers/data_provider.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 import 'shared/componenents/constants.dart';
+
 void main() async{
   Provider.debugCheckInvalidValueType = null;
 
@@ -18,7 +19,7 @@ void main() async{
   await Firebase.initializeApp();
   await CacheHelper.init();
 
-  currentUser = await FirebaseAuth.instance.currentUser;
+  currentUser = FirebaseAuth.instance.currentUser;
 
   Widget currentScreen;
   bool isSignedIn = CacheHelper.getData(key: IS_SIGNED_IN_SHARED_PREF) == null? false:CacheHelper.getData(key: IS_SIGNED_IN_SHARED_PREF);
@@ -49,12 +50,12 @@ class MyApp extends StatelessWidget {
           primaryColor: customAmberColor2,
           fontFamily: 'Spoqa Han Sans Neo',
         ),
-        home: currentScreen,
-       //  initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
-       // routes: {
-       //   PhoneNumberPage.id: (context) => PhoneNumberPage(),
-       //    HomeScreen.id: (context) => HomeScreen(),
-       //  },
+        home: PhoneNumberPage(),
+      //   initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
+      //  routes: {
+      //    PhoneNumberPage.id: (context) => PhoneNumberPage(),
+      //     HomeScreen.id: (context) => HomeScreen(),
+      //   },
       ),
     );
   }

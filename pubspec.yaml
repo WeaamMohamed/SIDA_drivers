@@ -58,7 +58,7 @@ flutter:
     - assets/images/
     - assets/lang/en.json
     - assets/lang/ar.json
-    - sounds/alert.mp3
+    - assets/sounds/alert.mp3
 
   fonts:
     - family: Spoqa Han Sans Neo

@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
-import 'package:sida_drivers_app/sign_up_in/phone_numer_page.dart';
+import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
 import '../shared/colors/colors.dart';
 
 

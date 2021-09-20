@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
-class DataProvider with ChangeNotifier{
 
-
-
+class DataProvider with ChangeNotifier
+{
   static bool _isEnglish = CacheHelper.getIsEnglishData();
   bool get isEnglish => _isEnglish;
 
@@ -22,5 +21,5 @@ class DataProvider with ChangeNotifier{
     notifyListeners();
   }
 
-
+  
 }

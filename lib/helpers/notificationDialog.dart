@@ -1,21 +1,19 @@
-
-
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:sida_drivers_app/firebase_db.dart';
+import 'package:sida_drivers_app/screens/going_to_pickup_location.dart';
+import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
-import 'package:sida_drivers_app/shared/helpers/ride_details.dart';
+import 'package:sida_drivers_app/models/tripdetails.dart';
 
 class ReceiveRide extends StatelessWidget {
 
-  final RideDetails rideDetails;
+  final TripDetails tripDetails;
 
-  ReceiveRide({this.rideDetails});
+  ReceiveRide({this.tripDetails});
   @override
   Widget build(BuildContext context) {
 
@@ -31,7 +29,7 @@ class ReceiveRide extends StatelessWidget {
           children: [
             Positioned(
 
-                top: screenHeight*0.35,
+                top: screenHeight*0.2,
                 child:
                 Column(
                   children: [
@@ -123,10 +121,10 @@ class ReceiveRide extends StatelessWidget {
                           Row(
                             children: [
                               SizedBox(width: 0.02 * screenWidth),
-                              SvgPicture.asset('assets/images/PickupFlag.svg',width:30,height:30),
+                              SvgPicture.asset('assets/images/pickupflag.svg',width:30,height:30),
                               SizedBox(width: 0.03 * screenWidth),
                               Flexible(
-                                  child: Text( rideDetails.pickup_address,
+                                  child: Text( tripDetails.pickupAddress,
                                       style: TextStyle(
                                           color: Colors.black, fontSize: 16.0 ))
                               )
@@ -140,7 +138,7 @@ class ReceiveRide extends StatelessWidget {
                               SvgPicture.asset('assets/images/TargetFlag.svg',width: 30,height: 30,),
                               SizedBox(width: 0.03 * screenWidth),
                               Flexible(
-                                child: Text(rideDetails.dropoff_address,
+                                child: Text(tripDetails.dropoffAddress,
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 16.0 )),
                               )
@@ -180,6 +178,7 @@ class ReceiveRide extends StatelessWidget {
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
                                     SizedBox(height: 0.04* screenHeight),
+                                    //Text(tripDetails.riderName,
                                     Text("Mohamed",
                                         style: TextStyle(
                                             color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
@@ -202,8 +201,9 @@ class ReceiveRide extends StatelessWidget {
                             onTap: (){
                               ///TODO:SOUND DOESN'T STOP!
                               assetsAudioPlayer.stop();
-
-                             checkAvailabilityOfRide(context);
+                              ///TODO:UNCOMMENT
+                            //  checkAvailabilityOfRide(context);
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails:tripDetails ,)));
                             },
                           ),
                         ],
@@ -212,8 +212,6 @@ class ReceiveRide extends StatelessWidget {
                   ],
                 )
             ),
-
-
           ],
         ),
       ),
@@ -223,7 +221,7 @@ class ReceiveRide extends StatelessWidget {
   void checkAvailabilityOfRide(context)
   {
 
-    rideRequestRef.once().then((DataSnapshot dataSnapShot){
+    rideRef.once().then((DataSnapshot dataSnapShot){
       Navigator.pop(context);
       String theRideId = "";
       if(dataSnapShot.value != null)
@@ -235,15 +233,15 @@ class ReceiveRide extends StatelessWidget {
       else
       {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //content: Text("Ride doesn't exist."),
           content: Text("Ride doesn't exist1."),
         ));
-        print("ride doesn't exist1");
       }
-      if(theRideId == rideDetails.ride_request_id)
+      if(theRideId == tripDetails.rideID)
       {
-        rideRequestRef.set("accepted");
-       // AssistantMethods.disableHomeTabLiveLocationUpdates();
-       // Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(rideDetails: rideDetails)));
+        rideRef.set("accepted");
+       // HelperMethods.disableHomeTabLiveLocationUpdates();
+       // Navigator.push(context, MaterialPageRoute(builder: (context)=> NewRideScreen(tripDetails: tripDetails)));
       }
       else if(theRideId == "cancelled")
       {

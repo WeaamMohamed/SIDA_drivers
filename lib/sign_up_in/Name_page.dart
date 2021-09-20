@@ -4,8 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:sida_drivers_app/firebase_db.dart';
+import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
+import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 
@@ -178,8 +179,11 @@ class _NamePageState extends State<NamePage> {
             if(form1.validate() && form2.validate())
             {
               CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
-              drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
-              drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
+              drivers_ref.child(currentUser.uid).set({'Phone': myphoneNumber , 'FirstName' :firstNamecontroller.text,'LastName' :lastNamecontroller.text});
+              //drivers_ref.child().update({'FirstName':  });
+              //drivers_ref.child(currentUser.uid).update({'LastName':  });
+              //drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
+              //drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
               Navigator.push(context, MaterialPageRoute(
                   builder: (BuildContext context) => HomeScreen()));
             }

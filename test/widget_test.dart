@@ -5,38 +5,38 @@
 
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-// import '../../firebase_db.dart';
+// import '../../globalvariables.dart.dart';
 
 // class PushNotificationService{
 
-//   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+//   final FirebaseMessaging fcm = FirebaseMessaging();
 
 
 //   Future initialize(context) async {
 
 //     if(Platform.isIOS){
-//       firebaseMessaging.requestNotificationPermissions(IosNotificationSettings());
+//       fcm.requestNotificationPermissions(IosNotificationSettings());
 //     }
 
-//     firebaseMessaging.configure(
+//     fcm.configure(
 //       /// the driver opened the app
 //       onMessage: (Map<String, dynamic> message) async {
 
-//         //fetchRideInfo(getRideRequestID(message), context);
-//         getRideRequestID(message);
+//         //fetchRideInfo(getRideID(message), context);
+//         getRideID(message);
 //       },
 //       /// after click to the notification
 //       onLaunch: (Map<String, dynamic> message) async {
 
-//         //fetchRideInfo(getRideRequestID(message), context);
-//         getRideRequestID(message);
+//         //fetchRideInfo(getRideID(message), context);
+//         getRideID(message);
 
 //       },
 //       /// get notifications if the app minimized
 //       onResume: (Map<String, dynamic> message) async {
 
-//         //fetchRideInfo(getRideRequestID(message), context);
-//         getRideRequestID(message);
+//         //fetchRideInfo(getRideID(message), context);
+//         getRideID(message);
 
 //       },
 
@@ -46,33 +46,33 @@
 
 //   Future<String> getToken() async{
 
-//     String token = await firebaseMessaging.getToken();
+//     String token = await fcm.getToken();
 //     print('token: $token');
 
 //     DatabaseReference tokenRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/token');
 //     tokenRef.set(token);
 
-//     firebaseMessaging.subscribeToTopic('alldrivers');
-//     firebaseMessaging.subscribeToTopic('allusers');
+//     fcm.subscribeToTopic('alldrivers');
+//     fcm.subscribeToTopic('allusers');
 
 //   }
 
-//   String getRideRequestID(Map<String, dynamic> message){
+//   String getRideID(Map<String, dynamic> message){
 
-//     String rideRequestID = '';
+//     String rideID = '';
 
 //     if(Platform.isAndroid){
-//       rideRequestID = message['data']['ride_request_id'];
+//       rideID = message['data']['ride_id'];
 //     }
 //     else{
-//      rideRequestID = message['ride_request_id'];
-//       print('ride_request_id: $rideRequestID');
+//      rideID = message['ride_id'];
+//       print('ride_id: $rideID');
 //     }
 
-//     return rideRequestID;
+//     return rideID;
 //   }
 
-//   // void fetchRideInfo(String rideRequestID, context){
+//   // void fetchRideInfo(String rideID, context){
 
 //   //   //show please wait dialog
 //   //   showDialog(
@@ -81,7 +81,7 @@
 //   //     builder: (BuildContext context) => ProgressDialog(status: 'Fetching details',),
 //   //   );
 
-//   //   DatabaseReference rideRequestRef = FirebaseDatabase.instance.reference().child('rideRequest/$rideRequestID');
+//   //   DatabaseReference rideRequestRef = FirebaseDatabase.instance.reference().child('rideRequest/$rideID');
 //   //   rideRequestRef.once().then((DataSnapshot snapshot){
 
 //   //     Navigator.pop(context);
@@ -106,7 +106,7 @@
 
 //   //       TripDetails tripDetails = TripDetails();
 
-//   //       tripDetails.rideRequestID = rideRequestID;
+//   //       tripDetails.rideID = rideID;
 //   //       tripDetails.pickupAddress = pickupAddress;
 //   //       tripDetails.destinationAddress = destinationAddress;
 //   //       tripDetails.pickup = LatLng(pickupLat, pickupLng);

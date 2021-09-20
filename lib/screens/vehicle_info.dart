@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
-
+import 'package:sida_drivers_app/globalvariables.dart';
 class VehicleInfoScreen extends StatefulWidget {
 
   @override
@@ -69,7 +69,6 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
                   customBlackButton(
                       onTap: (){
-
                         if(formKey.currentState.validate())
                         {
                           print("car brand: "+carBrandController.text);
@@ -77,11 +76,9 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
                           print("color: "+colorController.text);
                           print("license: "+carLicensePlateController.text);
                           print("updated.");
-
+                          drivers_ref.child(currentUser.uid).child('carDetails').update({'carBrand': carBrandController.text , 'carModel' :carModelController.text,'carColor' :colorController.text,'carLicensePlate':carLicensePlateController.text });
 
                         }
-
-
                       }),
 
 
