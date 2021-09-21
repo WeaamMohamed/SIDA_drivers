@@ -20,6 +20,4 @@ class DataProvider with ChangeNotifier
     print("toggleLanguage: " + _isEnglish.toString());
     notifyListeners();
   }
-
-  
 }
