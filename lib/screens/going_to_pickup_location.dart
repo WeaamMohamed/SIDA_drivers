@@ -17,7 +17,7 @@ import 'dart:async';
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/widgets/cancel_trip_container.dart';
-
+import 'package:sida_drivers_app/helpers/mapkit_helper.dart';
 class NewRideScreen extends StatefulWidget {
 
   final TripDetails tripDetails;
@@ -47,6 +47,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
   BitmapDescriptor animatingMarkerIcon;
   Position myPosition;
+  String status = "accepted";
+  String durationRide="";
+  bool isRequestingDirection = false;
   void initState()
   {
     super.initState();
@@ -66,16 +69,22 @@ class _NewRideScreenState extends State<NewRideScreen> {
   }
 
   void getRideLiveLocationUpdates() {
+
+    LatLng oldPos = LatLng(0, 0);
     rideStreamSubscription = Geolocator.getPositionStream(
         desiredAccuracy: LocationAccuracy.bestForNavigation,
         distanceFilter: 1).listen((Position position) {
       currentPosition = position;
       myPosition = position;
       LatLng mPosition = LatLng(position.latitude, position.longitude);
+
+      var rot = MapKitHelper.getMarkerRotation(oldPos.latitude, oldPos.longitude, myPosition.latitude, myPosition.latitude);
+
       Marker animatingMarker = Marker(
         markerId: MarkerId('animating'),
         position: mPosition,
         icon: animatingMarkerIcon,
+        rotation: rot,
         infoWindow: InfoWindow(title: 'Current Location'),
       );
       setState(() {
@@ -87,6 +96,16 @@ class _NewRideScreenState extends State<NewRideScreen> {
         marker.markerId.value == "animating");
         markersSet.add(animatingMarker);
       });
+      oldPos = mPosition;
+      updateRideDetails();
+
+      String rideRequestId = widget.tripDetails.rideID;
+      Map locMap =
+      {
+        "latitude": currentPosition.latitude.toString(),
+        "longitude": currentPosition.longitude.toString(),
+      };
+      newRequest_ref.child(rideRequestId).child("driverLocation").set(locMap);
     });
   }
 
@@ -122,7 +141,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
           Spacer(),
           Center(
             child: Text(
-            "Online"  ,
+              durationRide  ,
               style: TextStyle(
                 fontSize: 18,
                 color: mColor,
@@ -267,7 +286,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
     setState(() {
       Polyline polyline = Polyline(
-        color: Colors.pink,
+        color: Colors.blue,
         polylineId: PolylineId("PolylineID"),
         jointType: JointType.round,
         points: polylineCoordinates,
@@ -357,5 +376,38 @@ class _NewRideScreenState extends State<NewRideScreen> {
    newRequest_ref.child(rideReqId).child("driverLocation").set(locMap);
 
  }
+  void updateRideDetails() async
+  {
+    if(isRequestingDirection == false)
+    {
+      isRequestingDirection = true;
 
+      if(myPosition == null)
+      {
+        return;
+      }
+
+      var posLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+      LatLng destinationLatLng;
+
+      if(status == "accepted")
+      {
+        destinationLatLng = widget.tripDetails.pickupLocation;
+      }
+      else
+      {
+        destinationLatLng = widget.tripDetails.dropoffLocation;
+      }
+
+      var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(posLatLng, destinationLatLng);
+      if(directionDetails != null)
+      {
+        setState(() {
+          durationRide = directionDetails.durationText;
+        });
+      }
+
+      isRequestingDirection = false;
+    }
+  }
 }
