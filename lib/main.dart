@@ -107,8 +107,7 @@ class _MyAppState extends State<MyApp> {
           //   return supportedLocales.first;
         },
 
-        home: PhoneScreen(),
-      //  home: widget.currentScreen,
+        home: widget.currentScreen,
       //   initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
       //  routes: {
       //    PhoneNumberPage.id: (context) => PhoneNumberPage(),
