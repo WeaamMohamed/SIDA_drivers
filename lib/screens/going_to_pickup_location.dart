@@ -91,7 +91,7 @@ CameraPosition _kGooglePlex = CameraPosition(
     zoom: 14.4746,
   );
 
-  CameraPosition cameraPosition;
+  // cameraPosition;
 
   Future<void> getCurrentPosition() async
   {
@@ -101,7 +101,7 @@ CameraPosition _kGooglePlex = CameraPosition(
 
     LatLng latLatPosition = LatLng(position1.latitude, position1.longitude);
     CameraPosition currentCameraPosition = new CameraPosition(target: latLatPosition, zoom: 14);
-    cameraPosition = currentCameraPosition;
+    //cameraPosition = currentCameraPosition;
 
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(currentCameraPosition));
   }
@@ -244,7 +244,6 @@ CameraPosition _kGooglePlex = CameraPosition(
               polylines: polyLineSet,
               mapType: MapType.normal,
               myLocationButtonEnabled: true,
-              /// initialCameraPosition: (cameraPosition == null)? _kGooglePlex: cameraPosition,
               initialCameraPosition: _kGooglePlex,
               myLocationEnabled: true,
               zoomGesturesEnabled: true,
@@ -255,6 +254,7 @@ CameraPosition _kGooglePlex = CameraPosition(
               // markers: markersSet,
               // circles: circlesSet,
               onMapCreated: (GoogleMapController controller) async{
+
                 print("weaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaam : onMapCreated");
                 print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
                // _controllerGoogleMap.complete(controller);
@@ -343,6 +343,9 @@ CameraPosition _kGooglePlex = CameraPosition(
 
   void GoOnline() async
   {
+    //todo; 22/9
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
 
     print("weaam : GoOnline()");
     /// await getCurrentPosition();
@@ -363,6 +366,7 @@ CameraPosition _kGooglePlex = CameraPosition(
   ///
   void getLocationLiveUpdates() async
   {
+
     homeTabPositionStream = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1).listen((Position position) {
       currentPosition = position;
 
@@ -371,11 +375,13 @@ CameraPosition _kGooglePlex = CameraPosition(
         Geofire.setLocation(currentUser.uid, position.latitude, position.longitude);
       }
       LatLng userLatLangPosition = LatLng(position.latitude, position.longitude);
-      CameraPosition _newCameraPosition = CameraPosition(
-        target: userLatLangPosition,
-        //  zoom: 14.4746,
-        zoom: 18,
-      );
+      // CameraPosition _newCameraPosition = CameraPosition(
+      //   target: userLatLangPosition,
+      //   //  zoom: 14.4746,
+      //   zoom: 18,
+      // );
+
+      newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
       // setState(() {
       //
       // });
@@ -386,9 +392,9 @@ CameraPosition _kGooglePlex = CameraPosition(
       //
       // });
       /// newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
-      Timer(Duration(milliseconds: 500), () async {
-        await newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
-      });
+      // Timer(Duration(milliseconds: 500), () async {
+      //   await newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+      // });
       ////// newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
 
     });

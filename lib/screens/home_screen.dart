@@ -10,6 +10,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
+import 'package:sida_drivers_app/helpers/helpermethods.dart';
+import 'package:sida_drivers_app/helpers/mapkit_helper.dart';
 import 'package:sida_drivers_app/helpers/pushnotificationservice.dart';
 import 'package:sida_drivers_app/models/drivers.dart';
 import 'package:sida_drivers_app/screens/vehicle_info.dart';
@@ -32,6 +34,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
    var mapProvider;
+   bool isRequestingDirection = false;
+   Position myPosition;
 
 //TODO:
   ///Completer<GoogleMapController> _controllerGoogleMap = Completer();
@@ -69,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //     .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
 
-   CameraPosition currentCameraPosition = new CameraPosition(target: latLatPosition, zoom: 14);
+   CameraPosition currentCameraPosition = new CameraPosition(target: latLatPosition, zoom:20);
    cameraPosition = currentCameraPosition;
     // mapProvider.newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(
     //     currentCameraPosition));
@@ -260,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       //content: Text("You're Offline now!"),
                   //  ));
               }
-                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle
                 //   statusBarIconBrightness: value? Brightness.light: Brightness.dark ,
                 // ));
                 //print("current value : " + _enabled.toString());
@@ -493,17 +497,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void GoOnline() async
   {
 
-    print("weaam : GoOnline()");
-  /// await getCurrentPosition();
-    //Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
-    //currentPosition = position;
     Geofire.initialize("availableDrivers");
     print("weaam: longitude form Go Online: " + currentPosition.longitude.toString());
     Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
-    //print(widget.userID);
-    //print(currentPosition.latitude);
-    //print(currentPosition.longitude);
-    //Geofire.setLocation(widget.userID), currentPosition.latitude, currentPosition.longitude);
     rideRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/newRide');
     rideRef.set('Searching');
 
@@ -513,54 +509,44 @@ class _HomeScreenState extends State<HomeScreen> {
   }
    void getLocationLiveUpdates() async
    {
-     //todo; weaam
+
+    // LatLng oldPos = LatLng(0, 0);
+     //todo; weaam 55, 4:30
      //accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1
      homeTabPositionStream = Geolocator.getPositionStream(desiredAccuracy: LocationAccuracy.bestForNavigation,
    distanceFilter: 1).listen((Position position) {
       currentPosition = position;
+      myPosition = position;
 
       if(_enabled)
       {
-        Geofire.setLocation(currentUser.uid, position.latitude, position.longitude);
+
       }
 
 
-      LatLng userLatLangPosition = LatLng(position.latitude, position.longitude);
-      CameraPosition _newCameraPosition = CameraPosition(
-        target: userLatLangPosition,
-      //  zoom: 14.4746,
-        zoom: 18,
-      );
-      // setState(() {
+
+       LatLng latLng = LatLng(position.latitude, position.longitude);
+      Geofire.setLocation(currentUser.uid, position.latitude, position.longitude);
+      // var rot = MapKitHelper.getMarkerRotation(oldPos.latitude, oldPos.latitude,
+      //     position.latitude, position.longitude);
+      // Marker animatingMarker = Marker(markerId: MarkerId("animating"),
+      // position: latLng,
+      //  //todo; icon: animatingMarkerIcon,
+      //   rotation: rot,
+      //   infoWindow: InfoWindow(title: "current location"),
       //
-      // });
-      // setState(() {
-      //
-      //   googlePlex = _newCameraPosition;
-      //
-      //
-      // });
-     /// newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
-     Timer(Duration(milliseconds: 500), () async {
-            await newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
-      });
+      // );
+
+       newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
+       //todo; add marker set , zoom camera
+
+     // Timer(Duration(milliseconds: 500), () async {
+     //        await newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
+     //  });
      ////// newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(_newCameraPosition));
 
     });
-    
-    //  homeTabPositionStream = geoLocator.getPositionStream(locationOptions).listen((Position position) {
-    //    currentPosition = position;
-    //     if (_enabled)
-    //      {
-    //        Geofire.setLocation(currentUser.uid, currentPosition.latitude, currentPosition.longitude);
-    //        //Geofire.setLocation( widget.userID, position.latitude, position.longitude);
-    //      }
-    //    LatLng userLatLangPosition = LatLng(position.latitude,position.longitude,);
-    //     ///TODO:CHECK THIS LINE BELOW
-    //   // final GoogleMapController mapController = await _controllerGoogleMap.future;
-    //   newGoogleMapController.animateCamera(CameraUpdate.newLatLng(userLatLangPosition));
-    //    //newGoogleMapController.animateCamera(CameraUpdate.newLatLng(latLng));
-     //});
+
    }
   void GoOffline() async
   {
@@ -581,4 +567,39 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
 
   }
+
+  // void updateRideDetails() async
+  // {
+  //   if(isRequestingDirection == false)
+  //   {
+  //     isRequestingDirection = true;
+  //
+  //     if(myPosition == null)
+  //     {
+  //       return;
+  //     }
+  //
+  //     var posLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+  //     LatLng destinationLatLng;
+  //
+  //     if(status == "accepted")
+  //     {
+  //       destinationLatLng = ride.pickup;
+  //     }
+  //     else
+  //     {
+  //       destinationLatLng = widget.rideDetails.dropoff;
+  //     }
+  //
+  //     var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(posLatLng, destinationLatLng);
+  //     if(directionDetails != null)
+  //     {
+  //       setState(() {
+  //         durationRide = directionDetails.durationText;
+  //       });
+  //     }
+  //
+  //     isRequestingDirection = false;
+  //   }
+  // }
 }
