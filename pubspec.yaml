@@ -46,6 +46,7 @@ dependencies:
   assets_audio_player: ^2.0.13+1
   flutter_dialogs: ^2.1.0
   maps_toolkit: ^2.0.0
+  fluttertoast: ^8.0.7
 
 
 

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
+import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 
 import '../globalvariables.dart';
 import 'Name_page.dart';
@@ -120,11 +121,12 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
             //signInWithPhoneAuthCredential(phoneAuthCredential);
           },
           verificationFailed: (verificationFailed) async {
-            setState(() {
-              showLoading = false;
-            });
-            _scaffoldKey.currentState.showSnackBar(
-                SnackBar(content: Text(verificationFailed.message)));
+            defaultToast(message: verificationFailed.message, state: ToastState.ERROR);
+            // setState(() {
+            //   showLoading = false;
+            // });
+            // _scaffoldKey.currentState.showSnackBar(
+            //     SnackBar(content: Text(verificationFailed.message)));
           },
           codeSent: (verificationId, resendingToken) async {
             setState(() {

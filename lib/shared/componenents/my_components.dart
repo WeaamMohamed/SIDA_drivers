@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../colors/colors.dart';
 
@@ -104,6 +105,7 @@ Widget customTextFormField({
   TextEditingController textController,
   TextInputType textInputType,
   String hint,
+  Color textColor = Colors.black,
 }) =>
     TextFormField(
 
@@ -112,6 +114,9 @@ Widget customTextFormField({
 //labelText:"label",
 
       decoration: InputDecoration(
+
+        focusColor: customAmberColor2,
+
 
         //  contentPadding: EdgeInsets.symmetric(vertical: 15.0,),
 
@@ -129,6 +134,7 @@ Widget customTextFormField({
       ),
       cursorColor: Colors.black,
       style: TextStyle(
+        color: textColor,
         fontSize: 15,
       ),
       validator: validator,
@@ -321,3 +327,35 @@ Widget customContainerWithGradient({double height, String title,})=>
   ),
 );
 BorderRadius customBorderRadius = BorderRadius.circular(8);
+
+void defaultToast({
+  @required message,
+  @required ToastState state,
+}) async {
+  Fluttertoast.showToast(
+      msg: message,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 5,
+      backgroundColor: changeToastColor(state),
+      textColor: Colors.white,
+      fontSize: 14.0);
+}
+
+enum ToastState { ERROR, SUCCESSFUL, WARNING }
+
+Color changeToastColor(ToastState state) {
+  switch (state) {
+    case ToastState.ERROR:
+      return Colors.red[400];
+      break;
+    case ToastState.SUCCESSFUL:
+      return Colors.green;
+      break;
+    case ToastState.WARNING:
+      return Colors.orange;
+      break;
+    default:
+      return null;
+  }
+}

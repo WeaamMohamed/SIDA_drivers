@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:sida_drivers_app/demo/phone_screen.dart';
 import 'package:sida_drivers_app/screens/cancel_driver_screen.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
@@ -105,8 +106,9 @@ class _MyAppState extends State<MyApp> {
           // else
           //   return supportedLocales.first;
         },
-        
-        home: widget.currentScreen,
+
+        home: PhoneScreen(),
+      //  home: widget.currentScreen,
       //   initialRoute: (currentUser == null) ? PhoneNumberPage.id : HomeScreen.id,
       //  routes: {
       //    PhoneNumberPage.id: (context) => PhoneNumberPage(),

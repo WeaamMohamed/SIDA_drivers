@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/screens/home_screen.dart';
+import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
@@ -178,14 +179,23 @@ class _NamePageState extends State<NamePage> {
             final form2= formKey2.currentState;
             if(form1.validate() && form2.validate())
             {
-              CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
-              drivers_ref.child(currentUser.uid).set({'Phone': myphoneNumber , 'FirstName' :firstNamecontroller.text,'LastName' :lastNamecontroller.text});
+
+              drivers_ref.child(currentUser.uid).set({'Phone': myphoneNumber ,
+                'FirstName' :firstNamecontroller.text,'LastName' :lastNamecontroller.text})
+              .then((value) {
+                CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (BuildContext context) => HomeScreen()));
+
+              }).catchError((error){
+                defaultToast(message: error.toString(), state: ToastState.ERROR);
+              });
+
+
               //drivers_ref.child().update({'FirstName':  });
               //drivers_ref.child(currentUser.uid).update({'LastName':  });
               //drivers_ref.child(currentUser.uid).update({'FirstName': firstNamecontroller.text });
               //drivers_ref.child(currentUser.uid).update({'LastName': lastNamecontroller.text });
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (BuildContext context) => HomeScreen()));
             }
           },
           child:   Text(' Next',
