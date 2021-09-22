@@ -37,6 +37,7 @@ class HelperMethods
 
     return directionDetails;
   }
+
   static void disableHomeLiveLocationUpdates()
   {
     homeTabPositionStream.pause();
