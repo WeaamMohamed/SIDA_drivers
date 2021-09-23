@@ -11,6 +11,7 @@ Widget customHomeButton({
   Function onTap,
  // double borderRadius = 8,
   bool circularBorder = false,
+  double slideDistance=15
 
 }) =>
     Container(
@@ -56,7 +57,7 @@ Widget customHomeButton({
 
 
                 padding: EdgeInsets.symmetric(horizontal: 33),
-                margin: EdgeInsets.only(left: 15),
+                margin: EdgeInsets.only(left: slideDistance),
                 height: 60,
                   decoration: BoxDecoration(
                     color: Color(0xff010039),

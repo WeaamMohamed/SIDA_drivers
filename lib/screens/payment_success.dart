@@ -2,11 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sida_drivers_app/helpers/helpermethods.dart';
 
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
+import 'home_screen.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
+  final String paymentMethod;
+  final int fareAmount;
+  PaymentSuccessScreen({this.paymentMethod, this.fareAmount});
+
   @override
   _PaymentSuccessScreenState createState() => _PaymentSuccessScreenState();
 }
@@ -70,13 +76,13 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: _textWithOpacity(
-                              text: "The passenger will pay you"),
+                              text: "The passenger will pay you" ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "31.74",
+                              widget.fareAmount.toString(),
                               style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.bold,
@@ -127,7 +133,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "31.74",
+                                  "??",
                                   style: TextStyle(
                                     fontSize: 35,
                                     fontWeight: FontWeight.bold,
@@ -243,7 +249,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "65.74",
+                                (widget.fareAmount+0).toString(),
                                 style: TextStyle(
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold,
@@ -410,7 +416,10 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     withIcon: false,
                     title: "Done",
                     onTap: (){
-
+          Navigator.pop(context);
+          HelperMethods.enableHomeLiveLocationUpdates();
+          Navigator.push(context, MaterialPageRoute(
+              builder: (BuildContext context) => HomeScreen()));
                     }),
                   SizedBox(height: 15,),
                 ],

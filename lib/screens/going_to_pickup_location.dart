@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/helpers/helpermethods.dart';
+import 'package:sida_drivers_app/screens/payment_success.dart';
 import 'package:sida_drivers_app/shared/componenents/progressDialog.dart';
 import 'package:sida_drivers_app/models/tripdetails.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
@@ -50,6 +52,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
   String status = "accepted";
   String durationRide="";
   bool isRequestingDirection = false;
+  String btnTitle="I've arrived";
+  double Slider = 15;
+  Timer timer;
+  int durationCounter = 0;
+
   void initState()
   {
     super.initState();
@@ -141,10 +148,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
           Spacer(),
           Center(
             child: Text(
-              durationRide  ,
+             '400' ,
               style: TextStyle(
                 fontSize: 18,
-                color: mColor,
+                color: Colors.blue,
               ),
             ),
           ),
@@ -231,21 +238,48 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
                 //padding: const EdgeInsets.all(15),
                 child: customHomeButton(
+                  slideDistance: Slider,
                   context: context,
-                  title: "I've arrived",
+                  title: btnTitle,
                   circularBorder: true,
-                  onTap: () {},
+                  onTap: () async{
+                    if(status == "accepted")
+                      {
+                        status="arrived";
+                        newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
+                        if (!mounted) return;
+                        setState(() {
+                          Slider= 270;
+                          btnTitle="Start the trip ";
+                        });
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) => ProgressDialog(message: "Please wait...",)
+                        );
+                        await getPlaceDirection(widget.tripDetails.pickupLocation, widget.tripDetails.dropoffLocation);
+                        Navigator.pop(context);
+                      }
+                    else if( status == "arrived" )
+                    {
+                      status="onRide";
+                      newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
+                      if (!mounted) return;
+                      setState(() {
+                        btnTitle="End the trip";
+                        Slider= 15;
+                      });
+                      initTimer();
+                    }
+                    else if( status == "onRide" )
+                      {
+                        endTheTrip();
+
+                      }
+                  },
                 ),
               ),
             ),
-
-            //TODO: Cancel Trip
-            if(false) Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: CancelTripContainer(),
-            )
           ],
         ),
       )
@@ -375,6 +409,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
    };
    newRequest_ref.child(rideReqId).child("driverLocation").set(locMap);
 
+   drivers_ref.child(currentUser.uid).child('History').child(rideReqId).set(true);
+
  }
   void updateRideDetails() async
   {
@@ -392,7 +428,11 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
       if(status == "accepted")
       {
+        print("*********************accepted************************");
+
         destinationLatLng = widget.tripDetails.pickupLocation;
+        print(destinationLatLng);
+        print(posLatLng);
       }
       else
       {
@@ -400,14 +440,71 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
 
       var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(posLatLng, destinationLatLng);
+      print("*********************************************");
+      print(directionDetails);
+
       if(directionDetails != null)
       {
         setState(() {
+          print("*********************************************");
+          print(durationRide);
           durationRide = directionDetails.durationText;
         });
       }
 
       isRequestingDirection = false;
     }
+  }
+  void initTimer()
+  {
+    const interval = Duration(seconds: 1);
+    timer = Timer.periodic(interval, (timer) {
+      durationCounter = durationCounter + 1;
+    });
+  }
+  endTheTrip() async
+  {
+    timer.cancel();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context)=> ProgressDialog(message: "Please wait...",),
+    );
+
+    var currentLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+
+    var directionalDetails = await HelperMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickupLocation, currentLatLng);
+
+    Navigator.pop(context);
+
+    int fareAmount = HelperMethods.calculateFares(directionalDetails);
+
+    String rideRequestId = widget.tripDetails.rideID;
+    newRequest_ref.child(rideRequestId).child("fares").set(fareAmount.toString());
+    newRequest_ref.child(rideRequestId).child("status").set("ended");
+    rideStreamSubscription.cancel();
+   saveEarnings(fareAmount);
+    Navigator.push(context, MaterialPageRoute(
+        builder: (BuildContext context) => PaymentSuccessScreen( paymentMethod: widget.tripDetails.paymentMethod, fareAmount: fareAmount,)));
+  }
+
+
+  void saveEarnings(int fareAmount)
+  {
+    drivers_ref.child(currentUser.uid).child("earnings").once().then((DataSnapshot dataSnapShot) {
+      if(dataSnapShot.value != null)
+      {
+        double oldEarnings = double.parse(dataSnapShot.value.toString());
+        double totalEarnings = fareAmount + oldEarnings;
+
+        drivers_ref.child(currentUser.uid).child("earnings").set(totalEarnings.toStringAsFixed(2));
+      }
+      else
+      {
+        double totalEarnings = fareAmount.toDouble();
+        drivers_ref.child(currentUser.uid).child("earnings").set(totalEarnings.toStringAsFixed(2));
+      }
+    });
   }
 }

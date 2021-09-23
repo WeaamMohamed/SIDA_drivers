@@ -22,6 +22,8 @@ class HelperMethods
 
     if(res == "failed")
     {
+      print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+      print("Failed");
       return null;
     }
 
@@ -47,6 +49,19 @@ class HelperMethods
   {
     homeTabPositionStream.resume();
     Geofire.setLocation(currentUser.uid, currentPosition.latitude,currentPosition.longitude);
+  }
+  static int calculateFares(DirectionDetails directionDetails)
+  {
+    //in terms USD
+    double timeTraveledFare = (directionDetails.durationValue / 60) * 0.20;
+    double distancTraveledFare = (directionDetails.distanceValue / 1000) * 0.20;
+    double totalFareAmount = timeTraveledFare + distancTraveledFare;
+
+
+
+      double result = (totalFareAmount.truncate()) * 2.0;
+      return result.truncate();
+
   }
 }
 ///-------------------------------------------------------------------------------------
