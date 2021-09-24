@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
 import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
+import '../globalvariables.dart';
 import '../shared/colors/colors.dart';
 
 
@@ -15,6 +17,15 @@ class HomeDrawer extends StatefulWidget {
 }
 
 class _HomeDrawerState extends State<HomeDrawer> {
+
+  String _url='';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadImage();
+
+  }
   @override
   Widget build(BuildContext context) {
     return  Drawer(
@@ -44,9 +55,9 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 //  crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   CircleAvatar(
-                    backgroundImage: AssetImage(
-                      "assets/images/profile_pic.jpg",
-                    ),
+                    backgroundImage: _url == null ?  AssetImage("assets/images/profile_pic.jpg",
+              ):
+                    NetworkImage(_url),
                     minRadius: 43,
                     maxRadius: 43,
                   ),
@@ -202,6 +213,29 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ],
         )
     );
+  }
+  void loadImage() async {
+
+    String myUrl='';
+    try {
+      await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+
+        setState(() {
+          myUrl = snapshot.value['URL'];
+        });
+      });
+    }
+    catch(e)
+    { print("you got error: $e");
+    _url=null;
+    return;
+    }
+
+    setState(() {
+      _url=myUrl;
+      print(_url);
+      // imageFile = File(path);
+    });
   }
 }
 

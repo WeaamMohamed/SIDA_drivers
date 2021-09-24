@@ -16,10 +16,13 @@ import 'package:sida_drivers_app/shared/componenents/progressDialog.dart';
 import 'package:sida_drivers_app/models/tripdetails.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
 import 'dart:async';
+import 'package:date_time_format/date_time_format.dart';
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/widgets/cancel_trip_container.dart';
 import 'package:sida_drivers_app/helpers/mapkit_helper.dart';
+import 'package:time_formatter/time_formatter.dart';
+import 'package:time_formatter/time_formatter.dart';
 class NewRideScreen extends StatefulWidget {
 
   final TripDetails tripDetails;
@@ -56,6 +59,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
   double Slider = 15;
   Timer timer;
   int durationCounter = 0;
+  var StartTime;
+  var EndTime;
 
   void initState()
   {
@@ -104,7 +109,7 @@ class _NewRideScreenState extends State<NewRideScreen> {
         markersSet.add(animatingMarker);
       });
       oldPos = mPosition;
-      updateRideDetails();
+   //   updateRideDetails();
 
       String rideRequestId = widget.tripDetails.rideID;
       Map locMap =
@@ -245,6 +250,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                   onTap: () async{
                     if(status == "accepted")
                       {
+                        ///start time
+                         StartTime = DateTime.now().hour.toString()+':'+ DateTime.now().minute.toString();
+                        print("+______________________time________________________________________");
+                        print(StartTime.toString());
                         status="arrived";
                         newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
                         if (!mounted) return;
@@ -262,7 +271,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                       }
                     else if( status == "arrived" )
                     {
+                      ///end time
+                      EndTime = DateTime.now().hour.toString()+':'+ DateTime.now().minute.toString();
                       status="onRide";
+
                       newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
                       if (!mounted) return;
                       setState(() {
@@ -450,6 +462,8 @@ class _NewRideScreenState extends State<NewRideScreen> {
           print(durationRide);
           durationRide = directionDetails.durationText;
         });
+
+
       }
 
       isRequestingDirection = false;
@@ -475,12 +489,26 @@ class _NewRideScreenState extends State<NewRideScreen> {
     var currentLatLng = LatLng(myPosition.latitude, myPosition.longitude);
 
     var directionalDetails = await HelperMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickupLocation, currentLatLng);
-
     Navigator.pop(context);
 
-    int fareAmount = HelperMethods.calculateFares(directionalDetails);
-
     String rideRequestId = widget.tripDetails.rideID;
+
+    String carType='';
+    String distance='';
+    String time='';
+    try {
+      await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
+        carType = snapshot.value['ride_type'];
+        distance= snapshot.value['TripDistance'];
+        time= snapshot.value['TripTime'];
+        print("=____________++++++++++++++++++++++");
+        print(carType);
+      });
+    }
+    catch(e)
+    { print("you got error: $e");}
+
+    int fareAmount = HelperMethods.calculateFares(directionalDetails,carType,distance,time);
     newRequest_ref.child(rideRequestId).child("fares").set(fareAmount.toString());
     newRequest_ref.child(rideRequestId).child("status").set("ended");
     rideStreamSubscription.cancel();
@@ -506,5 +534,29 @@ class _NewRideScreenState extends State<NewRideScreen> {
         drivers_ref.child(currentUser.uid).child("earnings").set(totalEarnings.toStringAsFixed(2));
       }
     });
+  }
+
+
+  void WaittingTimeCaluclation()
+  {
+    String startTime = formatTime(StartTime); // or if '24:00'
+    String end_time = formatTime( EndTime);// or if '12:00
+
+
+//    var format = DateFormat("HH:mm");
+  //  var start = format.parse(startTime);
+    ///var end = format.parse(end_time);
+
+
+    //if(start.isAfter(end)) {
+      //print('start is big');
+     // print('difference = ${start.difference(end)}');
+    //} else if(start.isBefore(end)){
+      //print('end is big');
+      //print('difference = ${end.difference(start)}');
+    //}else{
+      //print('difference = ${end.difference(start)}');
+    //}
+
   }
 }

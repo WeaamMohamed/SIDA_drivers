@@ -10,6 +10,12 @@ class TripDetails
   String paymentMethod;
   String riderName;
   String riderPhone;
+  String fare;
+  String rideType;
+  String tripTime;
+  String tripDistance;
+
+
 
   TripDetails({
     this.pickupAddress, 
@@ -19,5 +25,10 @@ class TripDetails
     this.rideID, 
     this.paymentMethod, 
     this.riderName, 
-    this.riderPhone});
+    this.riderPhone,
+    this.fare,
+    this.rideType,
+    this.tripDistance,
+    this.tripTime
+  });
 }

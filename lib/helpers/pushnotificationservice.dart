@@ -102,9 +102,12 @@ class PushNotificationService{
 
               String paymentMethod = dataSnapShot.value['payment_method'];
 
-              //String riderName = dataSnapShot.value["rider_name"];
-            //  String riderPhone = dataSnapShot.value['rider_phone'];
-
+              String riderName = dataSnapShot.value["rider_name"];
+              String riderPhone = dataSnapShot.value['rider_phone'];
+              String rideType=dataSnapShot.value['ride_type'];
+              String tripTime=dataSnapShot.value['tripTime'];
+              String tripDistance=dataSnapShot.value['tripDistance'];
+              String fare=dataSnapShot.value['fare'];
               TripDetails tripDetails = TripDetails();
               
               tripDetails.rideID = rideID;
@@ -113,8 +116,12 @@ class PushNotificationService{
               tripDetails.pickupLocation = LatLng(pickupLat, pickupLng);
               tripDetails.dropoffLocation = LatLng(dropoffLat, dropoffLng);
               tripDetails.paymentMethod = paymentMethod;
-              //tripDetails.riderName = riderName;
-            //  tripDetails.riderPhone = riderPhone;
+              tripDetails.riderName = riderName;
+             tripDetails.riderPhone = riderPhone;
+              tripDetails.tripTime = tripTime;
+              tripDetails.tripDistance = tripDistance;
+              tripDetails.fare = fare;
+              tripDetails.rideType = rideType;
 
               print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Information :: ");
               print(tripDetails.pickupAddress);
