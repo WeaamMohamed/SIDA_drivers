@@ -19,12 +19,16 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
 
   String _url='';
+  String name='';
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    loadImage();
+    print("{{{{{{{{{{{{{{{{{{{{{{{");
+    print(_url);
 
+    super.initState();
+    getData();
+    loadImage();
   }
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text("Weaam Mohamed", style: TextStyle(
+                          Text(name, style: TextStyle(
                             fontSize: 20,
                           ),),
                           SizedBox(height: 10,),
@@ -222,20 +226,38 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
         setState(() {
           myUrl = snapshot.value['URL'];
+          print("__________________________________");
+          print(myUrl);
         });
       });
     }
     catch(e)
-    { print("you got error: $e");
+    {
+      print("you got error: $e");
     _url=null;
     return;
     }
 
     setState(() {
+
       _url=myUrl;
       print(_url);
       // imageFile = File(path);
     });
+  }
+  void getData() async
+  {
+    //TODO:GET BALANCE,PROFIT....
+    try {
+      await drivers_ref.child( currentUser.uid).once().then((DataSnapshot snapshot) async {
+        setState(() {
+          name = snapshot.value['FirstName'] +' '+snapshot.value['LastName'];
+        });
+      });
+    }
+    catch(e)
+    { print("you got error: $e");}
+
   }
 }
 
