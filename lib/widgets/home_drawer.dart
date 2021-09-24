@@ -73,7 +73,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(name, style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 21,
                           ),),
                           SizedBox(height: 10,),
 
