@@ -50,6 +50,8 @@ dependencies:
   image_picker: ^0.6.7+17
   firebase_storage: ^4.0.0
   image_downloader: ^0.30.0
+  date_time_format: ^2.0.1
+  time_formatter: ^1.0.0
 
 
 

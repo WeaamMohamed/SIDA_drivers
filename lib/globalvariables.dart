@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sida_drivers_app/models/drivers.dart';
@@ -30,7 +31,7 @@ final drivers_ref = database.reference().child('Drivers');
 
 DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
-
+FirebaseStorage storage = FirebaseStorage(storageBucket: 'gs://sida-51cb9.appspot.com');
 //rideRequestRef
 
 // DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("users");

@@ -43,10 +43,10 @@ class _ReceiveRideState extends State<ReceiveRide> {
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   Position myPosition;
   String status = "accepted";
+  String timeToPickUpLocation="";
+  String distanceToPickUpLocation='';
   String durationRide="";
   String distanceRide='';
-  String durationRide2="";
-  String distanceRide2='';
   bool isRequestingDirection = false;
   int fareAmount=0;
 
@@ -166,7 +166,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
               ),
                 Positioned(
                        left:0,
-                    top: screenHeight*0.2,
+                    top: screenHeight*0.1,
                     child:
                     Column(
                       children: [
@@ -192,7 +192,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                     child: Column(
                                       children: [
 
-                                        Text(fareAmount.toString(),
+                                        Text(widget.tripDetails.fare,
                                             style: TextStyle(
                                                 color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold)),
                                         Text('EGP',
@@ -222,7 +222,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                   children: [
                                     SizedBox(width: 0.04 * screenWidth),
                                         Flexible(
-                                          child: Text(distanceRide2,
+                                          child: Text(widget.tripDetails.tripDistance,
                                               style: TextStyle(
                                                   color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.bold)),
                                         ),
@@ -237,7 +237,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                         SizedBox(height: 0.05* screenHeight),
                         Container(
                           width: screenWidth,
-                          height: screenHeight*0.56,
+                          height: screenHeight*0.7,
                           decoration:BoxDecoration(
                             color: Colors.white,
                             border: Border.all(color:Colors.white ),
@@ -252,7 +252,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Align(
                                   alignment: Alignment.centerRight,
-                                  child:   Text("about " +distanceRide+" ("+durationRide+")" ,style: TextStyle(
+                                  child:   Text("about " +distanceToPickUpLocation+" ("+timeToPickUpLocation+")" ,style: TextStyle(
                                       color: Colors.grey, fontSize: 14.0 )),
 
                                 ),
@@ -275,7 +275,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                               Row(
                                 children: [
                                   SizedBox(width: 0.02 * screenWidth),
-                                  //SvgPicture.asset('assets/images/TargetFlag.svg',width: 30,height: 30,),
+                                  SvgPicture.asset('assets/images/Target_Flag.svg',width: 30,height: 30,),
                                   SizedBox(width: 0.03 * screenWidth),
                                   Flexible(
                                     child: Text(widget.tripDetails.dropoffAddress,
@@ -314,12 +314,12 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('AnySIDA',
+                                        Text(widget.tripDetails.rideType,
                                             style: TextStyle(
                                                 color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
                                         SizedBox(height: 0.04* screenHeight),
                                         //Text(tripDetails.riderName,
-                                        Text("Mohamed",
+                                        Text(widget.tripDetails.riderName,
                                             style: TextStyle(
                                                 color: Colors.black, fontSize: 16.0,fontWeight: FontWeight.bold )),
                                         SizedBox(height: 0.04* screenHeight),
@@ -411,58 +411,41 @@ class _ReceiveRideState extends State<ReceiveRide> {
 
   void updateRideDetails() async
   {
-    if(isRequestingDirection == false)
-    {
+    if(isRequestingDirection == false) {
       isRequestingDirection = true;
 
-      if(myPosition == null)
-      {
+      if (myPosition == null) {
         return;
       }
 
       var posLatLng = LatLng(myPosition.latitude, myPosition.longitude);
       LatLng destinationLatLng;
 
-      if(status == "accepted")
-      {
+      if (status == "accepted") {
         print("*********************accepted************************");
 
         destinationLatLng = widget.tripDetails.pickupLocation;
         print(destinationLatLng);
         print(posLatLng);
       }
-      else
-      {
+      else {
         destinationLatLng = widget.tripDetails.dropoffLocation;
       }
 
       /// from driver location => pickup
-      var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(posLatLng, destinationLatLng);
+      var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(
+          posLatLng, destinationLatLng);
       print("*********************************************");
       print(directionDetails);
 
-      if(directionDetails != null)
-      {
+      if (directionDetails != null) {
         setState(() {
           print("*********************************************");
-          print(durationRide);
-          durationRide = directionDetails.durationText;
-          distanceRide = directionDetails.distanceText;
+          print(timeToPickUpLocation);
+          timeToPickUpLocation = directionDetails.durationText;
+          distanceToPickUpLocation = directionDetails.distanceText;
         });
       }
-      /// from pickup=> dropOff
-      var directionalDetails2 = await HelperMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickupLocation, widget.tripDetails.dropoffLocation);
-      if(directionalDetails2 != null)
-      {
-        setState(() {
-          print("*********************************************");
-          fareAmount = HelperMethods.calculateFares(directionalDetails2);
-          print(durationRide);
-          durationRide2 = directionalDetails2.durationText;
-          distanceRide2 = directionalDetails2.distanceText;
-        });
-      }
-
       isRequestingDirection = false;
     }
   }

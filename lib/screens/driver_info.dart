@@ -91,10 +91,9 @@ class _DriverInfoState extends State<DriverInfo> {
                           children: [
                             Center(
                               child: CircleAvatar(
-                                backgroundImage: imageFile == null
-                                    ? AssetImage("assets/images/profile_pic.jpg")
-                                    : FileImage(File(imageFile.path)),
-
+                                backgroundImage:  _url == null
+                                    ? AssetImage("assets/images/profile_pic.jpg"):
+                              NetworkImage(_url),
                                 minRadius: 43,
                                 maxRadius: 43,
                               ),
@@ -169,34 +168,18 @@ class _DriverInfoState extends State<DriverInfo> {
                           return null;
                         },
                         textInputType: TextInputType.number,
-
                       ),
-
-
-
                     ],
                   ),
                 ),
-
                 Spacer(),
-
                 customBlackButton(
                     onTap: (){
-
                       if(formKey.currentState.validate())
                       {
                         print("updated.");
-
                       }
-
                     }),
-
-
-
-
-
-
-
               ],),),
         ),
       ) ,);
@@ -235,6 +218,14 @@ class _DriverInfoState extends State<DriverInfo> {
                   Navigator.pop(context);
                 },
                 label: Text('Gallery'),
+              ),
+              FlatButton.icon(
+                icon: Icon( Icons.delete),
+                onPressed: (){
+                  deletePhoto();
+                  Navigator.pop(context);
+                },
+                label: Text('Remove'),
               )
 
             ],
@@ -257,23 +248,26 @@ class _DriverInfoState extends State<DriverInfo> {
   void uploadImage(context) async {
 
     try {
-    ///TODO:Delete the old photo
-      FirebaseStorage storage =
-      FirebaseStorage(storageBucket: 'gs://sida-51cb9.appspot.com');
-      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child(Path.basename(imageFile.path));
-      StorageUploadTask storageUploadTask = ref.putFile(imageFile);
+      ///TODO:Delete the old photo
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('ProfilePhoto').child(Path.basename(imageFile.path));
+      print("##################################");
       print(imageFile);
-      print(storageUploadTask);
+      print(imageFile.path);
+      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"Path": imageFile.path});
+
+      StorageUploadTask storageUploadTask = ref.putFile(imageFile);
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Profile photo updated "),
+        content: Text("Profile photo updated successfully!"),
       ));
       String url = await taskSnapshot.ref.getDownloadURL();
       print('url $url');
       setState(() {
         _url = url;
       });
-      drivers_ref.child(currentUser.uid).update({"ProfilePhoto":imageFile.path});
+      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"URL": _url});
+
+
     } catch (ex) {
 
       Scaffold.of(context).showSnackBar(SnackBar(
@@ -282,23 +276,62 @@ class _DriverInfoState extends State<DriverInfo> {
     }
   }
   void loadImage() async {
-    String path='';
+
+    String myUrl='';
     try {
+      await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
 
-      await drivers_ref.child( currentUser.uid).once().then((DataSnapshot snapshot) async {
         setState(() {
-          path = snapshot.value['ProfilePhoto'];
-          print("=____________++++++++++++++++++++++");
-          print(path);
-
+          myUrl = snapshot.value['URL'];
         });
       });
     }
     catch(e)
-    { print("you got error: $e");}
+    { print("you got error: $e");
+      _url=null;
+     return;
+    }
 
     setState(() {
-      imageFile = File(path);
+      _url=myUrl;
+      print(_url);
+     // imageFile = File(path);
     });
   }
+  void deletePhoto() async
+  {
+    String myPath='';
+    if ( _url != null)
+      {
+        try {
+          await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+            setState(() {
+              myPath = snapshot.value['Path'];
+              print("=____________++++++++++++++++++++++");
+              print(myPath);
+            });
+          });
+        }
+        catch(e)
+        { print("you got error: $e");}
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('ProfilePhoto').child(Path.basename(myPath));
+       ref. delete();
+        drivers_ref.child( currentUser.uid).child('ProfilePhoto').remove();
+        setState(() {
+          _url = null;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Profile photo is removed"),
+        ));
+      }
+    else
+      {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("No photo to remove!"),
+        ));
+      }
+  }
+
 }
+
+

@@ -14,6 +14,9 @@ import '../globalvariables.dart';
 
 class HelperMethods
 {
+
+
+
   static Future<DirectionDetails> obtainPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition) async
   {
     String directionUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=${initialPosition.latitude},${initialPosition.longitude}&destination=${finalPosition.latitude},${finalPosition.longitude}&key=$MAP_API_KEY";
@@ -50,16 +53,48 @@ class HelperMethods
     homeTabPositionStream.resume();
     Geofire.setLocation(currentUser.uid, currentPosition.latitude,currentPosition.longitude);
   }
-  static int calculateFares(DirectionDetails directionDetails)
+
+  static void getRideDataForFare() async
   {
-    //in terms USD
-    double timeTraveledFare = (directionDetails.durationValue / 60) * 0.20;
-    double distancTraveledFare = (directionDetails.distanceValue / 1000) * 0.20;
-    double totalFareAmount = timeTraveledFare + distancTraveledFare;
 
+  }
 
+  /// directionDetailsto calculate the actual time of the trip
+  /// distance and time are the data stored in the database and the user confirmed it in the rider app
+  static int calculateFares(DirectionDetails directionDetails ,String carType,String distance,String time)
+  {
 
-      double result = (totalFareAmount.truncate()) * 2.0;
+    double timeTraveledFare=0.0;
+    double distancTraveledFare=0.0;
+    double totalFareAmount;
+    print("+____________________________");
+    print(time);
+    print(distance);
+    print( directionDetails.durationValue );
+    double tripTime= double.parse(time);
+    double tripDistance= double.parse(distance);
+    if (  carType == "Any SIDA")
+      {
+         if( directionDetails.durationValue > tripTime )
+           {
+             timeTraveledFare = ((directionDetails.durationValue - tripTime) / 60) * 0.36;
+           }
+
+         distancTraveledFare = (tripDistance/ 1000) * 2.61;
+         totalFareAmount = timeTraveledFare + distancTraveledFare;
+        if(totalFareAmount < 11)
+          totalFareAmount=11;
+      }
+    else if (  carType == "SIDA Plus")
+      {
+        if( directionDetails.durationValue > tripTime )
+        {
+          timeTraveledFare = ((directionDetails.durationValue - tripTime) / 60) * 0.4;
+        }
+        distancTraveledFare = (tripDistance/ 1000) * 2.80;
+        totalFareAmount = timeTraveledFare + distancTraveledFare;
+      }
+      double result = (totalFareAmount.truncate()) * 1.0;
       return result.truncate();
 
   }
