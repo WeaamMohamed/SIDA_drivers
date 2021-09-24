@@ -1,7 +1,15 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
+import 'package:path/path.dart' as Path;
+import '../globalvariables.dart';
+import '../shared/componenents/my_components.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 class VehicleInfoScreen extends StatefulWidget {
 
   @override
@@ -15,11 +23,15 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
   TextEditingController colorController = TextEditingController();
   TextEditingController carLicensePlateController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  File imageFile;
+  String _url;
+  final ImagePicker picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
 
-
+    final screenHeight= MediaQuery.of(context).size.height;
+    final screenWidth= MediaQuery.of(context).size.width;
     return Scaffold(
       appBar:  AppBar(
         //  backgroundColor: Colors.red,
@@ -27,7 +39,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
         centerTitle: true,
 
-        title: Text("Driver Information",
+        title: Text("Vehicle Information",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -122,15 +134,23 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
         child: Stack(
           children: [
             Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage(
-                  "assets/images/profile_pic.jpg",
+              child: Container(
+                height: 0.2*MediaQuery.of(context).size.height * 0.15,
+                width: MediaQuery.of(context).size.width * 0.6,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image:  _url == null
+                                          ? AssetImage(
+                  "assets/images/defaultCar.png",
+                  ):
+                      NetworkImage(_url),
+
+
+
+                      fit: BoxFit.cover,
+                    )
                 ),
-                minRadius: 43,
-                maxRadius: 43,
               ),
-
-
             ),
             Positioned(
               left: MediaQuery.of(context).size.width * 0.5,
@@ -150,7 +170,14 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
                 ),
 
                 padding: EdgeInsets.all(8),
-                child: Icon(Icons.edit, color: Colors.black,),
+                child:  IconButton(icon: Icon(Icons.edit, color: Colors.black,), onPressed: ()
+                {
+                  print("helllllllo");
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder:((builder)=> bottomsheet()),
+                  );
+                }),
               ),
             )
           ],
@@ -215,4 +242,154 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
     ],
   );
+
+  Widget bottomsheet()
+  {
+    return Container(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.symmetric(horizontal: 20
+          ,vertical: 20),
+      child: Column(
+        children: <Widget>[
+          Text('Upload Car photo',
+            style: TextStyle(
+                fontSize: 20
+            ),
+          ),
+          SizedBox( height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FlatButton.icon(
+                icon: Icon( Icons.camera),
+                onPressed: (){
+                  takephoto(ImageSource.camera);
+                  Navigator.pop(context);
+
+                },
+                label: Text('Camera'),
+              ),
+              FlatButton.icon(
+                icon: Icon( Icons.image),
+                onPressed: (){
+                  takephoto(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+                label: Text('Gallery'),
+              ),
+              FlatButton.icon(
+                icon: Icon( Icons.delete),
+                onPressed: (){
+                  deletePhoto();
+                  Navigator.pop(context);
+                },
+                label: Text('Remove'),
+              )
+
+            ],
+
+          )
+        ],
+      ),
+    );
+  }
+  void takephoto ( ImageSource source) async {
+
+    var PickedFile = await ImagePicker.pickImage(source: source);
+
+    setState(() {
+      imageFile = PickedFile;
+    });
+    uploadImage(context);
+  }
+
+  void uploadImage(context) async {
+
+    try {
+      ///TODO:Delete the old photo
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(imageFile.path));
+      print("##################################");
+      print(imageFile);
+      print(imageFile.path);
+      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"Path": imageFile.path});
+
+      StorageUploadTask storageUploadTask = ref.putFile(imageFile);
+      StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Car photo updated successfully!"),
+      ));
+      String url = await taskSnapshot.ref.getDownloadURL();
+      print('url $url');
+      setState(() {
+        _url = url;
+      });
+      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"URL": _url});
+
+
+    } catch (ex) {
+
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(ex.message),
+      ));
+    }
+  }
+  void loadImage() async {
+
+    String myUrl='';
+    try {
+      await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
+
+        setState(() {
+          myUrl = snapshot.value['URL'];
+        });
+      });
+    }
+    catch(e)
+    { print("you got error: $e");
+    _url=null;
+    return;
+    }
+
+    setState(() {
+      _url=myUrl;
+      print(_url);
+      // imageFile = File(path);
+    });
+  }
+  void deletePhoto() async
+  {
+    String myPath='';
+    if ( _url != null)
+    {
+      try {
+        await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
+          setState(() {
+            myPath = snapshot.value['Path'];
+            print("=____________++++++++++++++++++++++");
+            print(myPath);
+          });
+        });
+      }
+      catch(e)
+      { print("you got error: $e");}
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(myPath));
+      ref. delete();
+      drivers_ref.child( currentUser.uid).child('CarPhoto').remove();
+      setState(() {
+        _url = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("photo is removed"),
+      ));
+    }
+    else
+    {
+      print("_-----------------_");
+      print(_url);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("No photo to remove!"),
+      ));
+    }
+  }
 }

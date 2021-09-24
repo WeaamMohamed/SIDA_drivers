@@ -409,7 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
               title: "Update Driver Information",
               withIcon: false,
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverInfo()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> VehicleInfoScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> VehicleInfoScreen()));
 
 
               },
