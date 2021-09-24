@@ -19,12 +19,16 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
 
   String _url='';
+  String name='';
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
-    loadImage();
+    print("{{{{{{{{{{{{{{{{{{{{{{{");
+    print(_url);
 
+    super.initState();
+    getData();
+    loadImage();
   }
   @override
   Widget build(BuildContext context) {
@@ -56,7 +60,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 children: [
                   CircleAvatar(
                     backgroundImage: _url == null ?  AssetImage("assets/images/profile_pic.jpg",
-              ):
+                    ):
                     NetworkImage(_url),
                     minRadius: 43,
                     maxRadius: 43,
@@ -68,8 +72,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text("Weaam Mohamed", style: TextStyle(
-                            fontSize: 20,
+                          Text(name, style: TextStyle(
+                            fontSize: 21,
                           ),),
                           SizedBox(height: 10,),
 
@@ -184,29 +188,29 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
 
             _buildDrawerItem(
-                title: "Sign Out",
-                imagePath: "assets/images/log_out_icon.svg",
-                onTap:  () async{
-                  //TODO: sign out
+              title: "Sign Out",
+              imagePath: "assets/images/log_out_icon.svg",
+              onTap:  () async{
+                //TODO: sign out
 
-                  await FirebaseAuth.instance.signOut().then((value) {
-                    print("singed out successfully");
-                    CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: false);
-                  }).onError((error, stackTrace){
-                    print(error.toString());
-                  }).catchError((error)=> print(error.toString()));
+                await FirebaseAuth.instance.signOut().then((value) {
+                  print("singed out successfully");
+                  CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: false);
+                }).onError((error, stackTrace){
+                  print(error.toString());
+                }).catchError((error)=> print(error.toString()));
 
-                  //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
+                //Navigator.pushAndRemoveUntil(context, newRoute, (route) => false)
 
-                  Navigator.pushAndRemoveUntil<dynamic>(
-                    context,
-                    MaterialPageRoute<dynamic>(
-                      builder: (BuildContext context) => PhoneNumberPage(),
-                    ),
-                        (route) => false,//if you want to disable back feature set to false
-                  );
+                Navigator.pushAndRemoveUntil<dynamic>(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => PhoneNumberPage(),
+                  ),
+                      (route) => false,//if you want to disable back feature set to false
+                );
 
-                },),
+              },),
 
 
 
@@ -222,20 +226,38 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
         setState(() {
           myUrl = snapshot.value['URL'];
+          print("_______iiii___________________________");
+          print(myUrl);
         });
       });
     }
     catch(e)
-    { print("you got error: $e");
-    _url=null;
-    return;
+    {
+      print("you got error: $e");
+      _url=null;
+      return;
     }
 
     setState(() {
+
       _url=myUrl;
       print(_url);
       // imageFile = File(path);
     });
+  }
+  void getData() async
+  {
+    //TODO:GET BALANCE,PROFIT....
+    try {
+      await drivers_ref.child( currentUser.uid).once().then((DataSnapshot snapshot) async {
+        setState(() {
+          name = snapshot.value['FirstName'] +' '+snapshot.value['LastName'];
+        });
+      });
+    }
+    catch(e)
+    { print("you got error: $e");}
+
   }
 }
 
