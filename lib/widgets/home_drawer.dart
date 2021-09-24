@@ -226,7 +226,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
         setState(() {
           myUrl = snapshot.value['URL'];
-          print("__________________________________");
+          print("_______iiii___________________________");
           print(myUrl);
         });
       });
