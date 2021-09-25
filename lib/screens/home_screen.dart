@@ -22,8 +22,8 @@ import '../shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/shared/providers/map_provider.dart';
 import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 import 'package:sida_drivers_app/widgets/cancel_trip_container.dart';
+import 'package:sida_drivers_app/screens/driver_info.dart';
 
-import 'driver_info.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
 

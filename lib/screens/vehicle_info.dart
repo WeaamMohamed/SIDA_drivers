@@ -1,39 +1,37 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_downloader/image_downloader.dart';
-import 'package:path/path.dart' as Path;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/shared/componenents/my_components.dart';
+import 'package:sida_drivers_app/globalvariables.dart';
+import 'package:path/path.dart' as Path;
 import '../globalvariables.dart';
 import '../shared/componenents/my_components.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-
-class DriverInfo extends StatefulWidget {
+class VehicleInfoScreen extends StatefulWidget {
 
   @override
-  _DriverInfoState createState() => _DriverInfoState();
+  _VehicleInfoScreenState createState() => _VehicleInfoScreenState();
 }
 
-class _DriverInfoState extends State<DriverInfo> {
-  var nameController = TextEditingController();
-  var genderController = TextEditingController();
-  var ageController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
+class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
+
+  TextEditingController carBrandController = TextEditingController();
+  TextEditingController carModelController = TextEditingController();
+  TextEditingController colorController = TextEditingController();
+  TextEditingController carLicensePlateController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   File imageFile;
   String _url;
   final ImagePicker picker = ImagePicker();
 
   @override
-  void initState() {
-
-    super.initState();
-    loadImage();
-  }
-  @override
   Widget build(BuildContext context) {
 
-
+    final screenHeight= MediaQuery.of(context).size.height;
+    final screenWidth= MediaQuery.of(context).size.width;
     return Scaffold(
       appBar:  AppBar(
         //  backgroundColor: Colors.red,
@@ -41,7 +39,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
         centerTitle: true,
 
-        title: Text("Driver Information",
+        title: Text("Vehicle Information",
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -67,123 +65,185 @@ class _DriverInfoState extends State<DriverInfo> {
               left: 20,
               right: 20,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //  mainAxisSize: MainAxisSize.max,
+            child: Form(
+              key: formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //  mainAxisSize: MainAxisSize.max,
 
-              children: [
-
-
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.55,
-
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-
-                      Container(
-                        //  color: Colors.grey.shade400,
-                        height: MediaQuery.of(context).size.height * 0.15,
-
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: CircleAvatar(
-                                backgroundImage:  _url == null
-                                    ? AssetImage("assets/images/profile_pic.jpg"):
-                                NetworkImage(_url),
-                                minRadius: 43,
-                                maxRadius: 43,
-                              ),
+                children: [
 
 
-                            ),
-                            Positioned(
-                              left: MediaQuery.of(context).size.width * 0.5,
-                              top: MediaQuery.of(context).size.height * 0.085,
+                  _upperPart(),
 
-                              child: Container(
+                  //  Spacer(),
 
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    boxShadow: [BoxShadow(
-                                      color: Colors.grey.shade400,
-                                      spreadRadius: 1,
-                                      blurRadius: 8,
-                                      offset: Offset(2,7),
-                                    )]
-                                ),
+                  customBlackButton(
+                      onTap: (){
+                        if(formKey.currentState.validate())
+                        {
+                          print("car brand: "+carBrandController.text);
+                          print("car model: "+carModelController.text);
+                          print("color: "+colorController.text);
+                          print("license: "+carLicensePlateController.text);
+                          print("updated.");
+                          drivers_ref.child(currentUser.uid).child('carDetails').update({'carBrand': carBrandController.text , 'carModel' :carModelController.text,'carColor' :colorController.text,'carLicensePlate':carLicensePlateController.text });
 
-                                padding: EdgeInsets.all(8),
-                                child: IconButton(icon: Icon(Icons.edit, color: Colors.black,), onPressed: ()
-                                {
-                                  print("helllllllo");
-                                  showModalBottomSheet<void>(
-                                    context: context,
-                                    builder:((builder)=> bottomsheet()),
-                                  );
-                                }),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
+                        }
+                      }),
 
-                      customTextFormField(
-                        label: "Name (Registered)",
-                        textController: nameController,
-                        validator:  (value) {
-                          if (value.isEmpty) {
-                            return 'name must not be empty.';
-                          }
-                          return null;
-                        },
 
-                        textInputType: TextInputType.name,
 
-                      ),
 
-                      customTextFormField(
-                        label: "Gender",
-                        textController: genderController,
-                        validator:  (value) {
-                          if (value.isEmpty) {
-                            return 'gender must not be empty.';
-                          }
-                          return null;
-                        },
-                        textInputType: TextInputType.text,
 
-                      ),
-                      customTextFormField(
-                        label: "Age",
-                        textController: ageController,
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Phone number must not be empty.';
-                          }
-                          return null;
-                        },
-                        textInputType: TextInputType.number,
-                      ),
-                    ],
-                  ),
-                ),
-                Spacer(),
-                customBlackButton(
-                    onTap: (){
-                      if(formKey.currentState.validate())
-                      {
-                        print("updated.");
-                      }
-                    }),
-              ],),),
+                ],),
+            ),),
         ),
       ) ,);
   }
+
+  @override
+  void initState() {
+
+    // TODO: implement initState
+    //to hide app bar and status bar
+    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
+          statusBarIconBrightness: Brightness.dark,
+        ));
+    loadImage();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+
+    super.dispose();
+
+  }
+
+  Widget _upperPart() => Column(
+    children: [
+      Container(
+        //  color: Colors.grey.shade400,
+        height: MediaQuery.of(context).size.height * 0.15,
+
+        child: Stack(
+          children: [
+            Center(
+              child: Container(
+                height: 0.2*MediaQuery.of(context).size.height * 0.15,
+                width: MediaQuery.of(context).size.width * 0.6,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image:  _url == null
+                          ? AssetImage(
+                        "assets/images/defaultCar.png",
+                      ):
+                      NetworkImage(_url),
+
+
+
+                      fit: BoxFit.cover,
+                    )
+                ),
+              ),
+            ),
+            Positioned(
+              left: MediaQuery.of(context).size.width * 0.5,
+              top: MediaQuery.of(context).size.height * 0.085,
+
+              child: Container(
+
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [BoxShadow(
+                      color: Colors.grey.shade400,
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: Offset(2,7),
+                    )]
+                ),
+
+                padding: EdgeInsets.all(8),
+                child:  IconButton(icon: Icon(Icons.edit, color: Colors.black,), onPressed: ()
+                {
+                  print("helllllllo");
+                  showModalBottomSheet<void>(
+                    context: context,
+                    builder:((builder)=> bottomsheet()),
+                  );
+                }),
+              ),
+            )
+          ],
+        ),
+      ),
+      SizedBox(height: 20,),
+      customTextFormField(
+        label: "Car Brand",
+        textController: carBrandController,
+        validator:  (value) {
+          if (value.isEmpty) {
+            return 'car Brand must not be empty.';
+          }
+          return null;
+        },
+
+        textInputType: TextInputType.text,
+
+      ),
+      SizedBox(height: 20,),
+
+      customTextFormField(
+        label: "Car Model",
+        textController: carModelController,
+        validator:  (value) {
+          if (value.isEmpty) {
+            return 'Car Model must not be empty.';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+
+      ),
+      SizedBox(height: 20,),
+      customTextFormField(
+        label: "Color",
+        textController: colorController,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Color must not be empty.';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+
+      ),
+
+      SizedBox(height: 20,),
+      customTextFormField(
+        hint: "مثال: أ ف ل 3245",
+        label: "Car License Plate",
+        textController: carLicensePlateController,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'License Plate must not be empty.';
+          }
+          return null;
+        },
+        textInputType: TextInputType.text,
+
+      ),
+
+    ],
+  );
+
   Widget bottomsheet()
   {
     return Container(
@@ -193,7 +253,7 @@ class _DriverInfoState extends State<DriverInfo> {
           ,vertical: 20),
       child: Column(
         children: <Widget>[
-          Text('Choose Profile Picture',
+          Text('Upload Car photo',
             style: TextStyle(
                 fontSize: 20
             ),
@@ -249,23 +309,23 @@ class _DriverInfoState extends State<DriverInfo> {
 
     try {
       ///TODO:Delete the old photo
-      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('ProfilePhoto').child(Path.basename(imageFile.path));
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(imageFile.path));
       print("##################################");
       print(imageFile);
       print(imageFile.path);
-      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"Path": imageFile.path});
+      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"Path": imageFile.path});
 
       StorageUploadTask storageUploadTask = ref.putFile(imageFile);
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Profile photo updated successfully!"),
+        content: Text("Car photo updated successfully!"),
       ));
       String url = await taskSnapshot.ref.getDownloadURL();
       print('url $url');
       setState(() {
         _url = url;
       });
-      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"URL": _url});
+      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"URL": _url});
 
 
     } catch (ex) {
@@ -279,7 +339,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
     String myUrl='';
     try {
-      await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+      await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
 
         setState(() {
           myUrl = snapshot.value['URL'];
@@ -304,7 +364,7 @@ class _DriverInfoState extends State<DriverInfo> {
     if ( _url != null)
     {
       try {
-        await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+        await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
           setState(() {
             myPath = snapshot.value['Path'];
             print("=____________++++++++++++++++++++++");
@@ -314,24 +374,23 @@ class _DriverInfoState extends State<DriverInfo> {
       }
       catch(e)
       { print("you got error: $e");}
-      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('ProfilePhoto').child(Path.basename(myPath));
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(myPath));
       ref. delete();
-      drivers_ref.child( currentUser.uid).child('ProfilePhoto').remove();
+      drivers_ref.child( currentUser.uid).child('CarPhoto').remove();
       setState(() {
         _url = null;
       });
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Profile photo is removed"),
+        content: Text("photo is removed"),
       ));
     }
     else
     {
+      print("_-----------------_");
+      print(_url);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("No photo to remove!"),
       ));
     }
   }
-
 }
-
-
