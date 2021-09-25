@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 
+import 'identity_confirmation.dart';
+
 class CriminalRecordsAndTaxiApplicationFile extends StatefulWidget {
 
   @override
@@ -57,7 +59,12 @@ class _CriminalRecordsAndTaxiApplicationFileState extends State<CriminalRecordsA
             Spacer(),
             customBlackButton
               (//TODO: next
-                onTap: (){}
+                onTap: (){
+
+                  Navigator.push(context,  MaterialPageRoute(builder: (context)=> IdentityConfirmation()));
+
+
+                }
             )
 
 

@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter/material.dart';
+import 'package:sida_drivers_app/screens/vehicle_info.dart';
 import '../globalvariables.dart';
 import '../shared/componenents/my_components.dart';
 import 'package:image_picker/image_picker.dart';
@@ -175,7 +176,10 @@ class _DriverInfoState extends State<DriverInfo> {
                 Spacer(),
                 customBlackButton(
                     onTap: (){
-                      if(formKey.currentState.validate())
+                      drivers_ref.child(currentUser.uid).update({"Gender":  genderController.text});
+                      drivers_ref.child(currentUser.uid).update({"Age":  ageController.text});
+                      Navigator.push(context,  MaterialPageRoute(builder: (context)=> VehicleInfoScreen()));
+                      //  if(formKey.currentState.validate())
                       {
                         print("updated.");
                       }
@@ -253,10 +257,13 @@ class _DriverInfoState extends State<DriverInfo> {
       print("##################################");
       print(imageFile);
       print(imageFile.path);
-      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"Path": imageFile.path});
+      drivers_ref.child(currentUser.uid).child('Photos').child('ProfilePhoto').update({"Path": imageFile.path});
 
       StorageUploadTask storageUploadTask = ref.putFile(imageFile);
+
+      showDialog(context: context, builder:  ((builder)=> Center(child: CircularProgressIndicator( color: Colors.grey))));
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
+        Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Profile photo updated successfully!"),
       ));
@@ -265,7 +272,7 @@ class _DriverInfoState extends State<DriverInfo> {
       setState(() {
         _url = url;
       });
-      drivers_ref.child(currentUser.uid).child('ProfilePhoto').update({"URL": _url});
+      drivers_ref.child(currentUser.uid).child('Photos').child('ProfilePhoto').update({"URL": _url});
 
 
     } catch (ex) {
@@ -279,7 +286,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
     String myUrl='';
     try {
-      await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+      await drivers_ref.child( currentUser.uid).child('Photos').child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
 
         setState(() {
           myUrl = snapshot.value['URL'];
@@ -304,7 +311,7 @@ class _DriverInfoState extends State<DriverInfo> {
     if ( _url != null)
       {
         try {
-          await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+          await drivers_ref.child( currentUser.uid).child('Photos').child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
             setState(() {
               myPath = snapshot.value['Path'];
               print("=____________++++++++++++++++++++++");
@@ -316,7 +323,7 @@ class _DriverInfoState extends State<DriverInfo> {
         { print("you got error: $e");}
       StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('ProfilePhoto').child(Path.basename(myPath));
        ref. delete();
-        drivers_ref.child( currentUser.uid).child('ProfilePhoto').remove();
+        drivers_ref.child( currentUser.uid).child('Photos').child('ProfilePhoto').remove();
         setState(() {
           _url = null;
         });

@@ -144,6 +144,8 @@ Widget customTextFormField({
 Widget customEditImage({@required context,
   String imagePath = "assets/images/certificate.svg",
   Function onTap,
+  Function myOnpressed,
+  String myUrl
 }) => GestureDetector(
   onTap: onTap,
   child:   Container(
@@ -155,8 +157,8 @@ Widget customEditImage({@required context,
     //  color: Colors.white,
 
     decoration: BoxDecoration(
+     // borderRadius: BorderRadius.circular(15),
 
-      borderRadius: BorderRadius.circular(15),
 
     ),
 
@@ -171,10 +173,14 @@ Widget customEditImage({@required context,
           left: 0,
 
           child: Container(
-
-
-
             decoration: BoxDecoration(
+              image: DecorationImage(
+                image:  myUrl == null
+                    ? AssetImage(imagePath,
+                ):
+                NetworkImage(myUrl),
+                fit: BoxFit.cover,
+              ),
 
              color: Colors.grey.shade300,
 
@@ -232,9 +238,7 @@ Widget customEditImage({@required context,
 
             padding: EdgeInsets.all(8),
 
-            child: Icon(Icons.edit, color: Colors.black,
-
-              size: 30,),
+            child: IconButton(icon: Icon(Icons.edit, color: Colors.black,size:30), onPressed: myOnpressed),
 
           ),
 

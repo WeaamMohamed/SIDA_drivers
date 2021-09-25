@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../shared/componenents/my_components.dart';
+import 'driver_registeration.dart';
+import 'driver_registration_completed.dart';
 
 class IdentityConfirmation extends StatefulWidget {
 
@@ -106,7 +108,11 @@ class _IdentityConfirmationState extends State<IdentityConfirmation> {
             ),
             Spacer(),
             customBlackButton(
-              onTap: (){}
+              onTap: (){
+                Navigator.push(context,  MaterialPageRoute(builder: (context)=> DriverRegistrationCompleted()));
+
+
+              }
               ,
             )
           ],

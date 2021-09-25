@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../shared/componenents/my_components.dart';
+import 'home_screen.dart';
 
 class DriverRegistrationCompleted extends StatefulWidget {
 
@@ -79,7 +80,11 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
 
             Spacer(),
             customBlackButton(
-              onTap: (){}
+              onTap: (){
+                Navigator.push(context,  MaterialPageRoute(builder: (context)=> HomeScreen()));
+
+
+              }
               ,title: "Done",
             )
           ],

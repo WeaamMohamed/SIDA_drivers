@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 
 class PhotoHandler extends StatefulWidget {
    File imageFile;
+   
   PhotoHandler({this.imageFile});
   @override
   _PhotoHandlerState createState() => _PhotoHandlerState();

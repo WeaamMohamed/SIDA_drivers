@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/screens/vehicle_registration_certificate.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:path/path.dart' as Path;
@@ -81,16 +82,18 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
                   customBlackButton(
                       onTap: (){
-                        if(formKey.currentState.validate())
-                        {
-                          print("car brand: "+carBrandController.text);
-                          print("car model: "+carModelController.text);
-                          print("color: "+colorController.text);
-                          print("license: "+carLicensePlateController.text);
-                          print("updated.");
-                          drivers_ref.child(currentUser.uid).child('carDetails').update({'carBrand': carBrandController.text , 'carModel' :carModelController.text,'carColor' :colorController.text,'carLicensePlate':carLicensePlateController.text });
+                        // if(formKey.currentState.validate())
+                        // {
+                        //   print("car brand: "+carBrandController.text);
+                        //   print("car model: "+carModelController.text);
+                        //   print("color: "+colorController.text);
+                        //   print("license: "+carLicensePlateController.text);
+                        //   print("updated.");
+                        //   drivers_ref.child(currentUser.uid).child('carDetails').update({'carBrand': carBrandController.text , 'carModel' :carModelController.text,'carColor' :colorController.text,'carLicensePlate':carLicensePlateController.text });
+                        //
+                        // }
+                        Navigator.push(context,  MaterialPageRoute(builder: (context)=> VehicleRegistrationCertificate()));
 
-                        }
                       }),
 
 
@@ -309,14 +312,16 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
     try {
       ///TODO:Delete the old photo
-      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(imageFile.path));
+      StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('Photos').child('CarPhoto').child(Path.basename(imageFile.path));
       print("##################################");
       print(imageFile);
       print(imageFile.path);
-      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"Path": imageFile.path});
+      drivers_ref.child(currentUser.uid).child('Photos').child('CarPhoto').update({"Path": imageFile.path});
 
       StorageUploadTask storageUploadTask = ref.putFile(imageFile);
+      showDialog(context: context, builder:  ((builder)=> Center(child: CircularProgressIndicator( color: Colors.grey))));
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Car photo updated successfully!"),
       ));
@@ -325,7 +330,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       setState(() {
         _url = url;
       });
-      drivers_ref.child(currentUser.uid).child('CarPhoto').update({"URL": _url});
+      drivers_ref.child(currentUser.uid).child('Photos').child('CarPhoto').update({"URL": _url});
 
 
     } catch (ex) {
@@ -339,7 +344,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
     String myUrl='';
     try {
-      await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
+      await drivers_ref.child( currentUser.uid).child('Photos').child('CarPhoto').once().then((DataSnapshot snapshot) async {
 
         setState(() {
           myUrl = snapshot.value['URL'];
@@ -364,7 +369,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
     if ( _url != null)
     {
       try {
-        await drivers_ref.child( currentUser.uid).child('CarPhoto').once().then((DataSnapshot snapshot) async {
+        await drivers_ref.child( currentUser.uid).child('Photos').child('CarPhoto').once().then((DataSnapshot snapshot) async {
           setState(() {
             myPath = snapshot.value['Path'];
             print("=____________++++++++++++++++++++++");
@@ -376,7 +381,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       { print("you got error: $e");}
       StorageReference ref = storage.ref().child('DriversImages').child(currentUser.uid).child('CarPhoto').child(Path.basename(myPath));
       ref. delete();
-      drivers_ref.child( currentUser.uid).child('CarPhoto').remove();
+      drivers_ref.child( currentUser.uid).child('Photos').child('CarPhoto').remove();
       setState(() {
         _url = null;
       });
