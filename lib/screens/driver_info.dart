@@ -26,7 +26,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
     super.initState();
     loadImage();
   }
