@@ -181,7 +181,7 @@ class _NamePageState extends State<NamePage> {
             {
 
               drivers_ref.child(currentUser.uid).set({'Phone': myphoneNumber ,
-                'FirstName' :firstNamecontroller.text,'LastName' :lastNamecontroller.text})
+                'FirstName' :firstNamecontroller.text,'LastName' :lastNamecontroller.text, 'enable' : 'false'})
               .then((value) {
                 CacheHelper.saveData(key: IS_SIGNED_IN_SHARED_PREF, data: true);
                 Navigator.push(context, MaterialPageRoute(

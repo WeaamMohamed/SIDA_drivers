@@ -26,10 +26,6 @@ import 'package:sida_drivers_app/screens/driver_info.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
-
-  HomeScreen();
-  //final String userID;
-  //HomeScreen(  this.userID,{Key key}):super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -38,14 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
    var mapProvider;
    bool isRequestingDirection = false;
    Position myPosition;
-
+   bool enabled=false;
 //TODO:
   ///Completer<GoogleMapController> _controllerGoogleMap = Completer();
   Completer<GoogleMapController> _controllerGoogleMap;
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-  bool _enabled = false;
+
   Color mColor = Colors.white;
   var geoLocator = Geolocator();
   var locationOptions = LocationOptions(accuracy: LocationAccuracy.bestForNavigation, distanceFilter: 1);
@@ -130,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //to hide app bar and status bar
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
    _checkPermission();
-
+    getEnableValue();
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
           statusBarIconBrightness: Brightness.light,
@@ -142,6 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+   // getEnableValue();
     _controllerGoogleMap = Completer();
 
      mapProvider = Provider.of<MapProvider>(context);
@@ -195,9 +193,9 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: HomeDrawer(),
       key: scaffoldKey,
       appBar: AppBar(
-        brightness: _enabled? Brightness.light: Brightness.dark,
+        brightness: enabled? Brightness.light: Brightness.dark,
         automaticallyImplyLeading: false, // this will hide Drawer hamburger icon
-        backgroundColor: _enabled? Colors.white: Color(0xff2C2B69),
+        backgroundColor:  enabled? Colors.white: Color(0xff2C2B69),
         elevation: 0,
         actions: [
 
@@ -210,26 +208,26 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Padding(
               padding: EdgeInsets.only(left: 20, right: 20),
               child: SvgPicture.asset("assets/images/menu_iconn.svg",
-                color: mColor,),
+                color:  enabled ? Colors.black : Colors.white,),
             ),),
           Spacer(),
           Center(
             child: Text(
-              _enabled? "Online" : "Offline",
+              enabled? "Online" : "Offline",
               style: TextStyle(
                 fontSize: 18,
-                color: mColor,
+                color: enabled? Colors.black :Colors.white,
               ),
             ),
           ),
           SizedBox(width: 10,),
           CupertinoSwitch(
-            value: _enabled,
+            value:  enabled,
             activeColor: amberSwitchButton,
             trackColor: Colors.white70,
             onChanged: (value) {
               setState(() {
-                _enabled = value;
+                enabled = value;
               });
 
               if(value)
@@ -243,11 +241,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 //       getLocationLiveUpdates();
                 //     });
                     setState(() {
-                      mColor = Colors.black;
+                     // mColor = Colors.black;
                        // GoOnline();
                        //  getLocationLiveUpdates();
-                      _enabled = true;
+                      enabled = true;
                     });
+
+                    drivers_ref.child(currentUser.uid).update({ 'enable' :   enabled.toString()});
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     //content: Text("You're Online now!"),
                     //  ));
@@ -256,10 +256,11 @@ class _HomeScreenState extends State<HomeScreen> {
               {
                 ///offline
                     setState(() {
-                      mColor = Colors.white;
+                    //  mColor = Colors.white;
 
-                      _enabled = false;
+                      enabled = false;
                     });
+                    drivers_ref.child(currentUser.uid).update({ 'enable' :   enabled.toString()});
                     GoOffline();
                     //_enabled = false;
                     //ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -276,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
 
-      body: _enabled? Container(
+      body:  enabled? Container(
         height: double.infinity,
         width: double.infinity,
         child: Stack(
@@ -363,7 +364,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   context: context,
                   title: "I've arrived",
                   circularBorder: true,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverInfo()));
+                  }
+                  ,
                 ),
               ),
             ),
@@ -520,7 +524,7 @@ class _HomeScreenState extends State<HomeScreen> {
       currentPosition = position;
       myPosition = position;
 
-      if(_enabled)
+      if( enabled)
       {
 
       }
@@ -561,6 +565,25 @@ class _HomeScreenState extends State<HomeScreen> {
     rideRef = null;
   }
 
+  void getEnableValue () async
+  {
+    try {
+      await drivers_ref.child( currentUser.uid).once().then((DataSnapshot snapshot) async {
+        setState(() {
+           if ( snapshot.value['enable']  == 'true')
+           enabled =true;
+           else if ( snapshot.value['enable']  == 'false')
+             enabled =false;
+           else
+             print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+          print("=____________++++++++++++++++++++++");
+          print(  enabled);
+        });
+      });
+    }
+    catch(e)
+    { print("you got error: $e");}
+  }
   @override
   void dispose() {
     SystemChrome.setEnabledSystemUIOverlays(
