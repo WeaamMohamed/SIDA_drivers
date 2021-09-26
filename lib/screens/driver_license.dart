@@ -205,6 +205,9 @@ class _DriverLicenseState extends State<DriverLicense> {
     // TODO: implement initState
     //to hide app bar and status bar
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
+    loadImage('1');
+    loadImage('2');
+
     SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(statusBarColor: Colors.white.withOpacity(0.0),
           statusBarIconBrightness: Brightness.dark,
