@@ -22,13 +22,10 @@ class _HomeDrawerState extends State<HomeDrawer> {
   String name='';
   @override
   void initState() {
-    // TODO: implement initState
-    print("{{{{{{{{{{{{{{{{{{{{{{{");
-    print(_url);
-
     super.initState();
-    getData();
     loadImage();
+    getData();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -222,24 +219,20 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
     String myUrl='';
     try {
-      await drivers_ref.child( currentUser.uid).child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
+      await drivers_ref.child( currentUser.uid).child('Photos').child('ProfilePhoto').once().then((DataSnapshot snapshot) async {
 
         setState(() {
           myUrl = snapshot.value['URL'];
-          print("_______iiii___________________________");
-          print(myUrl);
         });
       });
     }
     catch(e)
-    {
-      print("you got error: $e");
-      _url=null;
-      return;
+    { print("you got error: $e");
+    _url=null;
+    return;
     }
 
     setState(() {
-
       _url=myUrl;
       print(_url);
       // imageFile = File(path);

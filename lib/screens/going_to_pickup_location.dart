@@ -286,7 +286,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
                     else if( status == "onRide" )
                       {
                         endTheTrip();
-
                       }
                   },
                 ),
@@ -499,26 +498,27 @@ class _NewRideScreenState extends State<NewRideScreen> {
     try {
       await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
         carType = snapshot.value['ride_type'];
-        distance= snapshot.value['TripDistance'];
-        time= snapshot.value['TripTime'];
+        distance= snapshot.value['tripDistance'];
+        time= snapshot.value['tripTime'];
         print("=____________++++++++++++++++++++++");
         print(carType);
       });
     }
     catch(e)
     { print("you got error: $e");}
-
+    print("+______________before______________");
     int fareAmount = HelperMethods.calculateFares(directionalDetails,carType,distance,time);
+    print("+_______________after_____________");
     newRequest_ref.child(rideRequestId).child("fares").set(fareAmount.toString());
     newRequest_ref.child(rideRequestId).child("status").set("ended");
     rideStreamSubscription.cancel();
-   saveEarnings(fareAmount);
+   saveEarnings(fareAmount.toDouble() *0.8);
     Navigator.push(context, MaterialPageRoute(
         builder: (BuildContext context) => PaymentSuccessScreen( paymentMethod: widget.tripDetails.paymentMethod, fareAmount: fareAmount,)));
   }
 
 
-  void saveEarnings(int fareAmount)
+  void saveEarnings(double fareAmount)
   {
     drivers_ref.child(currentUser.uid).child("earnings").once().then((DataSnapshot dataSnapShot) {
       if(dataSnapShot.value != null)

@@ -93,6 +93,8 @@ class HelperMethods
         }
         distancTraveledFare = (tripDistance/ 1000) * 2.80;
         totalFareAmount = timeTraveledFare + distancTraveledFare;
+        if(totalFareAmount < 12)
+          totalFareAmount=12;
       }
       double result = (totalFareAmount.truncate()) * 1.0;
       return result.truncate();

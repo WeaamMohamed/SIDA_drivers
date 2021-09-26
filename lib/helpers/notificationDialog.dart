@@ -81,6 +81,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
         markersSet.add(animatingMarker);
       });
       oldPos = mPosition;
+      ///TODO:the above part took too much time to load so the below function is executed after a time!!
       updateRideDetails();
 
       String rideRequestId = widget.tripDetails.rideID;
@@ -419,11 +420,11 @@ class _ReceiveRideState extends State<ReceiveRide> {
       }
 
       var posLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+      print("*********************--------------------------************************");
+      print(posLatLng);
       LatLng destinationLatLng;
 
       if (status == "accepted") {
-        print("*********************accepted************************");
-
         destinationLatLng = widget.tripDetails.pickupLocation;
         print(destinationLatLng);
         print(posLatLng);

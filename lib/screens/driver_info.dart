@@ -27,7 +27,6 @@ class _DriverInfoState extends State<DriverInfo> {
 
   @override
   void initState() {
-
     super.initState();
     loadImage();
   }
@@ -263,7 +262,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
       showDialog(context: context, builder:  ((builder)=> Center(child: CircularProgressIndicator( color: Colors.grey))));
       StorageTaskSnapshot taskSnapshot = await storageUploadTask.onComplete;
-        Navigator.pop(context);
+     Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text("Profile photo updated successfully!"),
       ));
