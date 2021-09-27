@@ -105,8 +105,8 @@ class PushNotificationService{
               String riderName = dataSnapShot.value["rider_name"];
               String riderPhone = dataSnapShot.value['rider_phone'];
               String rideType=dataSnapShot.value['ride_type'];
-              String tripTime=dataSnapShot.value['tripTime'];
-              String tripDistance=dataSnapShot.value['tripDistance'];
+              String tripTime=dataSnapShot.value['tripTime'].toString();
+              String tripDistance=dataSnapShot.value['tripDistance'].toString();
               String fare=dataSnapShot.value['fare'];
               TripDetails tripDetails = TripDetails();
               

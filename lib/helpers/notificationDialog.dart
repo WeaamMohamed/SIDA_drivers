@@ -70,7 +70,8 @@ class _ReceiveRideState extends State<ReceiveRide> {
         rotation: rot,
         infoWindow: InfoWindow(title: 'Current Location'),
       );
-      ///TODO: MOUNTED??
+      print("________________________before_____________");
+      if (!mounted) return;
       setState(() {
         CameraPosition cameraPosition = new CameraPosition(
             target: mPosition, zoom: 17);
@@ -80,6 +81,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
         marker.markerId.value == "animating");
         markersSet.add(animatingMarker);
       });
+      print("__________________after___________________");
       oldPos = mPosition;
       ///TODO:the above part took too much time to load so the below function is executed after a time!!
       updateRideDetails();

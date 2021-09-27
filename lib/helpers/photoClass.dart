@@ -19,7 +19,7 @@ class PhotoHandler extends StatefulWidget {
 }
 
 class _PhotoHandlerState extends State<PhotoHandler> {
-  String _url;
+  String _url='';
   @override
   Widget build(BuildContext context) {
     return Container();

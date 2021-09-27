@@ -22,7 +22,7 @@ class _DriverInfoState extends State<DriverInfo> {
   var ageController = TextEditingController();
   var formKey = GlobalKey<FormState>();
   File imageFile;
-  String _url;
+  String _url='';
   final ImagePicker picker = ImagePicker();
 
   @override
