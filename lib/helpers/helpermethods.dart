@@ -125,7 +125,6 @@ class HelperMethods
 
   }
 
-<<<<<<< HEAD
   static void getHistoryInfo (context){
 
     DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/earnings');
@@ -162,8 +161,6 @@ class HelperMethods
 
   
 }
-=======
->>>>>>> 51e31f7d98943df35118090f21ded5751df81bb4
 }
 ///-------------------------------------------------------------------------------------
 class DirectionDetails
