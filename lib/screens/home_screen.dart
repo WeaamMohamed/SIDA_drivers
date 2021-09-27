@@ -117,6 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
+
+    HelperMethods.getHistoryInfo(context);
   }
 
   @override

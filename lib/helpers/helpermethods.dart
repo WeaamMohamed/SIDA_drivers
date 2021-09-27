@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 
 import '../globalvariables.dart';
 
@@ -100,6 +101,43 @@ class HelperMethods
       return result.truncate();
 
   }
+
+  static void getHistoryInfo (context){
+
+    DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/earnings');
+
+    earningRef.once().then((DataSnapshot dataSnapshot){
+      if(dataSnapshot.value != null){
+        String earnings = dataSnapshot.value.toString();
+        Provider.of<DataProvider>(context, listen: false).updateEarnings(earnings);
+      }
+
+    });
+
+    DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/history');
+    historyRef.once().then((DataSnapshot snapshot) {
+
+      if(snapshot.value != null){
+
+        Map<dynamic, dynamic> values = snapshot.value;
+        int tripCount = values.length;
+
+        // update trip count to data provider
+        Provider.of<DataProvider>(context, listen: false).updateTripCount(tripCount);
+
+        List<String> tripHistoryKeys = [];
+        values.forEach((key, value) {tripHistoryKeys.add(key);});
+
+        // update trip keys to data provider
+        Provider.of<DataProvider>(context, listen: false).updateTripKeys(tripHistoryKeys);
+
+        //getHistoryData(context);
+
+      }
+    });
+
+  
+}
 }
 ///-------------------------------------------------------------------------------------
 class DirectionDetails

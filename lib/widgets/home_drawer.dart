@@ -3,8 +3,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/phone_number.dart';
+import 'package:provider/provider.dart';
+import 'package:sida_drivers_app/screens/balance_screen.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
+import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
 import '../globalvariables.dart';
 import '../shared/colors/colors.dart';
@@ -94,6 +97,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
 
             SizedBox(height: 20,),
+            InkWell(
+              child:
             Container(
 
               height: MediaQuery.of(context).size.height * 0.14,
@@ -125,7 +130,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                         fontWeight: FontWeight.bold,
                       ),),
                       Spacer(),
-                      Text("400.00", style: TextStyle(
+                      Text("${Provider.of<DataProvider>(context, listen: false).earnings} ", style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),),
                       Text("EGP")
@@ -164,6 +169,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
 
 
+            ),
+            onTap : ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=> BalanceScreen()))
             ),
             SizedBox(height: 10,),
 
