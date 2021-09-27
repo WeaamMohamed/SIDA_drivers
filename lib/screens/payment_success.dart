@@ -22,9 +22,9 @@ class PaymentSuccessScreen extends StatefulWidget {
 
 class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
   double horizontalPadding = 20;
-  String  extraTimeTraveledFare ='';
-  String distanceTraveledFare ='';
-  String waitingTimeFare ='';
+  String  extraTimeTraveledFare ="";
+  String distanceTraveledFare =" ";
+  String waitingTimeFare =" ";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -350,9 +350,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Base Fare", details: widget.tripDetails.rideType == 'Any SIDA' ? "11.00": "12.00"),
-                  _fareDetailsItem(text: "Distance", details: distanceTraveledFare),
-                  _fareDetailsItem(text: "time", details: extraTimeTraveledFare),
+                  _fareDetailsItem(text: "Base Fare", details: widget.tripDetails.rideType == 'Any SIDA' ? "11.00 EGP": "12.00 EGP"),
+                  _fareDetailsItem(text: "Distance", details: distanceTraveledFare  +' EGP'),
+                  _fareDetailsItem(text: "time", details: extraTimeTraveledFare +' EGP' ),
 
                   // SizedBox(height: 10,),
                   _divider(),
@@ -373,7 +373,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Surge x1.0", details: "0.00"),
+                  _fareDetailsItem(text: "Surge x1.0", details: "0.00 EGP"),
                   //  SizedBox(height: 15,),
                   _divider(),
                   SizedBox(
@@ -393,7 +393,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   SizedBox(
                     height: 25,
                   ),
-                  _fareDetailsItem(text: "Waiting time", details: waitingTimeFare),
+                  _fareDetailsItem(text: "Waiting time", details: waitingTimeFare +' EGP'),
                   _fareDetailsItem(
                       text: "Rounding",
                       details: "- 0.5 EGP",
@@ -453,7 +453,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                 style: TextStyle(color: Color(0xff8D90A1)),
               ),
               Spacer(),
-              Text(details, style: TextStyle(color: textColor)),
+              Text(details ?? '', style: TextStyle(color: textColor)),
             ],
           ),
           SizedBox(
@@ -495,12 +495,28 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
  void getFareDetails() async
  {
    try {
-     await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
+     await newRequest_ref.child( widget.tripDetails.rideID).child('fareDetails').once().then((DataSnapshot snapshot) async {
        setState(() {
          distanceTraveledFare = snapshot.value['distanceTraveledFare'];
-         extraTimeTraveledFare = snapshot.value['timeTraveledFare'];
+         extraTimeTraveledFare = snapshot.value['extraTimeTraveledFare'];
          waitingTimeFare = snapshot.value['waitingTimeFare'];
+         print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+         print(extraTimeTraveledFare);
+         print   (distanceTraveledFare);
+         print   (waitingTimeFare);
 
+
+       });
+     });
+   }
+   catch(e)
+   { print("you got error: $e");}
+   try {
+     await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
+       setState(() {
+
+         widget.tripDetails.tripTime=snapshot.value['tripTime'].toString();
+         widget.tripDetails.tripDistance=snapshot.value['tripDistance'].toString();
        });
      });
    }

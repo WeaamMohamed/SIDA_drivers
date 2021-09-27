@@ -359,13 +359,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
               child: Container(
 
-               //padding: const EdgeInsets.all(15),
+              // padding: const EdgeInsets.all(15),
                 child: customHomeButton(
                   context: context,
-                  title: "I've arrived",
+                  title: "           Wait for a new trip!",
                   circularBorder: true,
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverInfo()));
                   }
                   ,
                 ),
