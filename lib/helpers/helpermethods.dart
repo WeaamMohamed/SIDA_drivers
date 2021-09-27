@@ -62,46 +62,70 @@ class HelperMethods
 
   /// directionDetailsto calculate the actual time of the trip
   /// distance and time are the data stored in the database and the user confirmed it in the rider app
-  static int calculateFares(DirectionDetails directionDetails ,String carType,String distance,String time)
+  static int calculateFares(DirectionDetails directionDetails ,String carType,String distance,String time, String waitingTime,String ID)
   {
-
     double timeTraveledFare=0.0;
-    double distancTraveledFare=0.0;
-    double totalFareAmount;
-    print("+____________________________");
-    print(time);
-    print(distance);
-    print( directionDetails.durationValue );
+    double distanceTraveledFare=0.0;
+    double waitingTimeFare=0.0;
+    double totalFareAmount=0.0;
     double tripTime= double.parse(time);
     double tripDistance= double.parse(distance);
+
+    /// update trip distance and time with actual real value (maybe the same)
+    newRequest_ref.child(ID).update({"tripDistance":directionDetails.distanceValue.toStringAsFixed(directionDetails.distanceValue.truncateToDouble() == directionDetails.distanceValue ? 0 : 1)
+    });
+
+
     if (  carType == "Any SIDA")
       {
+        ///TODO:make sure they are the same unit
          if( directionDetails.durationValue > tripTime )
            {
+             drivers_ref.child(currentUser.uid).update({"tripTime":directionDetails.durationValue.toStringAsFixed( directionDetails.durationValue.truncateToDouble() == directionDetails.durationValue ? 0 : 1)});
              timeTraveledFare = ((directionDetails.durationValue - tripTime) / 60) * 0.36;
            }
+           if ( waitingTime != '0' &&  double.parse(waitingTime) > 5)
+             {
 
-         distancTraveledFare = (tripDistance/ 1000) * 2.61;
-         totalFareAmount = timeTraveledFare + distancTraveledFare;
+               waitingTimeFare=   (double.parse(waitingTime)-5) * 0.36;
+             }
+
+         distanceTraveledFare = (tripDistance/ 1000) * 2.61;
+         totalFareAmount = timeTraveledFare + distanceTraveledFare;
         if(totalFareAmount < 11)
           totalFareAmount=11;
       }
     else if (  carType == "SIDA Plus")
       {
+        ///TODO:make sure they are the same unit
         if( directionDetails.durationValue > tripTime )
         {
+          drivers_ref.child(currentUser.uid).update({"tripTime": directionDetails.durationValue});
+          print("______________________555_____");
+          print(directionDetails.durationValue);
+          print(tripTime);
           timeTraveledFare = ((directionDetails.durationValue - tripTime) / 60) * 0.4;
         }
-        distancTraveledFare = (tripDistance/ 1000) * 2.80;
-        totalFareAmount = timeTraveledFare + distancTraveledFare;
+        if ( waitingTime != '0'  &&  double.parse(waitingTime) > 5)
+        {
+           waitingTimeFare= (double.parse(waitingTime)-5) * 0.4;
+        }
+        distanceTraveledFare = (tripDistance/ 1000) * 2.80;
+        totalFareAmount = timeTraveledFare + distanceTraveledFare+waitingTimeFare;
+
         if(totalFareAmount < 12)
           totalFareAmount=12;
       }
+    newRequest_ref.child(ID ).child('fareDetails').update({"distanceTraveledFare":distanceTraveledFare.toStringAsFixed(  distanceTraveledFare.truncateToDouble() ==   distanceTraveledFare ? 0 : 1)
+        .toString(),
+      'extraTimeTraveledFare' : timeTraveledFare.toStringAsFixed(  timeTraveledFare.truncateToDouble() ==   timeTraveledFare ? 0 : 1).toString(),
+      'waitingTimeFare' : waitingTimeFare.toStringAsFixed(  waitingTimeFare.truncateToDouble() ==   waitingTimeFare ? 0 : 1).toString()});
       double result = (totalFareAmount.truncate()) * 1.0;
       return result.truncate();
 
   }
 
+<<<<<<< HEAD
   static void getHistoryInfo (context){
 
     DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/earnings');
@@ -138,6 +162,8 @@ class HelperMethods
 
   
 }
+=======
+>>>>>>> 51e31f7d98943df35118090f21ded5751df81bb4
 }
 ///-------------------------------------------------------------------------------------
 class DirectionDetails

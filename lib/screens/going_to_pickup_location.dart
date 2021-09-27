@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -252,7 +253,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
                       {
                         ///start time
                          StartTime = DateTime.now().hour.toString()+':'+ DateTime.now().minute.toString();
-                        print("+______________________time________________________________________");
+                         database.reference().child('rideRequests').child(widget.tripDetails.rideID).update({'waitingTime' : '0'});
+                         widget.tripDetails.waitingTime= '0';
+                         print("+______________________time________________________________________");
                         print(StartTime.toString());
                         status="arrived";
                         newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
@@ -273,8 +276,10 @@ class _NewRideScreenState extends State<NewRideScreen> {
                     {
                       ///end time
                       EndTime = DateTime.now().hour.toString()+':'+ DateTime.now().minute.toString();
+                      print("+______________________time________________________________________");
+                      print(EndTime.toString());
+                      WaittingTimeCaluclation();
                       status="onRide";
-
                       newRequest_ref.child(widget.tripDetails.rideID).child('status').set(status);
                       if (!mounted) return;
                       setState(() {
@@ -439,7 +444,6 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
       if(status == "accepted")
       {
-        print("*********************accepted************************");
 
         destinationLatLng = widget.tripDetails.pickupLocation;
         print(destinationLatLng);
@@ -451,14 +455,9 @@ class _NewRideScreenState extends State<NewRideScreen> {
       }
 
       var directionDetails = await HelperMethods.obtainPlaceDirectionDetails(posLatLng, destinationLatLng);
-      print("*********************************************");
-      print(directionDetails);
-
       if(directionDetails != null)
       {
         setState(() {
-          print("*********************************************");
-          print(durationRide);
           durationRide = directionDetails.durationText;
         });
 
@@ -485,36 +484,23 @@ class _NewRideScreenState extends State<NewRideScreen> {
       builder: (BuildContext context)=> ProgressDialog(message: "Please wait...",),
     );
 
+    ///TODO: THIS LINE IS MY ADDITION AS myPosition SOMETIMES IS NULL !
+    myPosition= currentPosition;
     var currentLatLng = LatLng(myPosition.latitude, myPosition.longitude);
+
 
     var directionalDetails = await HelperMethods.obtainPlaceDirectionDetails(widget.tripDetails.pickupLocation, currentLatLng);
     Navigator.pop(context);
 
     String rideRequestId = widget.tripDetails.rideID;
-
-    String carType='';
-    String distance='';
-    String time='';
-    try {
-      await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
-        carType = snapshot.value['ride_type'];
-        distance= snapshot.value['tripDistance'];
-        time= snapshot.value['tripTime'];
-        print("=____________++++++++++++++++++++++");
-        print(carType);
-      });
-    }
-    catch(e)
-    { print("you got error: $e");}
-    print("+______________before______________");
-    int fareAmount = HelperMethods.calculateFares(directionalDetails,carType,distance,time);
-    print("+_______________after_____________");
-    newRequest_ref.child(rideRequestId).child("fares").set(fareAmount.toString());
+    int fareAmount = HelperMethods.calculateFares(directionalDetails,widget.tripDetails.rideType,
+        widget.tripDetails.tripDistance,widget.tripDetails.tripTime,widget.tripDetails.waitingTime,rideRequestId);
+    newRequest_ref.child(rideRequestId).child("fare").set(fareAmount.toString());
     newRequest_ref.child(rideRequestId).child("status").set("ended");
     rideStreamSubscription.cancel();
    saveEarnings(fareAmount.toDouble() *0.8);
     Navigator.push(context, MaterialPageRoute(
-        builder: (BuildContext context) => PaymentSuccessScreen( paymentMethod: widget.tripDetails.paymentMethod, fareAmount: fareAmount,)));
+        builder: (BuildContext context) => PaymentSuccessScreen(  tripDetails: widget.tripDetails, fareAmount: fareAmount,)));
   }
 
 
@@ -539,24 +525,23 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
   void WaittingTimeCaluclation()
   {
-    String startTime = formatTime(StartTime); // or if '24:00'
-    String end_time = formatTime( EndTime);// or if '12:00
+    var format = DateFormat("HH:mm");
+   var start = format.parse(StartTime);
+    var end = format.parse(EndTime);
 
-
-//    var format = DateFormat("HH:mm");
-  //  var start = format.parse(startTime);
-    ///var end = format.parse(end_time);
-
-
-    //if(start.isAfter(end)) {
-      //print('start is big');
-     // print('difference = ${start.difference(end)}');
-    //} else if(start.isBefore(end)){
-      //print('end is big');
-      //print('difference = ${end.difference(start)}');
-    //}else{
-      //print('difference = ${end.difference(start)}');
-    //}
+    if(start.isAfter(end))
+    {
+      print('difference = ${start.difference(end)}');
+    }
+    else if(start.isBefore(end))
+    {
+    database.reference().child('rideRequests').child(widget.tripDetails.rideID).update({'waitingTime' : end.difference(start).inMinutes.toString()});
+      widget.tripDetails.waitingTime=  end.difference(start).inMinutes.toString();
+    }
+    else
+      {
+      print('difference = ${end.difference(start)}');
+      }
 
   }
 }

@@ -14,7 +14,7 @@ class TripDetails
   String rideType;
   String tripTime;
   String tripDistance;
-
+  String waitingTime;
 
 
   TripDetails({
@@ -29,6 +29,7 @@ class TripDetails
     this.fare,
     this.rideType,
     this.tripDistance,
-    this.tripTime
+    this.tripTime,
+    this.waitingTime
   });
 }

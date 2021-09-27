@@ -1,17 +1,20 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sida_drivers_app/helpers/helpermethods.dart';
+import 'package:sida_drivers_app/models/tripdetails.dart';
 
+import '../globalvariables.dart';
 import '../shared/colors/colors.dart';
 import '../shared/componenents/my_components.dart';
 import 'home_screen.dart';
 
 class PaymentSuccessScreen extends StatefulWidget {
-  final String paymentMethod;
+  final TripDetails tripDetails;
   final int fareAmount;
-  PaymentSuccessScreen({this.paymentMethod, this.fareAmount});
+  PaymentSuccessScreen({this.tripDetails, this.fareAmount});
 
   @override
   _PaymentSuccessScreenState createState() => _PaymentSuccessScreenState();
@@ -19,7 +22,9 @@ class PaymentSuccessScreen extends StatefulWidget {
 
 class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
   double horizontalPadding = 20;
-
+  String  extraTimeTraveledFare ="";
+  String distanceTraveledFare =" ";
+  String waitingTimeFare =" ";
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -133,7 +138,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "??",
+                                (widget.fareAmount * 0.2).toStringAsFixed(  (widget.fareAmount * 0.2).truncateToDouble() ==   (widget.fareAmount * 0.2) ? 0 : 1),
+
+                                  //.truncateToDouble().toString(),
                                   style: TextStyle(
                                     fontSize: 35,
                                     fontWeight: FontWeight.bold,
@@ -249,7 +256,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                (widget.fareAmount+0).toString(),
+                                (widget.fareAmount * 0.8).toStringAsFixed(  (widget.fareAmount * 0.8).truncateToDouble() ==   (widget.fareAmount * 0.8) ? 0 : 1),
+
+                             //   (widget.fareAmount * 0.8).truncateToDouble().toString(),
                                 style: TextStyle(
                                   fontSize: 35,
                                   fontWeight: FontWeight.bold,
@@ -278,7 +287,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         Column(
                           children: [
                             Text(
-                              "4.55",
+                              (double.parse(widget.tripDetails.tripDistance)/1000).toString(),
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
@@ -293,7 +302,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         Column(
                           children: [
                             Text(
-                              "00:17:22",
+                              (double.parse(widget.tripDetails.tripTime)/60).toString(),
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
@@ -307,9 +316,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         _verticalDivider(),
                         Column(
                           children: [
-                            //TODO: car type
                             Text(
-                              "AnySIDA",
+                              widget.tripDetails.rideType,
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
@@ -342,9 +350,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Base Fare", details: "20.0 EGP"),
-                  _fareDetailsItem(text: "Distance", details: "19 km"),
-                  _fareDetailsItem(text: "time", details: "03:45"),
+                  _fareDetailsItem(text: "Base Fare", details: widget.tripDetails.rideType == 'Any SIDA' ? "11.00 EGP": "12.00 EGP"),
+                  _fareDetailsItem(text: "Distance", details: distanceTraveledFare  +' EGP'),
+                  _fareDetailsItem(text: "time", details: extraTimeTraveledFare +' EGP' ),
 
                   // SizedBox(height: 10,),
                   _divider(),
@@ -365,7 +373,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Surge x1.4", details: "9.4"),
+                  _fareDetailsItem(text: "Surge x1.0", details: "0.00 EGP"),
                   //  SizedBox(height: 15,),
                   _divider(),
                   SizedBox(
@@ -385,7 +393,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   SizedBox(
                     height: 25,
                   ),
-                  _fareDetailsItem(text: "Waiting time", details: "5.4 EGP"),
+                  _fareDetailsItem(text: "Waiting time", details: waitingTimeFare +' EGP'),
                   _fareDetailsItem(
                       text: "Rounding",
                       details: "- 0.5 EGP",
@@ -432,8 +440,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
   }
 
   Widget _fareDetailsItem({
-    String text,
-    String details,
+    String text ='',
+    String details='',
     Color textColor = const Color(0xff8D90A1),
   }) =>
       Column(
@@ -445,7 +453,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                 style: TextStyle(color: Color(0xff8D90A1)),
               ),
               Spacer(),
-              Text(details, style: TextStyle(color: textColor)),
+              Text(details ?? '', style: TextStyle(color: textColor)),
             ],
           ),
           SizedBox(
@@ -474,7 +482,8 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+
+    getFareDetails();
     //to hide app bar and status bar
     // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -483,7 +492,38 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
     ));
     super.initState();
   }
+ void getFareDetails() async
+ {
+   try {
+     await newRequest_ref.child( widget.tripDetails.rideID).child('fareDetails').once().then((DataSnapshot snapshot) async {
+       setState(() {
+         distanceTraveledFare = snapshot.value['distanceTraveledFare'];
+         extraTimeTraveledFare = snapshot.value['extraTimeTraveledFare'];
+         waitingTimeFare = snapshot.value['waitingTimeFare'];
+         print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+         print(extraTimeTraveledFare);
+         print   (distanceTraveledFare);
+         print   (waitingTimeFare);
 
+
+       });
+     });
+   }
+   catch(e)
+   { print("you got error: $e");}
+   try {
+     await newRequest_ref.child( widget.tripDetails.rideID).once().then((DataSnapshot snapshot) async {
+       setState(() {
+
+         widget.tripDetails.tripTime=snapshot.value['tripTime'].toString();
+         widget.tripDetails.tripDistance=snapshot.value['tripDistance'].toString();
+       });
+     });
+   }
+   catch(e)
+   { print("you got error: $e");}
+
+ }
   @override
   void dispose() {
     SystemChrome.setEnabledSystemUIOverlays(
