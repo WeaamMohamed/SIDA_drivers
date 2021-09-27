@@ -23,8 +23,8 @@ class VehicleRegistrationCertificate extends StatefulWidget {
 class _VehicleRegistrationCertificateState extends State<VehicleRegistrationCertificate> {
 
   File imageFile;
-  String _url1;
-  String _url2;
+  String _url1='';
+  String _url2='';
   final ImagePicker picker = ImagePicker();
   @override
   Widget build(BuildContext context) {

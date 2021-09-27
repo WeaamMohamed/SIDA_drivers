@@ -23,8 +23,8 @@ class DriverLicense extends StatefulWidget {
 class _DriverLicenseState extends State<DriverLicense> {
 
   File imageFile;
-  String _url1;
-  String _url2;
+  String _url1='';
+  String _url2='';
   final ImagePicker picker = ImagePicker();
   var _licenseNumberController = TextEditingController();
   var _formKey = GlobalKey<FormState>();

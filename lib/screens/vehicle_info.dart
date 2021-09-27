@@ -25,7 +25,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
   TextEditingController carLicensePlateController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   File imageFile;
-  String _url;
+  String _url='';
   final ImagePicker picker = ImagePicker();
 
   @override
