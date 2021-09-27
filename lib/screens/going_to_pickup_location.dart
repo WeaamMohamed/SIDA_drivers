@@ -525,33 +525,23 @@ class _NewRideScreenState extends State<NewRideScreen> {
 
   void WaittingTimeCaluclation()
   {
-   // String startTime = formatTime(StartTime); // or if '24:00'
-    //String end_time = formatTime( EndTime);// or if '12:00
-
-
     var format = DateFormat("HH:mm");
    var start = format.parse(StartTime);
     var end = format.parse(EndTime);
 
     if(start.isAfter(end))
     {
-      print("++++++++++++++++++++++++++++++++++++++++++++");
-      print('start is big');
       print('difference = ${start.difference(end)}');
     }
     else if(start.isBefore(end))
     {
-      print("++++++++++++++++++++++++++++++++++++++++++++");
-      database.reference().child('rideRequests').child(widget.tripDetails.rideID).update({'waitingTime' : end.difference(start).inMinutes.toString()});
+    database.reference().child('rideRequests').child(widget.tripDetails.rideID).update({'waitingTime' : end.difference(start).inMinutes.toString()});
       widget.tripDetails.waitingTime=  end.difference(start).inMinutes.toString();
-      print('end is big');
-      print('difference = ${end.difference(start)}');
     }
     else
       {
-        print("++++++++++++++++++++++++++++++++++++++++++++");
       print('difference = ${end.difference(start)}');
-    }
+      }
 
   }
 }
