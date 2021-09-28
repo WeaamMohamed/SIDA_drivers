@@ -2,8 +2,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/screens/payment_screen.dart';
+import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 
 import '../shared/componenents/my_components.dart';
 
@@ -81,7 +83,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                   Row(
                     children: [
                       Text(
-                        "400.00",
+                        "${Provider.of<DataProvider>(context, listen: false).earnings}",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
