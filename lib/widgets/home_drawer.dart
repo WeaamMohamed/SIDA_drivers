@@ -20,6 +20,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   String _url='';
   String name='';
+  String rating='0.0';
   @override
   void initState() {
     super.initState();
@@ -77,7 +78,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           Row(
                             // mainAxisAlignment: MainAxisAlignment.s,
                             children: [
-                              Text("4.3", style: TextStyle(
+                              Text(rating, style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                               ),),
                               SizedBox(width: 4,),
@@ -245,6 +246,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
       await drivers_ref.child( currentUser.uid).once().then((DataSnapshot snapshot) async {
         setState(() {
           name = snapshot.value['FirstName'] +' '+snapshot.value['LastName'];
+        if (snapshot.value['ratings'] != null)
+          rating= snapshot.value['ratings'];
         });
       });
     }

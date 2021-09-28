@@ -117,6 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
+
+    getRideType();
   }
 
   @override
@@ -564,6 +566,20 @@ class _HomeScreenState extends State<HomeScreen> {
     rideRef = null;
   }
 
+  getRideType()
+  {
+    drivers_ref.child(currentUser.uid).child('carDetails').child('ride_type').once().then((DataSnapshot dataSnapshot )
+
+        {
+          if( dataSnapshot.value != null)
+            {
+              setState(() {
+                rideType=dataSnapshot.value;
+              });
+            }
+        }
+    );
+  }
   void getEnableValue () async
   {
     try {

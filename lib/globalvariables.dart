@@ -31,6 +31,7 @@ final drivers_ref = database.reference().child('Drivers');
 
 DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
+String rideType='';
 FirebaseStorage storage = FirebaseStorage(storageBucket: 'gs://sida-51cb9.appspot.com');
 //rideRequestRef
 
