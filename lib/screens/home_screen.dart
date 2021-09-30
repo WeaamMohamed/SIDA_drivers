@@ -24,6 +24,8 @@ import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 import 'package:sida_drivers_app/widgets/cancel_trip_container.dart';
 import 'package:sida_drivers_app/screens/driver_info.dart';
 
+import 'job_history.dart';
+
 class HomeScreen extends StatefulWidget {
   static const String id = 'homescreen';
   @override
@@ -427,7 +429,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: "Update Driver Information",
               withIcon: false,
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> DriverInfo()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> JobHistory()));
 
 
               },
