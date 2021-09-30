@@ -25,14 +25,16 @@ final assetsAudioPlayer = AssetsAudioPlayer();
 Position currentPosition;
 
 DatabaseReference rideRef;
+DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
 final database = FirebaseDatabase.instance;
 final drivers_ref = database.reference().child('Drivers');
-int tripCount=0;
-DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
-String rideType='';
 FirebaseStorage storage = FirebaseStorage(storageBucket: 'gs://sida-51cb9.appspot.com');
+
+int tripCount=0;
+String earnings='';
+String rideType='';
 //rideRequestRef
 
 // DatabaseReference usersRef = FirebaseDatabase.instance.reference().child("users");

@@ -131,8 +131,10 @@ class HelperMethods
     DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/earnings');
 
     earningRef.once().then((DataSnapshot dataSnapshot){
+      print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       if(dataSnapshot.value != null){
-        String earnings = dataSnapshot.value.toString();
+         earnings = dataSnapshot.value.toString();
+         print(earnings);
         Provider.of<DataProvider>(context, listen: false).updateEarnings(earnings);
       }
     });
