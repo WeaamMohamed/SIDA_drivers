@@ -93,7 +93,7 @@ class _NamePageState extends State<NamePage> {
                         obscureText: false,
                         style: TextStyle( color: Colors.white,fontSize: 20),
                         decoration: InputDecoration(
-                          hintText: "First name",
+                          hintText: "First Name",
                             hintStyle: TextStyle(color:Colors.white)
                         ),
                         onChanged: (val){
@@ -135,7 +135,7 @@ class _NamePageState extends State<NamePage> {
                         obscureText: false,
                         style: TextStyle( color: Colors.white,fontSize: 20),
                         decoration: InputDecoration(
-                          hintText: "Last name",
+                          hintText: "Last Name",
                           hintStyle: TextStyle(color:Colors.white)
                         ),
                         onChanged: (val){

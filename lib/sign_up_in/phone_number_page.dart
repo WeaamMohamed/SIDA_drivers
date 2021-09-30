@@ -175,7 +175,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                         style: TextStyle(color: Colors.white, fontSize: 18),
                         controller: phoneController,
                         decoration: InputDecoration(
-                          hintText: 'phone number',
+                          hintText: '01001234567',
                           hintStyle:TextStyle(color: Colors.white) ,
 
                         ),
@@ -195,7 +195,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                           if(val.isEmpty){return "Please fill in your Phone Number";}
                           final number = num.tryParse(val);
                           if (number == null) {
-                            return "Invalid phone number!";
+                            return "This is an invalid phone number.";
                           }
                           if(val.length != 11  ){return "Phone number must be 11 digits!";}
                           return null;
@@ -232,7 +232,7 @@ class _PhoneNumberPageState extends State<PhoneNumberPage> {
                 SizedBox(height: screenHeight*0.02,),
                 SizedBox(height: 0.02 * screenHeight),
                 Center(
-                  child: Text(' Enter the verification code sent to ' ,
+                  child: Text('Enter the verification code sent to' ,
                       style: TextStyle(
                           color: Colors.white, fontSize: 17.0)),
                 ),

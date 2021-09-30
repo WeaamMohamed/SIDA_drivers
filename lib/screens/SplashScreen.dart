@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:adobe_xd/pinned.dart';
-import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'Signing.dart';
 import 'package:adobe_xd/page_link.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,10 +68,10 @@ class SplashScreen extends StatelessWidget {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: translate(context,'splash_first'),
+                                      text: 'Start driving with',
                                     ),
                                     TextSpan(
-                                      text: translate(context,'splash_second'),
+                                      text: ' SIDA!',
                                       style: TextStyle(
                                         color: const Color(0xffffbb00),
                                       ),
@@ -163,7 +162,7 @@ class SplashScreen extends StatelessWidget {
                                             Pin(size: 130.0, start: 9.5),
                                             Pin(size: 21.0, start: 0.0),
                                             child: Text(
-                                              translate(context,'splash_third'),
+                                              'Phone number',
                                               style: TextStyle(
                                                 fontFamily:
                                                     'Spoqa Han Sans Neo',
