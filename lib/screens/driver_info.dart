@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_downloader/image_downloader.dart';
 import 'package:path/path.dart' as Path;
 import 'package:flutter/material.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/screens/vehicle_info.dart';
 import '../globalvariables.dart';
 import '../shared/componenents/my_components.dart';
@@ -42,7 +43,7 @@ class _DriverInfoState extends State<DriverInfo> {
 
         centerTitle: true,
 
-        title: Text("Driver Information",
+        title: Text(translate(context,'Driver info'),
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -134,7 +135,7 @@ class _DriverInfoState extends State<DriverInfo> {
                       ),
 
                       customTextFormField(
-                        label: "Name (Registered)",
+                        label: translate(context,'Name (Registered)'),
                         textController: nameController,
                         validator:  (value) {
                           if (value.isEmpty) {
@@ -149,7 +150,7 @@ class _DriverInfoState extends State<DriverInfo> {
                       ),
 
                       customTextFormField(
-                        label: "Gender",
+                        label: translate(context,'Gender'),
                         textController: genderController,
                         validator:  (value) {
                           if (value.isEmpty) {

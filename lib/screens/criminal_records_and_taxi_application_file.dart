@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 
 import 'identity_confirmation.dart';
@@ -32,7 +33,7 @@ class _CriminalRecordsAndTaxiApplicationFileState extends State<CriminalRecordsA
             ),
             SizedBox(height: 10,),
             Center(
-              child: Text("Front Side", style: TextStyle(
+              child: Text(translate(context,'Front Side'), style: TextStyle(
 
                 fontWeight: FontWeight.bold,
                 color: Color(0xffA9ACB6),
@@ -50,7 +51,7 @@ class _CriminalRecordsAndTaxiApplicationFileState extends State<CriminalRecordsA
             // ),
             // SizedBox(height: 10,),
             // Center(
-            //   child: Text("Back Side", style: TextStyle(
+            //   child: Text(translate(context,'Back Side'), style: TextStyle(
             //
             //     fontWeight: FontWeight.bold,
             //     color: Color(0xffA9ACB6),

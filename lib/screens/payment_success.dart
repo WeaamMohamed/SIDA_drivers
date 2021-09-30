@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sida_drivers_app/helpers/helpermethods.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/models/tripdetails.dart';
 
 import '../globalvariables.dart';
@@ -33,7 +34,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
       //   elevation: 0,
       //   backgroundColor: customAmberColor1,
       //   title: Text(
-      //     "Payment Success",
+      //     translate(context,'Payment Success'),
       //     style: TextStyle(
       //       fontSize: 22,
       //       fontWeight: FontWeight.bold,
@@ -71,7 +72,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                           height: size.height * 0.06,
                         ),
                         Text(
-                          "Payment Success",
+                          translate(context,'Payment Success'),
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -81,7 +82,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: _textWithOpacity(
-                              text: "The passenger will pay you" ),
+                              text: translate(context,'The passenger will pay you'), ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -130,7 +131,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                         ),
                         child: Column(
                           children: [
-                            _textWithOpacity(text: "Commission"),
+                            _textWithOpacity(text: translate(context,'Commission'),),
                             SizedBox(
                               height: 20,
                             ),
@@ -195,7 +196,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   //       Column(
                   //         children: [
                   //
-                  //           _textWithOpacity(text: "Commission"),
+                  //           _textWithOpacity(text: translate(context,'Commission'),),
                   //           SizedBox(height: 20,),
                   //           Row(
                   //             mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +249,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                       ),
                       child: Column(
                         children: [
-                          _textWithOpacity(text: "Your Profit"),
+                          _textWithOpacity(text: translate(context,'Your Profit'),),
                           SizedBox(
                             height: 20,
                           ),
@@ -291,7 +292,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
-                              "Kilometres",
+                              translate(context,'Kilometres'),
                               style: TextStyle(
                                 color: Color(0xff8D90A1),
                               ),
@@ -306,7 +307,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
-                              "Trip time",
+                              translate(context,'Trip time'),
                               style: TextStyle(
                                 color: Color(0xff8D90A1),
                               ),
@@ -321,7 +322,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                               style: TextStyle(fontSize: 15),
                             ),
                             Text(
-                              "car",
+                              translate(context,'Car'),
                               style: TextStyle(
                                 color: Color(0xff8D90A1),
                               ),
@@ -340,7 +341,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 25),
                       child: Text(
-                        "Your Fare",
+                        translate(context,'Your Fare'),
                         style: TextStyle(fontSize: 18),
                       ),
                     ),
@@ -350,9 +351,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Base Fare", details: widget.tripDetails.rideType == 'Any SIDA' ? "11.00 EGP": "12.00 EGP"),
-                  _fareDetailsItem(text: "Distance", details: distanceTraveledFare  +' EGP'),
-                  _fareDetailsItem(text: "time", details: extraTimeTraveledFare +' EGP' ),
+                  _fareDetailsItem(text: translate(context,'Base fare'), details: widget.tripDetails.rideType == 'Any SIDA' ? "11.00 EGP": "12.00 EGP"),
+                  _fareDetailsItem(text: translate(context,'Distance'), details: distanceTraveledFare  +' EGP'),
+                  _fareDetailsItem(text: translate(context,'Time'), details: extraTimeTraveledFare +' EGP' ),
 
                   // SizedBox(height: 10,),
                   _divider(),
@@ -363,7 +364,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   Row(
                     children: [
                       Text(
-                        "Normal Fare",
+                        translate(context,'Normal Fare'),
                       ),
                       Spacer(),
                       Text("22.67 EGP"),
@@ -373,7 +374,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                     height: 25,
                   ),
 
-                  _fareDetailsItem(text: "Surge x1.0", details: "0.00 EGP"),
+                  _fareDetailsItem(text: translate(context,'Surge '), details: "0.00 EGP"),
                   //  SizedBox(height: 15,),
                   _divider(),
                   SizedBox(
@@ -383,7 +384,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   Row(
                     children: [
                       Text(
-                        "Subtotal",
+                        translate(context,'Subtotal'),
                       ),
                       Spacer(),
                       Text("65.67 EGP"),
@@ -393,9 +394,9 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   SizedBox(
                     height: 25,
                   ),
-                  _fareDetailsItem(text: "Waiting time", details: waitingTimeFare +' EGP'),
+                  _fareDetailsItem(text: translate(context,'Wait Time'), details: waitingTimeFare +' EGP'),
                   _fareDetailsItem(
-                      text: "Rounding",
+                      text: translate(context,'Rounding'),
                       details: "- 0.5 EGP",
                       textColor: Color(0xff54AE61)),
                   _divider(),
@@ -422,7 +423,7 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen> {
                   customHomeButton(
                     context: context,
                     withIcon: false,
-                    title: "Done",
+                    title: translate(context,'Done'),
                     onTap: (){
           Navigator.pop(context);
           HelperMethods.enableHomeLiveLocationUpdates();

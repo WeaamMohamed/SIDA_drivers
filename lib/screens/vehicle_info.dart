@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/screens/vehicle_registration_certificate.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
@@ -40,7 +41,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
 
         centerTitle: true,
 
-        title: Text("Vehicle Information",
+        title: Text(translate(context,'Vehicle info'),
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -189,7 +190,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       ),
       SizedBox(height: 20,),
       customTextFormField(
-        label: "Car Brand",
+        label: translate(context,'Car Brand'),
         textController: carBrandController,
         validator:  (value) {
           if (value.isEmpty) {
@@ -204,7 +205,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       SizedBox(height: 20,),
 
       customTextFormField(
-        label: "Car Model",
+        label: translate(context,'Car Model'),
         textController: carModelController,
         validator:  (value) {
           if (value.isEmpty) {
@@ -217,7 +218,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       ),
       SizedBox(height: 20,),
       customTextFormField(
-        label: "Color",
+        label: translate(context,'Color'),
         textController: colorController,
         validator: (value) {
           if (value.isEmpty) {
@@ -232,7 +233,7 @@ class _VehicleInfoScreenState extends State<VehicleInfoScreen> {
       SizedBox(height: 20,),
       customTextFormField(
         hint: "مثال: أ ف ل 3245",
-        label: "Car License Plate",
+        label: translate(context,'Car license plate'),
         textController: carLicensePlateController,
         validator: (value) {
           if (value.isEmpty) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import '../shared/componenents/my_components.dart';
 import 'driver_registeration.dart';
 import 'driver_registration_completed.dart';
@@ -19,7 +20,7 @@ class _IdentityConfirmationState extends State<IdentityConfirmation> {
       appBar:  AppBar(
         //  backgroundColor: Colors.red,
         centerTitle: true,
-        title: Text("Identity confirmation",
+        title: Text(translate(context,'Identity confirmation'),
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -48,7 +49,7 @@ class _IdentityConfirmationState extends State<IdentityConfirmation> {
               child: Container(
                 width: size.width * 0.8,
                 child: Text(
-                  "Show your driver's license in front of you and take a picture, it is not allowed to take pictures with sunglasses",
+                  translate(context,'Show your driver license in front of you and take a picture, it is not allowed to take pictures with sunglasses'),
                 textAlign: TextAlign.center,),
               ),
             ),

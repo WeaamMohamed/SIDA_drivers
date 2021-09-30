@@ -7,6 +7,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/screens/going_to_pickup_location.dart';
 import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
@@ -125,7 +126,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
           Spacer(),
           Center(
             child: Text(
-               "Online"  ,
+               translate(context,'Online'),
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -255,7 +256,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Align(
                                   alignment: Alignment.centerRight,
-                                  child:   Text("about " +distanceToPickUpLocation+" ("+timeToPickUpLocation+")" ,style: TextStyle(
+                                  child:   Text(translate(context,'about ') +distanceToPickUpLocation+" ("+timeToPickUpLocation+")" ,style: TextStyle(
                                       color: Colors.grey, fontSize: 14.0 )),
 
                                 ),
@@ -298,15 +299,15 @@ class _ReceiveRideState extends State<ReceiveRide> {
                                     Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text('Car Type',
+                                        Text(translate(context,'Car Type'),
                                             style: TextStyle(
                                                 color: Colors.grey, fontSize: 16.0 ,fontWeight: FontWeight.bold)),
                                         SizedBox(height: 0.04* screenHeight),
-                                        Text('Customer name',
+                                        Text(translate(context,'Customer Name'),
                                             style: TextStyle(
                                                 color: Colors.grey, fontSize: 16.0 ,fontWeight: FontWeight.bold)),
                                         SizedBox(height: 0.04* screenHeight),
-                                        Text('Note',
+                                        Text(translate(context,'Note'),
                                             style: TextStyle(
                                                 color: Colors.grey, fontSize: 16.0 ,fontWeight: FontWeight.bold)),
                                         SizedBox(height: 0.04* screenHeight),
@@ -339,7 +340,7 @@ class _ReceiveRideState extends State<ReceiveRide> {
 
                               customHomeButton(
                                 context: context,
-                                title: "Accept",
+                                title: translate(context,'Accept'),
                                 withIcon: false,
                                 onTap: (){
                                   ///TODO:SOUND DOESN'T STOP!

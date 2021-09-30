@@ -2,6 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/screens/payment_screen.dart';
 
 import '../globalvariables.dart';
@@ -70,7 +71,7 @@ class _JobHistoryState extends State<JobHistory> {
                       SizedBox(width: 0.2 * screenWidth),
                       Align(
                         alignment: Alignment.center,
-                        child: Text('Job History',
+                        child: Text(translate(context,'Job History'),
                             style: TextStyle(
                                 color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold)),
                       ),

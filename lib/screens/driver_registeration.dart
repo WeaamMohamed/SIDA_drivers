@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 
 import '../shared/componenents/my_components.dart';
 
@@ -133,7 +134,7 @@ _divider()],
 
                 Padding(
                   padding:  EdgeInsets.symmetric(horizontal: horizontalPadding),
-                  child: Text("Driver Registration", style: TextStyle(
+                  child: Text(translate(context,'Driver Registration'), style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold
                   ),),
@@ -141,7 +142,7 @@ _divider()],
                 SizedBox(height: 8,),
                 Padding(
                   padding:  EdgeInsets.symmetric(horizontal: horizontalPadding),
-                  child: Text("Complete the information below", style: TextStyle(
+                  child: Text(translate(context,'Complete the information below'), style: TextStyle(
                     fontSize: 12,
                   ),),
                 ),
@@ -149,7 +150,7 @@ _divider()],
                 _divider(),
                 SizedBox(
                   child: _buildRegistrationCheckItem(
-                    title: "Driver information",
+                    title: translate(context,'Driver info'),
                     iconName: "check_icon",
                     onTap: (){
                       print("clicked");
@@ -157,27 +158,27 @@ _divider()],
                   ),
                 ),
                 _buildRegistrationCheckItem(
-                  title: "Vehicle information",
+                  title: translate(context,'Vehicle info'),
                   iconName: "warning",
                   onTap: (){},
                 ),
                 _buildRegistrationCheckItem(
-                  title: "Vehicle registration certificate",
+                  title: translate(context,'Vehicle registration certificate'),
                   iconName: "warning",
                   onTap: (){},
                 ),
                 _buildRegistrationCheckItem(
-                  title: "Driver license",
+                  title: translate(context,'Driver license'),
                   iconName: "warning",
                   onTap: (){},
                 ),
                 _buildRegistrationCheckItem(
-                  title: "Criminal Records/Taxi Application File",
+                  title: translate(context,'Criminal Records/Taxi Application File'),
                   iconName: "warning",
                   onTap: (){},
                 ),
                 _buildRegistrationCheckItem(
-                  title: "Identity confirmation",
+                  title: translate(context,'Identity confirmation'),
                   iconName: "warning",
                   onTap: (){},
                 ),
@@ -192,22 +193,22 @@ _divider()],
 
 
   // _buildRegistrationCheckItem(
-  // title: "Vehicle registration certificate",
+  // title: translate(context,'Vehicle registration certificate'),
   // iconName: "warning",
   // onTap: (){},
   // ),
   // _buildRegistrationCheckItem(
-  // title: "Driver license",
+  // title: translate(context,'Driver license'),
   // iconName: "warning",
   // onTap: (){},
   // ),
   // _buildRegistrationCheckItem(
-  // title: "Criminal Records/Taxi Application File",
+  // title: translate(context,'Criminal Records/Taxi Application File'),
   // iconName: "warning",
   // onTap: (){},
   // ),
   // _buildRegistrationCheckItem(
-  // title: "Identity confirmation",
+  // title: translate(context,'Identity confirmation'),
   // iconName: "warning",
   // onTap: (){},
   // ),
@@ -218,7 +219,7 @@ _divider()],
             Padding(
               padding:  EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: customBlackButton(
-                  title: "Submit",onTap: (){}),
+                  title: translate(context,'Submit'), onTap: (){}),
             ),
 
 

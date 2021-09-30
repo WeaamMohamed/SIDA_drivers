@@ -13,6 +13,7 @@ import 'package:sida_drivers_app/globalvariables.dart';
 import 'package:sida_drivers_app/helpers/helpermethods.dart';
 import 'package:sida_drivers_app/helpers/mapkit_helper.dart';
 import 'package:sida_drivers_app/helpers/pushnotificationservice.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/models/drivers.dart';
 import 'package:sida_drivers_app/screens/vehicle_info.dart';
 import 'package:sida_drivers_app/widgets/home_drawer.dart';
@@ -185,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //       child: SvgPicture.asset("assets/images/menu_iconn.svg"),),
     //     //Spacer(),
     //     Text(
-    //       _enabled? "Online" : "Offline",
+    //       _enabled? translate(context,'Online') : translate(context,'Offline'),
     //       style: TextStyle(
     //         fontSize: 18,
     //         color: Colors.white,
@@ -230,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Spacer(),
           Center(
             child: Text(
-              enabled? "Online" : "Offline",
+              enabled? translate(context,'Online') : translate(context,'Offline'),
               style: TextStyle(
                 fontSize: 18,
                 color: enabled? Colors.black :Colors.white,
@@ -417,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Spacer(),
             Container(
               width: mqSize.width * 0.6,
-              child: Text("You are currently not accepting orders. Please turn on the toggle button above to start receiving orders.",
+              child: Text(translate(context,'You are currently not accepting orders. Please turn on the toggle button above to start receiving orders.'),
                 style: TextStyle(fontSize: 17,
                     color: Colors.white60),
                 textAlign: TextAlign.center,
@@ -426,7 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Spacer(),
             customHomeButton(
               context: context,
-              title: "Update Driver Information",
+              title: translate(context,'Update Driver Information'),
               withIcon: false,
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> JobHistory()));

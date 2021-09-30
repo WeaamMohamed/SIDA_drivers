@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 
 import '../shared/componenents/my_components.dart';
 import 'home_screen.dart';
@@ -20,7 +21,7 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
       // appBar:  AppBar(
       //   //  backgroundColor: Colors.red,
       //   centerTitle: true,
-      //   title: Text("Driver Registration",
+      //   title: Text(translate(context,'Driver Registration'),
       //     style: TextStyle(
       //         fontSize: 16,
       //         fontWeight: FontWeight.bold,
@@ -38,7 +39,7 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
       // ),
       backgroundColor: Colors.white,
       appBar: customAppBar(context: context,
-        title:"Driver Registration",),
+        title:translate(context,'Driver Registration'),),
 
       body: Padding(
         padding: EdgeInsets.only(top: 30,
@@ -57,7 +58,7 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
               child: Container(
                 width: size.width * 0.8,
                 child: Text(
-                  "The request has been sent successfully.",
+                  translate(context,'The request has been sent successfully.'),
                   textAlign: TextAlign.center,),
               ),
             ),
@@ -66,7 +67,7 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
               child: Container(
                 width: size.width * 0.8,
                 child: Text(
-                  "Once the application has been reviewed, you will receive a valid notification or our customer service representative will call you, note that the verification process takes up to 24 hours from the time the documents are sent to the review.",
+                  translate(context,'Once the application has been reviewed, you will receive a valid notification or our customer service representative will call you, note that the verification process takes up to 24 hours from the time the documents are sent to the review.'),
                   textAlign: TextAlign.center,),
               ),
             ),
@@ -85,7 +86,7 @@ class _DriverRegistrationCompletedState extends State<DriverRegistrationComplete
 
 
               }
-              ,title: "Done",
+              ,title: translate(context,'Done'),
             )
           ],
         ),

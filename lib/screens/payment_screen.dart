@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 
 class PaymentScreen extends StatefulWidget {
 
@@ -13,7 +14,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Payment',style: TextStyle(fontWeight: FontWeight.bold,
+        title: Text(translate(context,'Payment'), style: TextStyle(fontWeight: FontWeight.bold,
         fontSize: 20, color: Colors.black,),),
         elevation: 0,
         backgroundColor: Colors.white,
@@ -62,7 +63,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               ),
                             ),
                             Text(
-                              "Commission",
+                              translate(context,'Commission'),
                               style: TextStyle(
                                 color: Colors.black.withOpacity(0.5),
                               ),
@@ -76,7 +77,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Due date",
+                              translate(context,'Due date'),
                             ),
                             Text(
                               "100.00  EGP",
@@ -95,7 +96,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
-              child: Text("Payment Amount ", style: TextStyle(
+              child: Text(translate(context,'Payment Amount'), style: TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold,
               ),),
             ),
@@ -124,10 +125,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 5, bottom: 25),
-              child: Text('Minimum payment amount: 70.00 EGP'),
+              child: Text(translate(context,'Minimum payment amount: '),),
             ),
 
-            Text("Payment Method ", style: TextStyle(
+            Text(translate(context,'Payment Method'), style: TextStyle(
               fontSize: 16, fontWeight: FontWeight.bold,
             ),),
 
@@ -136,7 +137,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               children: [
                 SvgPicture.asset("assets/images/money_icon.svg"),
                 SizedBox(width: 10,),
-                Text("Fawry Cash",
+                Text(translate(context,'Fawry Cash'),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,

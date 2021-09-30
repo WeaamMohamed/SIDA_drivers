@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 
 class CancelTripContainer extends StatelessWidget {
   @override
@@ -23,7 +24,7 @@ class CancelTripContainer extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            ("Would you like to cancel this trip?"),
+            (translate(context,'Would you like to cancel this trip?')),
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
@@ -51,7 +52,7 @@ class CancelTripContainer extends StatelessWidget {
         onTap: onTap,
         child: Center(
           child: Text(
-          "Cancel",
+          translate(context,'Cancel'),
             // overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 13,
@@ -78,7 +79,7 @@ class CancelTripContainer extends StatelessWidget {
         onTap: onTap,
         child: Center(
           child: Text(
-          "Back",
+          translate(context,'Back'),
             // overflow: TextOverflow.ellipsis,
             style: TextStyle(
               fontSize: 13,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -39,7 +40,7 @@ class _DriverLicenseState extends State<DriverLicense> {
 
         centerTitle: true,
 
-        title: Text("Driver License",
+        title: Text(translate(context,'Driver license'),
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -83,7 +84,7 @@ class _DriverLicenseState extends State<DriverLicense> {
                     ),
                     SizedBox(height: 10,),
                     Center(
-                      child: Text("Front Side", style: TextStyle(
+                      child: Text(translate(context,'Front Side'), style: TextStyle(
 
                         fontWeight: FontWeight.bold,
                         color: Color(0xffA9ACB6),
@@ -105,14 +106,14 @@ class _DriverLicenseState extends State<DriverLicense> {
                     ),
                     SizedBox(height: 10,),
                     Center(
-                      child: Text("Back Side", style: TextStyle(
+                      child: Text(translate(context,'Back Side'), style: TextStyle(
 
                         fontWeight: FontWeight.bold,
                         color: Color(0xffA9ACB6),
                       ),),
                     ),
                     customTextFormField(
-                        label: "Driver license number",
+                        label: translate(context,'Driver license number'),
                         textController: _licenseNumberController,
                         textInputType: TextInputType.number,
                         validator: (String val){
@@ -136,7 +137,7 @@ class _DriverLicenseState extends State<DriverLicense> {
             // ),
             // SizedBox(height: 10,),
             // Center(
-            //   child: Text("Front Side", style: TextStyle(
+            //   child: Text(translate(context,'Front Side'), style: TextStyle(
             //
             //     fontWeight: FontWeight.bold,
             //     color: Color(0xffA9ACB6),
@@ -154,14 +155,14 @@ class _DriverLicenseState extends State<DriverLicense> {
             // ),
             // SizedBox(height: 10,),
             // Center(
-            //   child: Text("Back Side", style: TextStyle(
+            //   child: Text(translate(context,'Back Side'), style: TextStyle(
             //
             //     fontWeight: FontWeight.bold,
             //     color: Color(0xffA9ACB6),
             //   ),),
             // ),
             // customTextFormField(
-            //   label: "Driver license number",
+            //   label: translate(context,'Driver license number'),
             //   textController: _licenseNumberController,
             //   textInputType: TextInputType.number,
             //   validator: (String val){

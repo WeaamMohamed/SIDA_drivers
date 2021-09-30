@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -32,7 +33,7 @@ class _VehicleRegistrationCertificateState extends State<VehicleRegistrationCert
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: customAppBar(context: context,
-        title:"Vehicle registration certificate" ,),
+        title: translate(context,'Vehicle registration certificate'),),
 
 
       body: Container(
@@ -56,7 +57,7 @@ class _VehicleRegistrationCertificateState extends State<VehicleRegistrationCert
             ),
             SizedBox(height: 10,),
             Center(
-              child: Text("Front Side", style: TextStyle(
+              child: Text(translate(context,'Front Side'), style: TextStyle(
 
                 fontWeight: FontWeight.bold,
                 color: Color(0xffA9ACB6),
@@ -78,7 +79,7 @@ class _VehicleRegistrationCertificateState extends State<VehicleRegistrationCert
             ),
             SizedBox(height: 10,),
             Center(
-              child: Text("Back Side", style: TextStyle(
+              child: Text(translate(context,'Back Side'), style: TextStyle(
 
                 fontWeight: FontWeight.bold,
                 color: Color(0xffA9ACB6),

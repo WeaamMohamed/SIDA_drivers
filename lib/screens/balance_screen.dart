@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/screens/payment_screen.dart';
 import 'package:sida_drivers_app/shared/providers/data_provider.dart';
@@ -56,7 +57,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                "Balance",
+                translate(context,'Balance'),
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -77,7 +78,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    "Total Amount",
+                    translate(context,'Total Amount'),
                     style: TextStyle(color: Colors.black.withOpacity(0.5)),
                   ),
                   Row(
@@ -101,7 +102,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                   Row(
                     children: [
                       Text(
-                        "Your Profit",
+                        translate(context,'Your Profit'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black.withOpacity(0.5),
@@ -119,7 +120,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                   Row(
                     children: [
                       Text(
-                        "Commission",
+                        translate(context,'Commission'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black.withOpacity(0.5),
@@ -151,7 +152,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                     child: customHomeButton(
                         context: context,
                         withIcon: false,
-                        title: "Checkout",
+                        title: translate(context,'Checkout'),
                         onTap: () {}),
                   ),
                 ],
@@ -194,7 +195,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                         width: 25,
                       ),
                       Text(
-                        ("Payment"),
+                        (translate(context,'Payment')),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -233,7 +234,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                       ),
                                     ),
                                     Text(
-                                      "Commission",
+                                      translate(context,'Commission'),
                                       style: TextStyle(
                                         color: Colors.black.withOpacity(0.5),
                                       ),
@@ -247,7 +248,7 @@ class _BalanceScreenState extends State<BalanceScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      "Due date",
+                                      translate(context,'Due date'),
                                     ),
                                     Text(
                                       "100.00  EGP",

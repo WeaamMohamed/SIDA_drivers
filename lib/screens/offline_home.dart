@@ -59,7 +59,7 @@
 //                   child: SvgPicture.asset("assets/images/menu_iconn.svg"),),
 //                 Spacer(),
 //                 Text(
-//                  _enabled? "Online" : "Offline",
+//                  _enabled? translate(context,'Online') : translate(context,'Offline'),
 //                   style: TextStyle(
 //                     fontSize: 18,
 //                     color: Colors.white,
@@ -83,7 +83,7 @@
 //
 //             Container(
 //               width: MediaQuery.of(context).size.width * 0.6,
-//               child: Text("You are currently not accepting orders. Please turn on the toggle button above to start receiving orders.",
+//               child: Text(translate(context,'You are currently not accepting orders. Please turn on the toggle button above to start receiving orders.'),
 //               style: TextStyle(fontSize: 17,
 //               color: Colors.white60),
 //                 textAlign: TextAlign.center,
@@ -92,7 +92,7 @@
 //             Spacer(),
 //             customHomeButton(
 //               context: context,
-//               title: "Update Driver Information",
+//               title: translate(context,'Update Driver Information'),
 //               onTap: (){},
 //             ),
 //

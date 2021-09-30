@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
 import 'package:sida_drivers_app/shared/colors/colors.dart';
 import 'package:sida_drivers_app/shared/componenents/my_components.dart';
 
@@ -20,7 +21,7 @@ class _CancelDriverScreenState extends State<CancelDriverScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           customContainerWithGradient(
-            title: "Please tell us the reason for the cancellation",
+            title: translate(context,'Please tell us the reason for the cancellation'),
           ),
           SizedBox(
             height: 10,
@@ -71,14 +72,14 @@ class _CancelDriverScreenState extends State<CancelDriverScreen> {
             children: [
               //TODO: onTap(){}
               _buildOptionItem(
-                  text: "The trip was unintentionally accepted", onTap: () {}),
+                  text: translate(context,'The trip was unintentionally accepted'), onTap: () {}),
               _buildOptionItem(
-                  text: "The pickup point is too far away", onTap: () {}),
+                  text: translate(context,'The pickup point is too far away'), onTap: () {}),
               _buildOptionItem(
-                  text: "The passenger asked for it", onTap: () {}),
+                  text: translate(context,'The passenger asked for it'), onTap: () {}),
               _buildOptionItem(
-                  text: "The pickup point place isn't safe", onTap: () {}),
-              _buildOptionItem(text: "Others", onTap: () {}),
+                  text: translate(context,'The pickup point place is not safe'), onTap: () {}),
+              _buildOptionItem(text: translate(context,'Others'), onTap: () {}),
 
             ],
           ),

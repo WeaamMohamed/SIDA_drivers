@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
+import 'package:sida_drivers_app/localization/localization_method.dart';
+import 'package:sida_drivers_app/models/animated_toggle_button.dart';
 import 'package:sida_drivers_app/screens/balance_screen.dart';
 import 'package:sida_drivers_app/shared/network/local/cache_helper.dart';
 import 'package:sida_drivers_app/shared/componenents/constants.dart';
 import 'package:sida_drivers_app/shared/providers/data_provider.dart';
 import 'package:sida_drivers_app/sign_up_in/phone_number_page.dart';
+
 import '../globalvariables.dart';
 import '../shared/colors/colors.dart';
-
+import '../main.dart';
 
 class HomeDrawer extends StatefulWidget {
-
   @override
   _HomeDrawerState createState() => _HomeDrawerState();
 }
@@ -24,13 +26,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
   String _url='';
   String name='';
   String rating='0.0';
+
   @override
   void initState() {
     super.initState();
     loadImage();
     getData();
-
   }
+
   @override
   Widget build(BuildContext context) {
     return  Drawer(
@@ -127,7 +130,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
                   Row(
                     children: [
-                      Text("Balance", style: TextStyle(
+                      Text(translate(context,'Balance'), style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),),
                       Spacer(),
@@ -139,7 +142,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
                   Row(
                     children: [
-                      Text("Your Profit", style: TextStyle(
+                      Text(translate(context,'Your Profit'), style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black.withOpacity(0.5),
 
@@ -153,7 +156,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                   ),
                   Row(
                     children: [
-                      Text("Commission", style: TextStyle(
+                      Text(translate(context,'Commission'), style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black.withOpacity(0.5),
 
@@ -175,25 +178,45 @@ class _HomeDrawerState extends State<HomeDrawer> {
             ),
             SizedBox(height: 10,),
 
+            //TODO: Weaam Re-position this button >>
+              Container(padding: EdgeInsets.all(10),
+                child: AnimatedToggle(
+                  values: ['EN','AR'],
+                  onToggleCallback: (index) {
 
+                  print("home index " + index.toString());
+
+                  if(index)
+                  {
+                    MyApp.setLocale(context, Locale('en', 'US'));
+                  }
+                  else
+                  {
+                    MyApp.setLocale(context, Locale('ar', 'EG'));
+                  }
+                },
+              ),
+            ),
+              //TODO: To there <<
+              
             _buildDrawerItem(
-                title: "Job History",
+                title: translate(context,'Job History'),
                 imagePath: "assets/images/document.svg",
                 onTap: (){}),
 
             _buildDrawerItem(
-                title: "Inbox",
+                title: translate(context,'Inbox'),
                 imagePath: "assets/images/mail_inbox_app.svg",
                 onTap: (){}),
 
             _buildDrawerItem(
-              title: "Help Center",
+              title: translate(context,'Help Center'),
               imagePath: "assets/images/call-center-agent.svg",
               onTap: (){},
             ),
 
             _buildDrawerItem(
-              title: "Sign Out",
+              title: translate(context,'Sign Out'),
               imagePath: "assets/images/log_out_icon.svg",
               onTap:  () async{
                 //TODO: sign out
