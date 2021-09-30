@@ -18,8 +18,6 @@ import '../globalvariables.dart';
 class HelperMethods
 {
 
-
-
   static Future<DirectionDetails> obtainPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition) async
   {
     String directionUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=${initialPosition.latitude},${initialPosition.longitude}&destination=${finalPosition.latitude},${finalPosition.longitude}&key=$MAP_API_KEY";
@@ -145,7 +143,7 @@ class HelperMethods
       if(snapshot.value != null){
 
         Map<dynamic, dynamic> values = snapshot.value;
-        int tripCount = values.length;
+        tripCount = values.length;
 
         // update trip count to data provider
         Provider.of<DataProvider>(context, listen: false).updateTripCount(tripCount);
