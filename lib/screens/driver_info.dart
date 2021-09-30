@@ -17,7 +17,7 @@ class DriverInfo extends StatefulWidget {
 }
 
 class _DriverInfoState extends State<DriverInfo> {
-  var nameController = TextEditingController();
+  var nameController = TextEditingController( );
   var genderController = TextEditingController();
   var ageController = TextEditingController();
   var formKey = GlobalKey<FormState>();
@@ -29,6 +29,7 @@ class _DriverInfoState extends State<DriverInfo> {
   void initState() {
     super.initState();
     loadImage();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -143,6 +144,7 @@ class _DriverInfoState extends State<DriverInfo> {
                         },
 
                         textInputType: TextInputType.name,
+
 
                       ),
 

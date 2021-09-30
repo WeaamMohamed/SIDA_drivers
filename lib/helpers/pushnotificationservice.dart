@@ -87,9 +87,11 @@ class PushNotificationService{
     DatabaseReference rideRef = FirebaseDatabase.instance.reference().child('rideRequests/$rideID');
     rideRef.once().then((DataSnapshot dataSnapShot)
     {
+      print('weaam : notificatio alert');
       print(dataSnapShot.value);
           if(dataSnapShot.value != null)
           {
+            print('weaam : notification alert');
               assetsAudioPlayer.open(Audio('assets/sounds/alert.mp3'));
               assetsAudioPlayer.play();
               double pickupLat = double.parse(dataSnapShot.value['pickup_location']['latitude'].toString());

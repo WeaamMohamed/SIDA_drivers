@@ -446,7 +446,8 @@ class _ReceiveRideState extends State<ReceiveRide> {
           print("*********************************************");
           print(timeToPickUpLocation);
           timeToPickUpLocation = directionDetails.durationText;
-          newRequest_ref.child(widget.tripDetails.rideID).set({"ArrivalTime" :timeToPickUpLocation });
+
+          ///newRequest_ref.child(widget.tripDetails.rideID).set({"ArrivalTime" :timeToPickUpLocation });
           distanceToPickUpLocation = directionDetails.distanceText;
 
         });
