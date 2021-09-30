@@ -352,8 +352,6 @@ class _HomeScreenState extends State<HomeScreen> {
               onMapCreated: (GoogleMapController controller) {
 
                 print("weaam : onMapCreated");
-                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
-
                 _controllerGoogleMap.complete(controller);
                 newGoogleMapController = controller;
               //  mapProvider.newGoogleMapController = controller;

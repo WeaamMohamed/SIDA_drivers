@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,8 +9,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:sida_drivers_app/models/appData.dart';
 import 'package:sida_drivers_app/shared/providers/data_provider.dart';
-
+import 'package:sida_drivers_app/models/history.dart';
 import '../globalvariables.dart';
 
 
@@ -127,6 +129,7 @@ class HelperMethods
 
   static void getHistoryInfo (context){
 
+    /// get and display earnings
     DatabaseReference earningRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/earnings');
 
     earningRef.once().then((DataSnapshot dataSnapshot){
@@ -134,10 +137,9 @@ class HelperMethods
         String earnings = dataSnapshot.value.toString();
         Provider.of<DataProvider>(context, listen: false).updateEarnings(earnings);
       }
-
     });
-
-    DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/history');
+///get and display trip history
+    DatabaseReference historyRef = FirebaseDatabase.instance.reference().child('Drivers/${currentUser.uid}/History');
     historyRef.once().then((DataSnapshot snapshot) {
 
       if(snapshot.value != null){
@@ -158,9 +160,22 @@ class HelperMethods
 
       }
     });
-
-  
 }
+  static void obtainTripRequestsHistoryData(context)
+  {
+    var keys = Provider.of<AppData>(context, listen: false).tripHistoryKeys;
+
+    for(String key in keys)
+    {
+      newRequest_ref.child(key).once().then((DataSnapshot snapshot) {
+        if(snapshot.value != null)
+        {
+          var history = myHistory.fromSnapshot(snapshot);
+          Provider.of<AppData>(context, listen: false).updateTripHistoryData(history);
+        }
+      });
+    }
+  }
 }
 ///-------------------------------------------------------------------------------------
 class DirectionDetails
