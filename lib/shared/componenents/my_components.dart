@@ -101,14 +101,17 @@ Widget customBlackButton({
     );
 
 Widget customTextFormField({
+
   String label,
   Function validator,
   TextEditingController textController,
   TextInputType textInputType,
   String hint,
   Color textColor = Colors.black,
+  String initialValue,
 }) =>
     TextFormField(
+      initialValue: initialValue,
 
       controller: textController,
       keyboardType: textInputType,

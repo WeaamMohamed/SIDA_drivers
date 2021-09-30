@@ -117,9 +117,21 @@ class _HomeScreenState extends State<HomeScreen> {
     PushNotificationService pushNotificationService = PushNotificationService();
     pushNotificationService.initialize(context);
     pushNotificationService.getToken();
-
     getRideType();
     HelperMethods.getHistoryInfo(context);
+  }
+
+  getRideType()
+  {
+    drivers_ref.child(currentUser.uid).child("carDetails").child("ride_type").once().then((DataSnapshot snapshot)
+    {
+      if(snapshot.value != null)
+      {
+        setState(() {
+          rideType = snapshot.value.toString();
+        });
+      }
+    });
   }
 
   @override
@@ -137,19 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     getCurrentDriverInfo();
   }
-  getRideType()
-  {
 
-    drivers_ref.child(currentUser.uid).child("carDetails").child("ride_type").once().then((DataSnapshot snapshot)
-    {
-      if(snapshot.value != null)
-      {
-        setState(() {
-          rideType = snapshot.value.toString();
-        });
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -352,6 +352,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onMapCreated: (GoogleMapController controller) {
 
                 print("weaam : onMapCreated");
+                print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> go online");
+
                 _controllerGoogleMap.complete(controller);
                 newGoogleMapController = controller;
               //  mapProvider.newGoogleMapController = controller;
