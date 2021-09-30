@@ -13,7 +13,6 @@ class PushNotificationService{
 
   final FirebaseMessaging fcm = FirebaseMessaging();
   Future initialize(context) async {
-    print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> initialize");
     // if(Platform.isIOS){
     //   fcm.requestNotificationPermissions(IosNotificationSettings());
     // }
@@ -46,9 +45,6 @@ class PushNotificationService{
   }
 
   Future<String> getToken() async{
-
-    print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> get token");
-
     String token = await fcm.getToken();
     print('token: $token');
 
@@ -64,8 +60,6 @@ class PushNotificationService{
   }
 
   String getRideID(Map<String, dynamic> message){
-
-    print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> get rider id");
 
     String rideID = '';
 
@@ -83,7 +77,7 @@ class PushNotificationService{
 
   void fetchRideInfo(String rideID, context)
   {
-    print(" _>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> yaraaaaaab");
+
     DatabaseReference rideRef = FirebaseDatabase.instance.reference().child('rideRequests/$rideID');
     rideRef.once().then((DataSnapshot dataSnapShot)
     {
@@ -124,12 +118,10 @@ class PushNotificationService{
               tripDetails.tripDistance = tripDistance;
               tripDetails.fare = fare;
               tripDetails.rideType = rideType;
-
-              print("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Information :: ");
               print(tripDetails.pickupAddress);
               print(tripDetails.dropoffAddress);
               //print(tripDetails.riderName);
-              print("whyyyyyyyyyyy?>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
               Navigator.push(context, MaterialPageRoute(builder: (context)=> ReceiveRide(tripDetails: tripDetails,)));
 
 
