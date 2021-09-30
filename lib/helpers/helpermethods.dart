@@ -132,7 +132,7 @@ class HelperMethods
 
     earningRef.once().then((DataSnapshot dataSnapshot){
       if(dataSnapshot.value != null){
-        String earnings = dataSnapshot.value.toString();
+        earnings = dataSnapshot.value.toString();
         Provider.of<DataProvider>(context, listen: false).updateEarnings(earnings);
       }
     });

@@ -14,13 +14,7 @@ class JobHistory extends StatefulWidget {
 class _JobHistoryState extends State<JobHistory> {
 
   String rides_num='';
-  String earnings='';
 
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     final screenHeight= MediaQuery.of(context).size.height;
@@ -71,7 +65,7 @@ class _JobHistoryState extends State<JobHistory> {
                 Text("Total profit ( ${tripCount} rides)", style: TextStyle(
                   color:Colors.black, fontSize: 18
                 ),),
-                SizedBox(height: 0.01 * screenHeight),
+                SizedBox(height: 0.03 * screenHeight),
                 Text("${earnings} EGP", style: TextStyle(
                     color:Colors.black, fontSize: 20,fontWeight: FontWeight.bold
                 ),),
@@ -87,19 +81,6 @@ class _JobHistoryState extends State<JobHistory> {
     );
   }
 
-  getData() async
-  {
-    try {
-      await drivers_ref.child( currentUser.uid).child('earnings').once().then((DataSnapshot snapshot) async {
 
-        setState(() {
-          earnings = snapshot.value;
-        });
-      });
-    }
-    catch(e)
-    { print("you got error: $e");
-    }
-  }
 
 }

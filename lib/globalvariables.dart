@@ -28,10 +28,13 @@ DatabaseReference rideRef;
 
 final database = FirebaseDatabase.instance;
 final drivers_ref = database.reference().child('Drivers');
-int tripCount=0;
+
 DatabaseReference newRequest_ref= database.reference().child('rideRequests');
 
 String rideType='';
+String earnings='';
+int tripCount=0;
+
 FirebaseStorage storage = FirebaseStorage(storageBucket: 'gs://sida-51cb9.appspot.com');
 //rideRequestRef
 
